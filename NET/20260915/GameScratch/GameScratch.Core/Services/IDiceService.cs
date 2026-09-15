@@ -1,3 +1,5 @@
+using GameScratch.Core.Common;
+
 namespace GameScratch.Core.Services;
 
 public interface IDiceService
