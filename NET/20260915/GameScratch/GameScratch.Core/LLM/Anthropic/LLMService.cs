@@ -10,6 +10,6 @@ public class LLMService(IOptions<LLMServiceOptions> options) : ILLMService
 
     string ILLMService.SendMessage(string message)
     {
-        return "Anthropic LLMService";
+        return $"LLMService is using model {_options.ModelName}";
     }
 }

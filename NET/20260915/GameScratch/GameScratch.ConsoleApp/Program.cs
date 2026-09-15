@@ -1,12 +1,21 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using GameScratch.ConsoleApp;
+using GameScratch.Core.LLM;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 Console.WriteLine("Hello, World!");
 
-var config = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.local.json", optional: true)
-    .AddEnvironmentVariables()
-    .Build();
+HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 
-var apiKey = config["ANTHROPIC_API_KEY"] ??
-    throw new InvalidOperationException("ANTHROPIC_API_KEY not configured.");
+builder.Configuration
+    .AddJsonFile("appsettings.local.json", optional: true)
+    .AddEnvironmentVariables();
+
+builder.ConfigureServices();
+
+using IHost host = builder.Build();
+
+var llmService = host.Services.GetRequiredService<ILLMService>();
+
+Console.WriteLine(llmService.SendMessage("default message"));
