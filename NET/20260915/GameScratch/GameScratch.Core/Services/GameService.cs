@@ -10,4 +10,9 @@ public class GameService(ILLMService llmService) : IGameService
     {
         return await _llmService.SendMessageAsync(message);
     }
+
+    void IGameService.Reset()
+    {
+        _llmService.ClearChatHistory();
+    }
 }

@@ -5,15 +5,17 @@ using Anthropic;
 using Anthropic.Core;
 using Anthropic.Models.Messages;
 using System.Text;
+using System.Linq.Expressions;
 
 namespace GameScratch.Core.LLM.Anthropic;
 
-public class LLMService : ILLMService
+public class LLMService : LLMServiceBase, ILLMService
 {
     private readonly LLMServiceOptions _options;
     private readonly AnthropicClient _client;
 
     public LLMService(IOptions<LLMServiceOptions> options)
+        : base()
     {
         _options = options?.Value ?? throw new ArgumentNullException("LLMServiceOptions not dependency injected.");
         _client = new AnthropicClient(new ClientOptions { ApiKey = _options.ApiKey });

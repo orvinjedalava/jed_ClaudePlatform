@@ -5,23 +5,23 @@ using GameScratch.Core.LLM;
 
 namespace GameScratch.Tests.Services;
 
-public class MessageServiceTests
+public class GameServiceTests
 {
-    private readonly IGameService _messageService;
+    private readonly IGameService _gameService;
     private readonly Mock<ILLMService> _llmServiceMock;
 
-    public MessageServiceTests()
+    public GameServiceTests()
     {
         // initialize mocks
         _llmServiceMock = new Mock<ILLMService>();
 
-        _messageService = new GameService(
+        _gameService = new GameService(
             llmService: _llmServiceMock.Object
         );
     }
 
     [Fact]
-    public async Task SendMessage_Success()
+    public async Task SendMessageToLLMAsync_Success()
     {
         string expectedResponse = "Mocked Response";
         string message = "My message";
@@ -30,8 +30,16 @@ public class MessageServiceTests
             .Setup(m => m.SendMessageAsync(message))
             .ReturnsAsync(expectedResponse);
 
-        var result = await _messageService.SendMessageToLLMAsync(message);
+        var result = await _gameService.SendMessageToLLMAsync(message);
 
         Assert.Equal(expectedResponse, result);
+    }
+
+    [Fact]
+    public void Reset_Success()
+    {
+        var exception = Record.Exception(() => _gameService.Reset());
+
+        Assert.Null(exception);
     }
 }
