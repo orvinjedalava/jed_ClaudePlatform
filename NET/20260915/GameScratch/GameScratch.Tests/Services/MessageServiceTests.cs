@@ -7,7 +7,7 @@ namespace GameScratch.Tests.Services;
 
 public class MessageServiceTests
 {
-    private readonly IMessageService _messageService;
+    private readonly IGameService _messageService;
     private readonly Mock<ILLMService> _llmServiceMock;
 
     public MessageServiceTests()
@@ -15,7 +15,7 @@ public class MessageServiceTests
         // initialize mocks
         _llmServiceMock = new Mock<ILLMService>();
 
-        _messageService = new MessageService(
+        _messageService = new GameService(
             llmService: _llmServiceMock.Object
         );
     }

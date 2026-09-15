@@ -22,6 +22,9 @@ public class LLMService : ILLMService
     
     async Task<string> ILLMService.SendMessageAsync(string message)
     {
+        if (!_options.Enabled)
+            return "LLM is not enabled.";
+        
         Message responseMsg = await _client.Messages.Create(
             new MessageCreateParams()
             {
