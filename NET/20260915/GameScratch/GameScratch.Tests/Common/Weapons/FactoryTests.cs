@@ -9,7 +9,10 @@ public class FactoryTests
     [InlineData(WeaponType.BareHands, "BareHands", DiceType.D4)]
     public void BuildWeapon_Success(WeaponType weaponType, string name, DiceType diceType)
     {
-        Weapon result = Factory.BuildWeapon(weaponType);
+        Weapon result = WeaponBuilder
+            .Create()
+            .FromWeaponType(weaponType)
+            .Build();
 
         Assert.Equal(diceType, result.BaseDamage);
         Assert.Equal(name, result.Name, ignoreCase: true);

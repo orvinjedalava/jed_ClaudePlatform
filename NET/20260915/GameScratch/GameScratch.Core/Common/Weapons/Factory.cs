@@ -1,20 +1,31 @@
 namespace GameScratch.Core.Common.Weapons;
 
-public static class Factory
+public class WeaponBuilder
 {
-    public static Weapon BuildWeapon(WeaponType weaponType)
+    private Weapon? _weapon;
+
+    public static WeaponBuilder Create() => new();
+    public WeaponBuilder FromWeaponType(WeaponType weaponType)
     {
-        return new()
+        switch(weaponType)
         {
-            Name = weaponType.ToString(),
-            BaseDamage = weaponType.GetDiceType()
-        };
+            case WeaponType.BareHands:
+                _weapon = new()
+                {
+                    Name = weaponType.ToString(),
+                    BaseDamage = weaponType.GetDiceType(),
+                    StaminaCost = weaponType.GetStaminaCost()
+                };
+                break;
+        }
+
+        return this;
     }
 
-    public static DiceType GetDiceType(this WeaponType weaponType) => weaponType switch
+    public Weapon Build()
     {
-        WeaponType.BareHands => DiceType.D4,
-        _ => throw new ArgumentOutOfRangeException(nameof(weaponType), weaponType, "Unknown weapon type.")
-    };
+        return _weapon ?? 
+            throw new InvalidOperationException("A weapon type must be selected before building.");
+    }
     
 }
