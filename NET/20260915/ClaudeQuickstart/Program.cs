@@ -29,9 +29,9 @@ var message = await client.Messages.Create(
     }
 );
 
-foreach(var block in message.Content)
+foreach(ContentBlock block in message.Content)
 {
-    if (block.TryPickText(out var textBlock))
+    if (block.TryPickText(out TextBlock? textBlock))
     {
         Console.WriteLine(textBlock.Text);
     }
