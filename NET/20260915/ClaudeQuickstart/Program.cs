@@ -23,7 +23,12 @@ var message = await client.Messages.Create(
             new MessageParam()
             {
                 Role = Role.User,
-                Content = "What should I search for to find the latest developments in renewable energy?"
+                Content = new MessageParamContent(
+                    [
+                        new ContentBlockParam(
+                            new TextBlockParam("What should I search for to find the latest developments in renewable energy?"))
+                    ]
+                )
             }
         ]
     }
