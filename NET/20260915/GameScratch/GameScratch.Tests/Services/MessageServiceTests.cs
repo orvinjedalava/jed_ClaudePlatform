@@ -21,16 +21,16 @@ public class MessageServiceTests
     }
 
     [Fact]
-    public void SendMessage_Success()
+    public async Task SendMessage_Success()
     {
         string expectedResponse = "Mocked Response";
         string message = "My message";
 
         _llmServiceMock
-            .Setup(m => m.SendMessage(message))
-            .Returns(expectedResponse);
+            .Setup(m => m.SendMessageAsync(message))
+            .ReturnsAsync(expectedResponse);
 
-        var result = _messageService.SendMessageToLLM(message);
+        var result = await _messageService.SendMessageToLLMAsync(message);
 
         Assert.Equal(expectedResponse, result);
     }

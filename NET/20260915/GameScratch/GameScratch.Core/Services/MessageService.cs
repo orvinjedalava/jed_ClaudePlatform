@@ -6,8 +6,8 @@ public class MessageService(ILLMService llmService) : IMessageService
 {
     private readonly ILLMService _llmService = llmService ?? throw new ArgumentNullException("LLMService not injected.");
 
-    string IMessageService.SendMessageToLLM(string message)
+    async Task<string> IMessageService.SendMessageToLLMAsync(string message)
     {
-        return _llmService.SendMessage(message);
+        return await _llmService.SendMessageAsync(message);
     }
 }

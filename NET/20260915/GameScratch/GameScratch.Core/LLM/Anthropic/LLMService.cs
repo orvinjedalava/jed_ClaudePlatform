@@ -1,15 +1,58 @@
 
 using Microsoft.Extensions.Options;
 
+using Anthropic;
+using Anthropic.Core;
+using Anthropic.Models.Messages;
+using System.Text;
+
 namespace GameScratch.Core.LLM.Anthropic;
 
-public class LLMService(IOptions<LLMServiceOptions> options) : ILLMService
+public class LLMService : ILLMService
 {
-    private readonly LLMServiceOptions _options = options?.Value ?? 
-        throw new ArgumentNullException("LLMServiceOptions not dependency injected.");
+    private readonly LLMServiceOptions _options;
+    private readonly AnthropicClient _client;
 
-    string ILLMService.SendMessage(string message)
+    public LLMService(IOptions<LLMServiceOptions> options)
     {
-        return $"LLMService is using model {_options.ModelName}";
+        _options = options?.Value ?? throw new ArgumentNullException("LLMServiceOptions not dependency injected.");
+        _client = new AnthropicClient(new ClientOptions { ApiKey = _options.ApiKey });
+
+    }
+    
+    async Task<string> ILLMService.SendMessageAsync(string message)
+    {
+        Message responseMsg = await _client.Messages.Create(
+            new MessageCreateParams()
+            {
+                Model = Model.ClaudeHaiku4_5_20251001,
+                MaxTokens = 1000,
+                Messages =
+                [
+                    new MessageParam()
+                    {
+                        Role = Role.User,
+                        Content = new MessageParamContent(
+                            [
+                                new ContentBlockParam(
+                                    new TextBlockParam("What should I search for to find the latest developments in renewable energy?"))
+                            ]
+                        )
+                    }
+                ]
+            }
+        );
+
+        var sb = new StringBuilder();
+
+        foreach(ContentBlock block in responseMsg.Content)
+        {
+            if (block.TryPickText(out TextBlock? textBlock))
+            {
+                sb.AppendLine(textBlock.Text);
+            }
+        }
+
+        return sb.ToString();
     }
 }

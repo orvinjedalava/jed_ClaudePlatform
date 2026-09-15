@@ -2,5 +2,5 @@ namespace GameScratch.Core.Services;
 
 public interface IMessageService
 {
-    string SendMessageToLLM(string message);
+    Task<string> SendMessageToLLMAsync(string message);
 }

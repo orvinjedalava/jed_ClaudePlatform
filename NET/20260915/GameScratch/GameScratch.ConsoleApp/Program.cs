@@ -1,5 +1,5 @@
 ﻿using GameScratch.ConsoleApp;
-using GameScratch.Core.LLM;
+using GameScratch.Core.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,6 +16,6 @@ builder.ConfigureServices();
 
 using IHost host = builder.Build();
 
-var llmService = host.Services.GetRequiredService<ILLMService>();
+var messageService = host.Services.GetRequiredService<IMessageService>();
 
-Console.WriteLine(llmService.SendMessage("default message"));
+Console.WriteLine(await messageService.SendMessageToLLMAsync("What should I search for to find the latest developments in renewable energy?"));
