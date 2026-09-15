@@ -1,11 +1,15 @@
-using GameScratch.Core.LLM;
+
+using Microsoft.Extensions.Options;
 
 namespace GameScratch.Core.LLM.Anthropic;
 
-public class LLMService : ILLMService
+public class LLMService(IOptions<LLMServiceOptions> options) : ILLMService
 {
+    private readonly LLMServiceOptions _options = options?.Value ?? 
+        throw new ArgumentNullException("LLMServiceOptions not dependency injected.");
+
     string ILLMService.SendMessage(string message)
     {
-        throw new NotImplementedException();
+        return "Anthropic LLMService";
     }
 }

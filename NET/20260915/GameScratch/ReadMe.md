@@ -20,5 +20,11 @@
 - dotnet add GameScratch.App/GameScratch.ConsoleApp.csproj reference GameScratch.Core/GameScratch.Core.csproj
 - dotnet add GameScratch.Tests/GameScratch.Tests.csproj reference GameScratch.Core/GameScratch.Core.csproj
 
-# Add dotnet package for Generic Host
+# Add dotnet package for Generic Host and other configuration packages
 - dotnet add GameScratch.ConsoleApp/GameScratch.ConsoleApp.csproj package Microsoft.Extensions.Hosting
+- dotnet add GameScratch.ConsoleApp/GameScratch.ConsoleApp.csproj package Microsoft.Extensions.Options
+- dotnet add GameScratch.Core/GameScratch.Core.csproj package Microsoft.Extensions.Options
+- dotnet add GameScratch.Tests/GameScratch.Tests.csproj package Microsoft.Extensions.Options
+
+# Add Anthropic package
+- dotnet add GameScratch.Core/GameScratch.Core.csproj package Anthropic
