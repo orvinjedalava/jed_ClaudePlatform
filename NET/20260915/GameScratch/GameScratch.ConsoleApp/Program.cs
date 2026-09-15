@@ -16,6 +16,6 @@ builder.ConfigureServices();
 
 using IHost host = builder.Build();
 
-var messageService = host.Services.GetRequiredService<IMessageService>();
+var messageService = host.Services.GetRequiredService<IGameService>();
 
 Console.WriteLine(await messageService.SendMessageToLLMAsync("What should I search for to find the latest developments in renewable energy?"));
