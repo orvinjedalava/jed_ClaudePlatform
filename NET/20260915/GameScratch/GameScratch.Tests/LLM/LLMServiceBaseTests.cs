@@ -1,5 +1,7 @@
 using GameScratch.Core.LLM;
 using GameScratch.Core.Services;
+using GameScratch.Core.Common.Players;
+using GameScratch.Core.Common.Weapons;
 using Moq;
 
 namespace GameScratch.Tests.LLM;
@@ -23,5 +25,24 @@ public class LLMServiceBaseTests
         _llmServiceBase.ClearChatHistory();
 
         Assert.Empty(_llmServiceBase.ChatHistory);
+    }
+
+    [Fact]
+    public async Task ExecuterTurnAsync_Success()
+    {
+        var actions = new Dictionary<string, Func<IActionContext, string>>
+        {
+            { "Attack", ctx => $"{ctx.Attacker.Profile.Name} attacks {ctx.Defender.Profile.Name}" },
+            { "GuardStance", ctx => $"{ctx.Attacker.Profile.Name} guards" }
+        };
+
+        _actionServiceMock.SetupGet(s => s.Actions).Returns(actions);
+
+        Weapon weapon = WeaponBuilder.Create().FromWeaponType(WeaponType.BareHands).Build();
+
+        Player challenger = PlayerBuilder.Create().WithProfile(RoleType.Challenger, "Player").WithStats().WithEquipment(weapon).Build();
+        Player champion = PlayerBuilder.Create().WithProfile(RoleType.Champion, "Model").WithStats().WithEquipment(weapon).Build();
+
+        Assert.NotNull(await _llmServiceBase.ExecuteTurnAsync(champion, challenger));
     }
 }

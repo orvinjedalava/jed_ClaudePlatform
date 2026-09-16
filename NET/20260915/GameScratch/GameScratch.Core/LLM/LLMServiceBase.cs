@@ -1,14 +1,15 @@
+using GameScratch.Core.Common.Players;
 using GameScratch.Core.Services;
 
 namespace GameScratch.Core.LLM;
 
 public class LLMServiceBase : ILLMService
 {
-    private readonly IActionService _actionService;
+    protected readonly IActionService _actionService;
     public LLMServiceBase(IActionService actionService)
     {
         _actionService = actionService ?? throw new ArgumentNullException("ActionService not dependency injected.");
-        
+
         ChatHistory = [];
     }
 
@@ -19,7 +20,17 @@ public class LLMServiceBase : ILLMService
         ChatHistory.Clear();
     }
 
-    Task<string> ILLMService.SendMessageAsync(string message)
+    public async Task<string> ExecuteTurnAsync(Player champion, Player challenger)
+    {
+        var actionNames = _actionService.Actions.Keys.ToList();
+        string chosenAction = actionNames[Random.Shared.Next(actionNames.Count)];
+
+        IActionContext context = new ActionContext(champion, challenger);
+
+        return _actionService.Actions[chosenAction](context);
+    }
+
+    public Task<string> SendMessageAsync(string message)
     {
         throw new NotImplementedException();
     }

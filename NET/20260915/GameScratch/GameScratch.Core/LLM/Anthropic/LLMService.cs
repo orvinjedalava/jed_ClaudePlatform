@@ -5,8 +5,9 @@ using Anthropic;
 using Anthropic.Core;
 using Anthropic.Models.Messages;
 using System.Text;
-using System.Linq.Expressions;
+
 using GameScratch.Core.Services;
+using GameScratch.Core.Common.Players;
 
 namespace GameScratch.Core.LLM.Anthropic;
 
@@ -22,8 +23,13 @@ public class LLMService : LLMServiceBase, ILLMService
         _client = new AnthropicClient(new ClientOptions { ApiKey = _options.ApiKey });
 
     }
+
+    public async Task<string> ExecuteTurnAsync(Player champion, Player challenger)
+    {
+        throw new NotImplementedException();
+    }
     
-    async Task<string> ILLMService.SendMessageAsync(string message)
+    public async Task<string> SendMessageAsync(string message)
     {
         if (!_options.Enabled)
             return "LLM is not enabled.";

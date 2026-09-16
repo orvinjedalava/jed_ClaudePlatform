@@ -4,5 +4,8 @@ namespace GameScratch.Core.Services;
 
 public interface IActionService
 {
-    // string Attack(Record attacker, Record defender);
+
+    Dictionary<string, Func<IActionContext, string>> Actions { get; init; }
+    string Attack(Player attacker, Player defender);
+    string GuardStance(Player attacker);
 }
