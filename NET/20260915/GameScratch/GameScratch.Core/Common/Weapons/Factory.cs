@@ -17,7 +17,8 @@ public class WeaponBuilder
                 {
                     Name = weaponType.Value.ToString(),
                     BaseDamage = weaponType.Value.GetDiceType(),
-                    StaminaCost = weaponType.Value.GetStaminaCost()
+                    StaminaCost = weaponType.Value.GetStaminaCost(),
+                    WeaponType = weaponType.Value
                 };
                 break;
         }

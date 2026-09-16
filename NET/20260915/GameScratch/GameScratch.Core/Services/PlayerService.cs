@@ -7,12 +7,27 @@ public class PlayerService : IPlayerService
 {
     void IPlayerService.ResetPlayer(Player player)
     {
-        ResetPlayer(player, WeaponType.BareHands);
+        ResetPlayer(player, player.Equipment.Weapon.WeaponType);
     }
 
     void IPlayerService.ResetPlayer(Player player, WeaponType weaponType)
     {
         ResetPlayer(player, weaponType);
+    }
+
+    Player IPlayerService.CreatePlayer(RoleType roleType, string name, WeaponType weaponType)
+    {
+        Weapon weapon = WeaponBuilder
+            .Create()
+            .FromWeaponType(weaponType)
+            .Build();
+
+        return PlayerBuilder
+            .Create()
+            .WithProfile(roleType, name)
+            .WithStats()
+            .WithEquipment(weapon)
+            .Build();
     }
 
     private void ResetPlayer(Player player, WeaponType weaponType)

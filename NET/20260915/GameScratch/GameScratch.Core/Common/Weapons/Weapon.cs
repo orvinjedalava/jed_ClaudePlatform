@@ -7,6 +7,7 @@ public class Weapon
     public required DiceType BaseDamage { get; init; }
     public required string Name { get; init; }
     public required int StaminaCost { get; set; }
+    public required WeaponType WeaponType { get; set; }
 
     public override bool Equals(object? obj)
     {
@@ -17,7 +18,8 @@ public class Weapon
 
         return BaseDamage == weapon.BaseDamage
             && Name == weapon.Name
-            && StaminaCost == weapon.StaminaCost;
+            && StaminaCost == weapon.StaminaCost
+            && WeaponType == weapon.WeaponType;
     }
 
     public override int GetHashCode()

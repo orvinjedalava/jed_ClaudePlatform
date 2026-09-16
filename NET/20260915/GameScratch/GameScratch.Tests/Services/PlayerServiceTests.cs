@@ -36,4 +36,21 @@ public class PlayerServiceTests
 
         Assert.True(expectedWeapon.Equals(player.Equipment.Weapon));
     }
+
+    [Theory]
+    [InlineData(RoleType.Challenger, "Player", WeaponType.BareHands)]
+    [InlineData(RoleType.Champion, "Model", WeaponType.BareHands)]
+    public void CreatePlayer_Success(RoleType roleType, string name, WeaponType weaponType)
+    {
+        Weapon weapon = WeaponBuilder
+            .Create()
+            .FromWeaponType(WeaponType.BareHands)
+            .Build();
+        
+        Player result = _playerService.CreatePlayer(roleType, name, weaponType);
+
+        Assert.Equal(roleType, result.Profile.RoleType);
+        Assert.Equal(name, result.Profile.Name);
+        Assert.True(result.Equipment.Weapon.Equals(weapon));
+    }
 }

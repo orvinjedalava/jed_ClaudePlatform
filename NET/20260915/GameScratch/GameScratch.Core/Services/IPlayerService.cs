@@ -7,4 +7,6 @@ public interface IPlayerService
 {
     void ResetPlayer(Player player);
     void ResetPlayer(Player player, WeaponType weaponType);
+
+    Player CreatePlayer(RoleType roleType, string name, WeaponType weaponType);
 }
