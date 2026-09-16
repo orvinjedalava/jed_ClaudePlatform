@@ -5,6 +5,6 @@ namespace GameScratch.Core.Services;
 
 public interface IPlayerService
 {
-    void ResetPlayer(Player record);
-    void ResetPlayer(Player record, WeaponType weaponType);
+    void ResetPlayer(Player player);
+    void ResetPlayer(Player player, WeaponType weaponType);
 }

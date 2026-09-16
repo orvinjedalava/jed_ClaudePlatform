@@ -5,26 +5,28 @@ namespace GameScratch.Core.Services;
 
 public class PlayerService : IPlayerService
 {
-    void IPlayerService.ResetPlayer(Player record)
+    void IPlayerService.ResetPlayer(Player player)
     {
-        ResetPlayer(record, WeaponType.BareHands);
+        ResetPlayer(player, WeaponType.BareHands);
     }
 
-    void IPlayerService.ResetPlayer(Player record, WeaponType weaponType)
+    void IPlayerService.ResetPlayer(Player player, WeaponType weaponType)
     {
-        ResetPlayer(record, weaponType);
+        ResetPlayer(player, weaponType);
     }
 
-    private void ResetPlayer(Player record, WeaponType weaponType)
+    private void ResetPlayer(Player player, WeaponType weaponType)
     {
-        record = new Player
-        {
-            Profile = new(),
-            Stats = new(),
-            Equipment = new()
-            {
-                Weapon = WeaponBuilder.Create().FromWeaponType(weaponType).Build()
-            }
-        };
+        Weapon weapon = WeaponBuilder
+            .Create()
+            .FromWeaponType(weaponType)
+            .Build();
+
+        player = PlayerBuilder
+            .Create()
+            .WithProfile(player.Profile.RoleType, player.Profile.Name)
+            .WithStats()
+            .WithEquipment(weapon)
+            .Build();
     }
 }
