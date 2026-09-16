@@ -7,8 +7,8 @@ public class PromptFactory
         [1] Attack with weapon
         [2] Go to guard stance
 
-        [r] Reset Game
-        [q] Quite Game
+        [r] Reset Match
+        [q] Quite Match
         
     """;
 
@@ -20,7 +20,7 @@ public class PromptFactory
     public const string GameStateNoneMsg = 
     """
         [s] Start game
-        [q] Quite game
+        [c] Close game
     """;
 
     public const string ChampionActionMsg = 
@@ -29,7 +29,8 @@ public class PromptFactory
     """;
 
 
-    public const string QuiteMsg = "Closing game...";
+    public const string QuiteMatchMsg = "Quiting current match...";
+    public const string CloseGameMsg = "Closing game. Goodbye!";
 
     public static PromptFactory Create() => new();
 
@@ -40,8 +41,9 @@ public class PromptFactory
             { GameState.ChallengerTurn.ToString(), ChallengerTurnMsg },
             { GameState.ChampionTurn.ToString(), ChampionTurnMsg },
             { GameState.None.ToString(), GameStateNoneMsg},
-            { nameof(QuiteMsg), QuiteMsg },
-            { nameof(ChampionActionMsg), ChampionActionMsg}
+            { nameof(QuiteMatchMsg), QuiteMatchMsg },
+            { nameof(ChampionActionMsg), ChampionActionMsg},
+            { nameof(CloseGameMsg), CloseGameMsg },
         };
 
         return _promptsMap;

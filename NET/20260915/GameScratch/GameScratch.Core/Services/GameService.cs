@@ -33,6 +33,13 @@ public class GameService: IGameService
         return await _llmService.SendMessageAsync(message);
     }
 
+    public string ShowMainMenu()
+    {
+        LatestGameState = GameState.None;
+
+        return _promptsMap[LatestGameState.ToString()];
+    }
+
     public string Reset()
     {
         _llmService.ClearChatHistory();
@@ -102,7 +109,7 @@ public class GameService: IGameService
             case 'q':
                 LatestGameState = GameState.None;
                 isContinue = false;
-                responseMsg = _promptsMap[nameof(PromptFactory.QuiteMsg)];
+                responseMsg = _promptsMap[nameof(PromptFactory.QuiteMatchMsg)];
                 break;
             default:
                 isContinue = true;
@@ -125,10 +132,9 @@ public class GameService: IGameService
                 isContinue = true;
                 responseMsg = _promptsMap[LatestGameState.ToString()];
                 break;
-            case 'q':
-                LatestGameState = GameState.None;
+            case 'c':
                 isContinue = false;
-                responseMsg = _promptsMap[nameof(PromptFactory.QuiteMsg)];
+                responseMsg = _promptsMap[nameof(PromptFactory.CloseGameMsg)];
                 break;
             default:
                 isContinue = true;

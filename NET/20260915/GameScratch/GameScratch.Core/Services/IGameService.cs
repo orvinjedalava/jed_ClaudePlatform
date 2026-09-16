@@ -11,6 +11,7 @@ public interface IGameService
 
     Task<string> SendMessageToLLMAsync(string message);
 
+    string ShowMainMenu();
     string Reset();
     string Start();
 

@@ -92,7 +92,7 @@ public class GameServiceTests
     [InlineData('s', true)]
     [InlineData('1', true)]
     [InlineData('r', true)]
-    [InlineData('q', false)]
+    [InlineData('c', false)]
     public void HandleGameStateNoneInput_Success(char keyChar, bool expectedContinueGame)
     {
         (bool isContinue, _) = _gameService.HandleGameStateNoneInput(keyChar);
@@ -106,6 +106,14 @@ public class GameServiceTests
        _gameService.ExecuteChampionTurn();
 
        Assert.NotEqual(GameState.ChampionTurn, _gameService.LatestGameState); 
+    }
+
+    [Fact]
+    public void ShowMainMenu_Success()
+    {
+        _gameService.ShowMainMenu();
+
+        Assert.Equal(GameState.None, _gameService.LatestGameState);
     }
 
 }
