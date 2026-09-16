@@ -24,12 +24,15 @@ public class LLMService : LLMServiceBase, ILLMService
 
     }
 
-    public async Task<string> ExecuteTurnAsync(Player champion, Player challenger)
+    public new async Task<string> ExecuteTurnAsync(Player champion, Player challenger)
     {
-        throw new NotImplementedException();
+        if (!_options.Enabled)
+            return await base.ExecuteTurnAsync(champion, challenger);
+        
+        return await SendMessageAsync("TODO message");
     }
     
-    public async Task<string> SendMessageAsync(string message)
+    public new async Task<string> SendMessageAsync(string message)
     {
         if (!_options.Enabled)
             return "LLM is not enabled.";
