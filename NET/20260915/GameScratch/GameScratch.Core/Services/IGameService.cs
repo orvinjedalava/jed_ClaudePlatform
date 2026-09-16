@@ -18,5 +18,5 @@ public interface IGameService
     (bool continueGame, string responseMsg) HandleInput(char keyChar);
     (bool continueGame, string responseMsg) HandleChallengerInput(char keyChar);
     (bool continueGame, string responseMsg) HandleGameStateNoneInput(char keyChar);
-    string ExecuteChampionTurn();
+    Task<string> ExecuteChampionTurnAsync();
 }

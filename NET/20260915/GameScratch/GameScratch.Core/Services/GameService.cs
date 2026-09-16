@@ -143,10 +143,12 @@ public class GameService: IGameService
         return (isContinue, responseMsg);
     }
 
-    public string ExecuteChampionTurn()
+    public async Task<string> ExecuteChampionTurnAsync()
     {
+        string actionMsg = await _llmService.ExecuteTurnAsync(Champion, Challenger);
+
         LatestGameState = GameState.ChallengerTurn;
 
-        return $"{_promptsMap[nameof(PromptFactory.ChampionActionMsg)]}\n\n{_promptsMap[LatestGameState.ToString()]}";
+        return $"{actionMsg}\n\n{_promptsMap[LatestGameState.ToString()]}";
     }
 }

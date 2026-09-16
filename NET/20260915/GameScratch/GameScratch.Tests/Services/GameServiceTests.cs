@@ -101,9 +101,9 @@ public class GameServiceTests
     }
 
     [Fact]
-    public void ExecuteChampionTurn_Success()
+    public async Task ExecuteChampionTurn_Success()
     {
-       _gameService.ExecuteChampionTurn();
+       await _gameService.ExecuteChampionTurnAsync();
 
        Assert.NotEqual(GameState.ChampionTurn, _gameService.LatestGameState); 
     }

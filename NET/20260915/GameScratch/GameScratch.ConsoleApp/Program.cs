@@ -21,9 +21,9 @@ var gameService = host.Services.GetRequiredService<IGameService>();
 
 // Console.WriteLine(await messageService.SendMessageToLLMAsync("What should I search for to find the latest developments in renewable energy?"));
 
-EnterMainMenu();
+await EnterMainMenu();
 
-void EnterMainMenu()
+async Task EnterMainMenu()
 {
     Console.WriteLine(gameService.ShowMainMenu());
 
@@ -42,7 +42,7 @@ void EnterMainMenu()
         {
             if (gameService.LatestGameState == GameState.ChallengerTurn)
             {
-                EnterMatch();
+                await EnterMatch();
             }
         }
         else
@@ -52,7 +52,7 @@ void EnterMainMenu()
     }
 }
 
-void EnterMatch()
+async Task EnterMatch()
 {
     while(true)
     {
@@ -69,7 +69,7 @@ void EnterMatch()
         {
             if (gameService.LatestGameState == GameState.ChampionTurn)
             {
-                Console.WriteLine(gameService.ExecuteChampionTurn());
+                Console.WriteLine(await gameService.ExecuteChampionTurnAsync());
             }
         }
         else
