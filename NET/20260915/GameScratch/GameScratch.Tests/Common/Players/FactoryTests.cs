@@ -27,5 +27,6 @@ public class FactoryTests
         Assert.Equal(name, result.Profile.Name);
         Assert.Equal(20, result.Stats.HitPoints);
         Assert.Equal(10, result.Stats.Stamina);
+        Assert.Equal(StanceType.Default, result.StanceType);
     }
 }

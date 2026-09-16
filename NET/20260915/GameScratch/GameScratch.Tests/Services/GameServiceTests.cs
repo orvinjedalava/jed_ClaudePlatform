@@ -45,4 +45,12 @@ public class GameServiceTests
 
         Assert.Null(exception);
     }
+
+    [Fact]
+    public void Start_Success()
+    {
+        var exception = Record.Exception(() => _gameService.Start());
+
+        Assert.Null(exception);
+    }
 }
