@@ -100,4 +100,12 @@ public class GameServiceTests
         Assert.Equal(expectedContinueGame, isContinue);
     }
 
+    [Fact]
+    public void ExecuteChampionTurn_Success()
+    {
+       _gameService.ExecuteChampionTurn();
+
+       Assert.NotEqual(GameState.ChampionTurn, _gameService.LatestGameState); 
+    }
+
 }

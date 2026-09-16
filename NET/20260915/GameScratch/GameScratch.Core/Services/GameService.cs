@@ -138,4 +138,11 @@ public class GameService: IGameService
 
         return (isContinue, responseMsg);
     }
+
+    public string ExecuteChampionTurn()
+    {
+        LatestGameState = GameState.ChallengerTurn;
+
+        return _promptsMap[nameof(PromptFactory.ChampionActionMsg)];
+    }
 }

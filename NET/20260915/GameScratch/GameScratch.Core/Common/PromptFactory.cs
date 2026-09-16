@@ -23,6 +23,12 @@ public class PromptFactory
         [q] Quite game
     """;
 
+    public const string ChampionActionMsg = 
+    """
+        Champion decided to {0}
+    """;
+
+
     public const string QuiteMsg = "Closing game...";
 
     public static PromptFactory Create() => new();
@@ -34,7 +40,8 @@ public class PromptFactory
             { GameState.ChallengerTurn.ToString(), ChallengerTurnMsg },
             { GameState.ChampionTurn.ToString(), ChampionTurnMsg },
             { GameState.None.ToString(), GameStateNoneMsg},
-            { nameof(QuiteMsg), QuiteMsg }
+            { nameof(QuiteMsg), QuiteMsg },
+            { nameof(ChampionActionMsg), ChampionActionMsg}
         };
 
         return _promptsMap;
