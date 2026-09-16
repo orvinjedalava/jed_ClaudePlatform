@@ -1,4 +1,4 @@
-using GameScratch.Core.Common.Player;
+using GameScratch.Core.Common.Players;
 
 namespace GameScratch.Core.Services;
 

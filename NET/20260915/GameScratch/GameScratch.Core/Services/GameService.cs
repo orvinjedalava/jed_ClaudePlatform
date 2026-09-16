@@ -1,4 +1,4 @@
-using GameScratch.Core.Common.Player;
+using GameScratch.Core.Common.Players;
 using GameScratch.Core.Common.Weapons;
 using GameScratch.Core.LLM;
 
@@ -27,7 +27,8 @@ public class GameService: IGameService
         };
     }
 
-    public Player Challenger { get; set; }
+    public Player Challenger { get; set; } = null!;
+    public Player Champion { get; set; } = null!;
 
     async Task<string> IGameService.SendMessageToLLMAsync(string message)
     {
@@ -37,5 +38,7 @@ public class GameService: IGameService
     void IGameService.Reset()
     {
         _llmService.ClearChatHistory();
+        _playerService.ResetPlayer(Challenger);
+        _playerService.ResetPlayer(Champion);
     }
 }
