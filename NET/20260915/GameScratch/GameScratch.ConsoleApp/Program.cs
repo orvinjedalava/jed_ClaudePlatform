@@ -16,6 +16,11 @@ builder.ConfigureServices();
 
 using IHost host = builder.Build();
 
-var messageService = host.Services.GetRequiredService<IGameService>();
+var gameService = host.Services.GetRequiredService<IGameService>();
 
-Console.WriteLine(await messageService.SendMessageToLLMAsync("What should I search for to find the latest developments in renewable energy?"));
+// Console.WriteLine(await messageService.SendMessageToLLMAsync("What should I search for to find the latest developments in renewable energy?"));
+var response = gameService.Start();
+
+Console.WriteLine(response);
+
+ConsoleKeyInfo key = Console.ReadKey();

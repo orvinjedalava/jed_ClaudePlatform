@@ -6,6 +6,10 @@ public class PromptFactory
     """
         [1] Attack with weapon
         [2] Go to guard stance
+        
+        [r] Reset Game
+        [q] Quite Game
+        
     """;
 
     public const string ChampionTurnMsg = 

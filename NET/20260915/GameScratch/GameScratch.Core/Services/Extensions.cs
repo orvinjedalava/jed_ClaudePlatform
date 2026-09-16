@@ -11,6 +11,7 @@ public static class ServicesExtensions
     {
         builder.Services.AddScoped<IPlayerService, PlayerService>();
         builder.Services.AddScoped<IActionService, ActionService>();
+        builder.Services.AddTransient<IDiceService, DiceService>();
         builder.Services.AddSingleton<IGameService, GameService>();
 
         builder.Services.Configure<LLMServiceOptions>(builder.Configuration.GetSection("AnthropicLLMService"));
