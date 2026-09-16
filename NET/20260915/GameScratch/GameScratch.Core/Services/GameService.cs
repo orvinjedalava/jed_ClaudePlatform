@@ -107,9 +107,8 @@ public class GameService: IGameService
                 responseMsg = Reset();
                 break;
             case 'q':
-                LatestGameState = GameState.None;
                 isContinue = false;
-                responseMsg = _promptsMap[nameof(PromptFactory.QuiteMatchMsg)];
+                responseMsg = $"{_promptsMap[nameof(PromptFactory.QuiteMatchMsg)]}\n\n{ShowMainMenu()}";
                 break;
             default:
                 isContinue = true;
@@ -128,9 +127,8 @@ public class GameService: IGameService
         switch(keyChar)
         {
             case 's':
-                LatestGameState = GameState.ChampionTurn;
                 isContinue = true;
-                responseMsg = _promptsMap[LatestGameState.ToString()];
+                responseMsg = Start();
                 break;
             case 'c':
                 isContinue = false;

@@ -25,14 +25,10 @@ EnterMainMenu();
 
 void EnterMainMenu()
 {
-    bool inMainMenu = true;
+    Console.WriteLine(gameService.ShowMainMenu());
 
-    var response = gameService.ShowMainMenu();
-    Console.WriteLine(response);
-
-    while(inMainMenu)
+    while(true)
     {
-        
         char inputChar = Console.IsInputRedirected ? 
             (Console.ReadLine()?.FirstOrDefault() ?? '\0')
             : Console.ReadKey(true).KeyChar;
@@ -44,29 +40,42 @@ void EnterMainMenu()
 
         if (isContinue)
         {
-            // (bool isContinueMatch, string responseMatchMsg) = gameService.HandleGameStateNoneInput(key.KeyChar);
-
-            // if (gameService.LatestGameState != GameState.None)
-            // {
-            //     bool matchInProgress = true;
-
-            //     while(matchInProgress)
-            //     {
-                    
-
-            //         if (gameService.LatestGameState == GameState.None)
-            //         {
-            //             matchInProgress = false;
-            //         }
-            //     }
-            // }
+            if (gameService.LatestGameState == GameState.ChallengerTurn)
+            {
+                EnterMatch();
+            }
         }
         else
         {
-            inMainMenu = false;
-
+            break;
         }
+    }
+}
 
+void EnterMatch()
+{
+    while(true)
+    {
+        char inputChar = Console.IsInputRedirected ? 
+            (Console.ReadLine()?.FirstOrDefault() ?? '\0')
+            : Console.ReadKey(true).KeyChar;
+
+        (bool isContinue, string responseMsg) = gameService.HandleInput(inputChar);
+        Console.WriteLine("\n");
+
+        Console.WriteLine(responseMsg);
+
+        if (isContinue)
+        {
+            if (gameService.LatestGameState == GameState.ChampionTurn)
+            {
+                Console.WriteLine(gameService.ExecuteChampionTurn());
+            }
+        }
+        else
+        {
+            break;
+        }
     }
 }
 
