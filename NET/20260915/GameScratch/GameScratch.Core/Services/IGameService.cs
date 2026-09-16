@@ -13,4 +13,8 @@ public interface IGameService
 
     string Reset();
     string Start();
+
+    (bool continueGame, string responseMsg) HandleInput(char keyChar);
+    (bool continueGame, string responseMsg) HandleChallengerInput(char keyChar);
+    (bool continueGame, string responseMsg) HandleGameStateNoneInput(char keyChar);
 }

@@ -2,6 +2,7 @@ using Moq;
 
 using GameScratch.Core.Services;
 using GameScratch.Core.LLM;
+using GameScratch.Core.Common;
 
 namespace GameScratch.Tests.Services;
 
@@ -53,4 +54,50 @@ public class GameServiceTests
 
         Assert.Null(exception);
     }
+
+    [Theory]
+    [InlineData('1', GameState.ChallengerTurn, true)]
+    [InlineData('2', GameState.ChallengerTurn, true)]
+    [InlineData('s', GameState.None, true)]
+    public void HandleInput_Success(char keyChar, GameState gameState, bool expectedContinueGame)
+    {
+        var gameService = new GameService(
+            llmService: _llmServiceMock.Object,
+            playerService: _playerServiceMock.Object
+        )
+        { 
+            LatestGameState = gameState 
+        };
+
+        (bool isContinue, _) = gameService.HandleChallengerInput(keyChar);
+
+        Assert.Equal(expectedContinueGame, isContinue);
+    }
+
+    [Theory]
+    [InlineData('1', true)]
+    [InlineData('2', true)]
+    [InlineData('r', true)]
+    [InlineData('q', false)]
+    [InlineData('o', true)]
+    [InlineData('9', true)]
+    public void HandleChallengerInput_Success(char keyChar, bool expectedContinueGame)
+    {
+        (bool isContinue, _) = _gameService.HandleChallengerInput(keyChar);
+
+        Assert.Equal(expectedContinueGame, isContinue);
+    }
+
+    [Theory]
+    [InlineData('s', true)]
+    [InlineData('1', true)]
+    [InlineData('r', true)]
+    [InlineData('q', false)]
+    public void HandleGameStateNoneInput_Success(char keyChar, bool expectedContinueGame)
+    {
+        (bool isContinue, _) = _gameService.HandleGameStateNoneInput(keyChar);
+
+        Assert.Equal(expectedContinueGame, isContinue);
+    }
+
 }

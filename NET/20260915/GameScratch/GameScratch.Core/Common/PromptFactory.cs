@@ -6,7 +6,7 @@ public class PromptFactory
     """
         [1] Attack with weapon
         [2] Go to guard stance
-        
+
         [r] Reset Game
         [q] Quite Game
         
@@ -17,14 +17,24 @@ public class PromptFactory
         Model is thinking...
     """;
 
+    public const string GameStateNoneMsg = 
+    """
+        [s] Start game
+        [q] Quite game
+    """;
+
+    public const string QuiteMsg = "Closing game...";
+
     public static PromptFactory Create() => new();
 
-    public Dictionary<GameState, string> Build()
+    public Dictionary<string, string> Build()
     {
-        var _promptsMap = new Dictionary<GameState, string>()
+        var _promptsMap = new Dictionary<string, string>()
         {
-            { GameState.ChallengerTurn, ChallengerTurnMsg },
-            { GameState.ChampionTurn, ChampionTurnMsg }
+            { GameState.ChallengerTurn.ToString(), ChallengerTurnMsg },
+            { GameState.ChampionTurn.ToString(), ChampionTurnMsg },
+            { GameState.None.ToString(), GameStateNoneMsg},
+            { nameof(QuiteMsg), QuiteMsg }
         };
 
         return _promptsMap;

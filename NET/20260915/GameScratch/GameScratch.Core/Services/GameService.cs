@@ -10,7 +10,7 @@ public class GameService: IGameService
     private readonly ILLMService _llmService;
     private readonly IPlayerService _playerService;
 
-    private readonly Dictionary<GameState, string> _promptsMap;
+    private readonly Dictionary<string, string> _promptsMap;
 
     public GameService(
         ILLMService llmService,
@@ -33,7 +33,7 @@ public class GameService: IGameService
         return await _llmService.SendMessageAsync(message);
     }
 
-    string IGameService.Reset()
+    public string Reset()
     {
         _llmService.ClearChatHistory();
         _playerService.ResetPlayer(Challenger);
@@ -41,10 +41,10 @@ public class GameService: IGameService
 
         LatestGameState = GameState.ChallengerTurn;
 
-        return _promptsMap[LatestGameState];
+        return _promptsMap[LatestGameState.ToString()];
     }
 
-    string IGameService.Start()
+    public string Start()
     {
         _llmService.ClearChatHistory();
 
@@ -62,6 +62,80 @@ public class GameService: IGameService
 
         LatestGameState = GameState.ChallengerTurn;
 
-        return _promptsMap[LatestGameState];
+        return _promptsMap[LatestGameState.ToString()];
+    }
+
+    public (bool continueGame, string responseMsg) HandleInput(char keyChar)
+    {
+        switch(LatestGameState)
+        {
+            case GameState.ChallengerTurn:
+                return HandleChallengerInput(keyChar);
+            case GameState.None:
+                return HandleGameStateNoneInput(keyChar);
+        }
+
+        return (false, string.Empty);
+    }
+
+    public (bool continueGame, string responseMsg) HandleChallengerInput(char keyChar)
+    {
+        bool isContinue = false;
+        string responseMsg = string.Empty;
+
+        switch(keyChar)
+        {
+            case '1':
+                LatestGameState = GameState.ChampionTurn;
+                isContinue = true;
+                responseMsg = _promptsMap[LatestGameState.ToString()];
+                break;
+            case '2':
+                LatestGameState = GameState.ChampionTurn;
+                isContinue = true;
+                responseMsg = _promptsMap[LatestGameState.ToString()];
+                break;
+            case 'r':
+                isContinue = true;
+                responseMsg = Reset();
+                break;
+            case 'q':
+                LatestGameState = GameState.None;
+                isContinue = false;
+                responseMsg = _promptsMap[nameof(PromptFactory.QuiteMsg)];
+                break;
+            default:
+                isContinue = true;
+                responseMsg = $"Invalid input.\n\n{_promptsMap[LatestGameState.ToString()]}";
+                break;
+        }
+
+        return (isContinue, responseMsg);
+    }
+
+    public (bool continueGame, string responseMsg) HandleGameStateNoneInput(char keyChar)
+    {
+        bool isContinue = false;
+        string responseMsg = string.Empty;
+
+        switch(keyChar)
+        {
+            case 's':
+                LatestGameState = GameState.ChampionTurn;
+                isContinue = true;
+                responseMsg = _promptsMap[LatestGameState.ToString()];
+                break;
+            case 'q':
+                LatestGameState = GameState.None;
+                isContinue = false;
+                responseMsg = _promptsMap[nameof(PromptFactory.QuiteMsg)];
+                break;
+            default:
+                isContinue = true;
+                responseMsg = $"Invalid input.\n\n{_promptsMap[LatestGameState.ToString()]}";
+                break;
+        }
+
+        return (isContinue, responseMsg);
     }
 }
