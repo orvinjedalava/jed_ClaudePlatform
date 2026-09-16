@@ -143,6 +143,6 @@ public class GameService: IGameService
     {
         LatestGameState = GameState.ChallengerTurn;
 
-        return _promptsMap[nameof(PromptFactory.ChampionActionMsg)];
+        return $"{_promptsMap[nameof(PromptFactory.ChampionActionMsg)]}\n\n{_promptsMap[LatestGameState.ToString()]}";
     }
 }
