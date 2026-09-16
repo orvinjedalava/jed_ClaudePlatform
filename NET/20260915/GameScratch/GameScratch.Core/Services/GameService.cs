@@ -89,18 +89,21 @@ public class GameService: IGameService
     {
         bool isContinue = false;
         string responseMsg = string.Empty;
+        string actionResponseMsg = string.Empty;
 
         switch(keyChar)
         {
             case '1':
+                actionResponseMsg = _playerService.AttackChampion(Challenger, Champion);
                 LatestGameState = GameState.ChampionTurn;
                 isContinue = true;
-                responseMsg = _promptsMap[LatestGameState.ToString()];
+                responseMsg = $"{actionResponseMsg}\n\n{_promptsMap[LatestGameState.ToString()]}";
                 break;
             case '2':
+                actionResponseMsg = _playerService.GuardStance(Challenger);
                 LatestGameState = GameState.ChampionTurn;
                 isContinue = true;
-                responseMsg = _promptsMap[LatestGameState.ToString()];
+                responseMsg = $"{actionResponseMsg}\n\n{_promptsMap[LatestGameState.ToString()]}";
                 break;
             case 'r':
                 isContinue = true;

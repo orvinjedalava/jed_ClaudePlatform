@@ -1,6 +1,7 @@
 using GameScratch.Core.Common.Weapons;
 using GameScratch.Core.Services;
 using GameScratch.Core.Common.Players;
+using Moq;
 
 namespace GameScratch.Tests.Services;
 
@@ -8,9 +9,13 @@ public class PlayerServiceTests
 {
     private readonly IPlayerService _playerService;
 
+    private readonly Mock<IActionService> _actionServiceMock;
+
     public PlayerServiceTests()
     {
-        _playerService = new PlayerService();
+        _actionServiceMock = new Mock<IActionService>();
+
+        _playerService = new PlayerService(_actionServiceMock.Object);
     }
 
     [Theory]
@@ -54,5 +59,24 @@ public class PlayerServiceTests
         Assert.Equal(name, result.Profile.Name);
         Assert.True(result.Equipment.Weapon.Equals(weapon));
         Assert.Equal(StanceType.Default, result.Conditions.StanceType);
+    }
+
+    [Fact]
+    public void AttackChampion_Success()
+    {
+        Player challenger = PlayersFactory.DefaultChallengerPlayer;
+        Player champion = PlayersFactory.DefaultChampionPlayer;
+        var exception = Record.Exception(() => _playerService.AttackChampion(challenger, champion));
+
+        Assert.Null(exception);
+    }
+
+    [Fact]
+    public void GuardStance_Success()
+    {
+        Player challenger = PlayersFactory.DefaultChallengerPlayer;
+        var exception = Record.Exception(() => _playerService.GuardStance(challenger));
+
+        Assert.Null(exception);
     }
 }

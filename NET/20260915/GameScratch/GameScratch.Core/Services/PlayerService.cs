@@ -5,12 +5,18 @@ namespace GameScratch.Core.Services;
 
 public class PlayerService : IPlayerService
 {
-    void IPlayerService.ResetPlayer(Player player)
+    private IActionService _actionService;
+    public PlayerService(IActionService actionService)
+    {
+        _actionService = actionService;
+    }
+
+    public void ResetPlayer(Player player)
     {
         player.ClearConditions();
     }
 
-    Player IPlayerService.CreatePlayer(RoleType roleType, string name, WeaponType weaponType)
+    public Player CreatePlayer(RoleType roleType, string name, WeaponType weaponType)
     {
         Player player = PlayersFactory.DefaultPlayer;
 
@@ -24,5 +30,15 @@ public class PlayerService : IPlayerService
         player.Profile.RoleType = roleType;
 
         return player;
+    }
+
+    public string AttackChampion(Player player, Player champion)
+    {
+        return _actionService.Attack(player, champion);
+    }
+
+    public string GuardStance(Player player)
+    {
+        return _actionService.GuardStance(player);
     }
 }
