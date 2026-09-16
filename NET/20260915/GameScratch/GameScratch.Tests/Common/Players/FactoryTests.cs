@@ -25,8 +25,10 @@ public class FactoryTests
 
         Assert.Equal(roleType, result.Profile.RoleType);
         Assert.Equal(name, result.Profile.Name);
-        Assert.Equal(20, result.Stats.HitPoints);
-        Assert.Equal(10, result.Stats.Stamina);
+        Assert.Equal(20, result.Stats.HitPointsCurrent);
+        Assert.Equal(20, result.Stats.HitPointsMax);
+        Assert.Equal(10, result.Stats.StaminaPointsCurrent);
+        Assert.Equal(10, result.Stats.StaminaPointsMax);
         Assert.Equal(StanceType.Default, result.StanceType);
     }
 }

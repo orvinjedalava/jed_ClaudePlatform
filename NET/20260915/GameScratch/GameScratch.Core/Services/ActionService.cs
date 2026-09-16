@@ -12,10 +12,13 @@ public sealed record ActionContext(Player Attacker, Player Defender) : IActionCo
 
 public class ActionService : IActionService
 {
+    private IDiceService _diceService;
     public Dictionary<string, Func<IActionContext, string>> Actions { get; init; }
 
-    public ActionService()
+    public ActionService(IDiceService diceService)
     {
+        _diceService = diceService;
+
         Actions = new()
         {
             { nameof(Attack), ctx => Attack(ctx.Attacker, ctx.Defender) },

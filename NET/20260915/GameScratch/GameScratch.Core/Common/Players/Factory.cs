@@ -21,12 +21,14 @@ public class PlayerBuilder
         };
     }
 
-    public PlayerBuilder WithStats(int hitPoints = 20, int stamina = 10)
+    public PlayerBuilder WithStats(int hitPoints = 20, int staminaPoints = 10)
     {
         _stats = new Stats()
         {
-            HitPoints = hitPoints,
-            Stamina = stamina
+            HitPointsCurrent = hitPoints,
+            HitPointsMax = hitPoints,
+            StaminaPointsCurrent = staminaPoints,
+            StaminaPointsMax = staminaPoints
         };
 
         return this;
