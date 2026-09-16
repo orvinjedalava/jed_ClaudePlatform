@@ -7,4 +7,6 @@ public class Player
     public required Profile Profile { get; init; }
     public required Stats Stats { get; init; }
     public required Equipment Equipment { get; init; }
+
+    public StanceType StanceType { get; set; } = StanceType.Default;
 }

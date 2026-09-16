@@ -14,27 +14,22 @@ public class PlayerServiceTests
     }
 
     [Theory]
-    [InlineData(null)]
-    [InlineData(WeaponType.BareHands)]
-    public void ResetPlayer_Success(WeaponType? weaponType)
+    [InlineData(null, RoleType.Challenger, "Player")]
+    [InlineData(WeaponType.BareHands, RoleType.Champion, "Model")]
+    public void ResetPlayer_Success(WeaponType? weaponType, RoleType roleType, string name)
     {
-        Player player = new Player()
-        {
-            Profile = new(),
-            Stats = new(),
-            Equipment = new()
-            {
-                Weapon = WeaponBuilder.Create().FromWeaponType(WeaponType.BareHands).Build()
-            }
-        };
+        Weapon weapon = WeaponBuilder.Create().FromWeaponType(weaponType).Build();
+
+        Player player = PlayerBuilder.Create().WithProfile(roleType, name).WithStats().WithEquipment(weapon).Build();
         if (weaponType == null)
             _playerService.ResetPlayer(player);
         else
             _playerService.ResetPlayer(player, weaponType.Value);
 
-        Weapon expectedWeapon = WeaponBuilder.Create().FromWeaponType(weaponType).Build();
-
-        Assert.True(expectedWeapon.Equals(player.Equipment.Weapon));
+        Assert.Equal(roleType, player.Profile.RoleType);
+        Assert.Equal(name, player.Profile.Name);
+        Assert.True(player.Equipment.Weapon.Equals(weapon));
+        Assert.Equal(StanceType.Default, player.StanceType);
     }
 
     [Theory]
@@ -52,5 +47,6 @@ public class PlayerServiceTests
         Assert.Equal(roleType, result.Profile.RoleType);
         Assert.Equal(name, result.Profile.Name);
         Assert.True(result.Equipment.Weapon.Equals(weapon));
+        Assert.Equal(StanceType.Default, result.StanceType);
     }
 }
