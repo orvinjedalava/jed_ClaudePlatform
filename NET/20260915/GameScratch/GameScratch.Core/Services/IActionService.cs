@@ -4,5 +4,5 @@ namespace GameScratch.Core.Services;
 
 public interface IActionService
 {
-    string Attack(Record attacker, Record defender);
+    // string Attack(Record attacker, Record defender);
 }

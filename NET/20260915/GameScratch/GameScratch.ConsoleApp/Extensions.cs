@@ -9,9 +9,7 @@ public static class Extensions
 {
     public static HostApplicationBuilder ConfigureServices(this HostApplicationBuilder builder)
     {
-        builder.Services.Configure<LLMServiceOptions>(builder.Configuration.GetSection("AnthropicLLMService"));
-        builder.Services.AddScoped<IGameService, GameService>();
-        builder.Services.AddScoped<ILLMService, Core.LLM.Anthropic.LLMService>();
+        builder.ConfigureCoreServices();
         return builder;
     }
 }

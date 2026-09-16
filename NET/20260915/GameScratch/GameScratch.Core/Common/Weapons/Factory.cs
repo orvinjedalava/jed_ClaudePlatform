@@ -5,16 +5,19 @@ public class WeaponBuilder
     private Weapon? _weapon;
 
     public static WeaponBuilder Create() => new();
-    public WeaponBuilder FromWeaponType(WeaponType weaponType)
+    public WeaponBuilder FromWeaponType(WeaponType? weaponType)
     {
+        if (weaponType == null)
+            weaponType = WeaponType.BareHands;
+
         switch(weaponType)
         {
             case WeaponType.BareHands:
                 _weapon = new()
                 {
-                    Name = weaponType.ToString(),
-                    BaseDamage = weaponType.GetDiceType(),
-                    StaminaCost = weaponType.GetStaminaCost()
+                    Name = weaponType.Value.ToString(),
+                    BaseDamage = weaponType.Value.GetDiceType(),
+                    StaminaCost = weaponType.Value.GetStaminaCost()
                 };
                 break;
         }

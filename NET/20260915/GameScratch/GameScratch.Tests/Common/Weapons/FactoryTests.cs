@@ -6,15 +6,17 @@ namespace GameScratch.Tests.Common.Weapons;
 public class FactoryTests
 {
     [Theory]
-    [InlineData(WeaponType.BareHands, "BareHands", DiceType.D4)]
-    public void BuildWeapon_Success(WeaponType weaponType, string name, DiceType diceType)
+    [InlineData(null, "BareHands", DiceType.D4, 10)]
+    [InlineData(WeaponType.BareHands, "BareHands", DiceType.D4, 10)]
+    public void BuildWeapon_Success(WeaponType? weaponType, string expectedName, DiceType expectedDiceType, int expectedStaminaCost)
     {
         Weapon result = WeaponBuilder
             .Create()
             .FromWeaponType(weaponType)
             .Build();
 
-        Assert.Equal(diceType, result.BaseDamage);
-        Assert.Equal(name, result.Name, ignoreCase: true);
+        Assert.Equal(expectedDiceType, result.BaseDamage);
+        Assert.Equal(expectedName, result.Name, ignoreCase: true);
+        Assert.Equal(expectedStaminaCost, result.StaminaCost);
     }
 }

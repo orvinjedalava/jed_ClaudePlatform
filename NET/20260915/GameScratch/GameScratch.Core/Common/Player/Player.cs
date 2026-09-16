@@ -2,7 +2,7 @@ using GameScratch.Core.Common.Weapons;
 
 namespace GameScratch.Core.Common.Player;
 
-public class Record
+public class Player
 {
     public required Profile Profile { get; init; }
     public required Stats Stats { get; init; }

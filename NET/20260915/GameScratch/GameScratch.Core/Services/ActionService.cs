@@ -1,6 +1,6 @@
 namespace GameScratch.Core.Services;
 
-public class ActionService
+public class ActionService : IActionService
 {
     
 }
