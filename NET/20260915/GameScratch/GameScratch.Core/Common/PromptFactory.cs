@@ -4,6 +4,7 @@ public class PromptFactory
 {
     public const string ChallengerTurnMsg = 
     """
+    =========================================================================
         [1] Attack with weapon
         [2] Go to guard stance
 
@@ -14,17 +15,20 @@ public class PromptFactory
 
     public const string ChampionTurnMsg = 
     """
+    =========================================================================
         Model is thinking...
     """;
 
     public const string GameStateNoneMsg = 
     """
+    =========================================================================
         [s] Start game
         [c] Close game
     """;
 
     public const string ChampionActionMsg = 
     """
+    =========================================================================
         Champion decided to {0}
     """;
 

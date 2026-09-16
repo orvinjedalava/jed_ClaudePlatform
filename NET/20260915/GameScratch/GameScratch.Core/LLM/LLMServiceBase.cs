@@ -1,9 +1,14 @@
+using GameScratch.Core.Services;
+
 namespace GameScratch.Core.LLM;
 
 public class LLMServiceBase : ILLMService
 {
-    public LLMServiceBase()
+    private readonly IActionService _actionService;
+    public LLMServiceBase(IActionService actionService)
     {
+        _actionService = actionService ?? throw new ArgumentNullException("ActionService not dependency injected.");
+        
         ChatHistory = [];
     }
 
