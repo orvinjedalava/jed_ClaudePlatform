@@ -1,5 +1,10 @@
 namespace GameScratch.Core.Common.Weapons;
 
+public class WeaponsFactory
+{
+    public static Weapon BareHands = WeaponBuilder.Create().FromWeaponType(WeaponType.BareHands).Build();
+}
+
 public class WeaponBuilder
 {
     private Weapon? _weapon;

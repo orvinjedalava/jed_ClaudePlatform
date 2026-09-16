@@ -7,28 +7,28 @@ namespace GameScratch.Tests.Common.Players;
 public class FactoryTests
 {
     [Theory]
-    [InlineData(WeaponType.BareHands, RoleType.Challenger, "Player")]
-    [InlineData(WeaponType.BareHands, RoleType.Champion, "Boss")]
-    public void BuildPlayer_Success(WeaponType? weaponType, RoleType roleType, string name)
+    [InlineData(WeaponType.BareHands, RoleType.Challenger)]
+    [InlineData(WeaponType.BareHands, RoleType.Champion)]
+    public void BuildPlayer_Success(WeaponType weaponType, RoleType roleType)
     {
+        Player player = PlayersFactory.DefaultPlayer;
+
+        string name = roleType.ToString();
+
         Weapon weapon = WeaponBuilder
             .Create()
             .FromWeaponType(weaponType)
             .Build();
-        
-        Player result = PlayerBuilder
-            .Create()
-            .WithProfile(roleType, name)
-            .WithStats()
-            .WithEquipment(weapon)
-            .Build();
 
-        Assert.Equal(roleType, result.Profile.RoleType);
-        Assert.Equal(name, result.Profile.Name);
-        Assert.Equal(20, result.Stats.HitPointsCurrent);
-        Assert.Equal(20, result.Stats.HitPointsMax);
-        Assert.Equal(10, result.Stats.StaminaPointsCurrent);
-        Assert.Equal(10, result.Stats.StaminaPointsMax);
-        Assert.Equal(StanceType.Default, result.StanceType);
+        player.Equipment.Weapon = weapon;
+        player.Profile.RoleType = roleType;
+        player.Profile.Name = name;
+        
+        Assert.Equal(roleType, player.Profile.RoleType);
+        Assert.Equal(name, player.Profile.Name);
+        Assert.Equal(20, player.Stats.HitPoints);
+        Assert.Equal(10, player.Stats.StaminaPoints);
+        Assert.Equal(10, player.Stats.ArmorClass);
+        Assert.Equal(StanceType.Default, player.Conditions.StanceType);
     }
 }

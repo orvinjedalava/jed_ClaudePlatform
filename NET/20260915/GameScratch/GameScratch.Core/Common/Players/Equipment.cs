@@ -4,5 +4,5 @@ namespace GameScratch.Core.Common.Players;
 
 public class Equipment
 {
-    public required Weapon Weapon { get; init; }
+    public required Weapon Weapon { get; set; }
 }

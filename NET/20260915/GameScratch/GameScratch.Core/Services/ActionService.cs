@@ -1,3 +1,5 @@
+using System.Text;
+using GameScratch.Core.Common;
 using GameScratch.Core.Common.Players;
 
 namespace GameScratch.Core.Services;
@@ -28,7 +30,32 @@ public class ActionService : IActionService
 
     public string Attack(Player attacker, Player defender)
     {
-        return $"{attacker.Profile.Name} ATTACKS {defender.Profile.Name} with {attacker.Equipment.Weapon.Name}";
+        var sb = new StringBuilder();
+        sb.AppendLine($"{attacker.Profile.Name} ATTACKS {defender.Profile.Name} with {attacker.Equipment.Weapon.Name}");
+
+        attacker.UseWeapon();
+        
+        int attackRoll = _diceService.Roll(DiceType.D20);
+        int defenderArmorClass = defender.GetArmorClass();
+        bool attackSuccessfull = attackRoll >= defenderArmorClass;
+
+        if (attackSuccessfull)
+        {
+            int damage = _diceService.Roll(attacker.Equipment.Weapon.BaseDamage);
+            defender.AddHitPointsDamage(damage);
+            sb.Append($" and hits, doing {damage} points of damage.");
+        }
+        else
+        {
+            sb.Append($" but missed!");
+        }
+
+        sb.AppendLine();
+
+        string rollSummaryMsg = $"ArmorClass: {defenderArmorClass}\nRoll:{attackRoll}\nHit:{attackSuccessfull}";
+        sb.AppendLine(rollSummaryMsg);
+
+        return sb.ToString();
     }
 
     public string GuardStance(Player attacker)

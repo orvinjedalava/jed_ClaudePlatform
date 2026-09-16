@@ -7,41 +7,22 @@ public class PlayerService : IPlayerService
 {
     void IPlayerService.ResetPlayer(Player player)
     {
-        ResetPlayer(player, player.Equipment.Weapon.WeaponType);
-    }
-
-    void IPlayerService.ResetPlayer(Player player, WeaponType weaponType)
-    {
-        ResetPlayer(player, weaponType);
+        player.ClearConditions();
     }
 
     Player IPlayerService.CreatePlayer(RoleType roleType, string name, WeaponType weaponType)
     {
+        Player player = PlayersFactory.DefaultPlayer;
+
         Weapon weapon = WeaponBuilder
             .Create()
             .FromWeaponType(weaponType)
             .Build();
 
-        return PlayerBuilder
-            .Create()
-            .WithProfile(roleType, name)
-            .WithStats()
-            .WithEquipment(weapon)
-            .Build();
-    }
+        player.Equipment.Weapon = weapon;
+        player.Profile.Name = name;
+        player.Profile.RoleType = roleType;
 
-    private void ResetPlayer(Player player, WeaponType weaponType)
-    {
-        Weapon weapon = WeaponBuilder
-            .Create()
-            .FromWeaponType(weaponType)
-            .Build();
-
-        player = PlayerBuilder
-            .Create()
-            .WithProfile(player.Profile.RoleType, player.Profile.Name)
-            .WithStats()
-            .WithEquipment(weapon)
-            .Build();
+        return player;
     }
 }

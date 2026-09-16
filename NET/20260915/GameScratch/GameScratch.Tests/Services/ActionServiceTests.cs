@@ -23,8 +23,8 @@ public class ActionServiceTests
     {
         Weapon weapon = WeaponBuilder.Create().FromWeaponType(WeaponType.BareHands).Build();
 
-        Player attacker = PlayerBuilder.Create().WithProfile(RoleType.Challenger, "Player").WithStats().WithEquipment(weapon).Build();
-        Player defender = PlayerBuilder.Create().WithProfile(RoleType.Champion, "Model").WithStats().WithEquipment(weapon).Build();
+        Player attacker = PlayersFactory.DefaultChallengerPlayer;
+        Player defender = PlayersFactory.DefaultChampionPlayer;
 
         Assert.NotNull(_actionService.Attack(attacker, defender));
     }
@@ -34,7 +34,7 @@ public class ActionServiceTests
     {
         Weapon weapon = WeaponBuilder.Create().FromWeaponType(WeaponType.BareHands).Build();
 
-        Player attacker = PlayerBuilder.Create().WithProfile(RoleType.Challenger, "Player").WithStats().WithEquipment(weapon).Build();
+        Player attacker = PlayersFactory.DefaultChallengerPlayer;
 
         Assert.NotNull(_actionService.GuardStance(attacker));
     }

@@ -40,8 +40,8 @@ public class LLMServiceBaseTests
 
         Weapon weapon = WeaponBuilder.Create().FromWeaponType(WeaponType.BareHands).Build();
 
-        Player challenger = PlayerBuilder.Create().WithProfile(RoleType.Challenger, "Player").WithStats().WithEquipment(weapon).Build();
-        Player champion = PlayerBuilder.Create().WithProfile(RoleType.Champion, "Model").WithStats().WithEquipment(weapon).Build();
+        Player challenger = PlayersFactory.DefaultChallengerPlayer;
+        Player champion = PlayersFactory.DefaultChampionPlayer;
 
         Assert.NotNull(await _llmServiceBase.ExecuteTurnAsync(champion, challenger));
     }

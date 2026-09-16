@@ -3,11 +3,42 @@ using GameScratch.Core.Common.Weapons;
 
 namespace GameScratch.Core.Common.Players;
 
+public class PlayersFactory
+{
+    public static Player DefaultPlayer =>
+        PlayerBuilder
+            .Create()
+            .WithProfile(RoleType.None, string.Empty)
+            .WithStats()
+            .WithEquipment(WeaponsFactory.BareHands)
+            .WithConditions()
+            .Build();
+            
+    public static Player DefaultChallengerPlayer =>
+        PlayerBuilder
+            .Create()
+            .WithProfile(RoleType.Challenger, RoleType.Challenger.ToString())
+            .WithStats()
+            .WithEquipment(WeaponsFactory.BareHands)
+            .WithConditions()
+            .Build();
+
+    public static Player DefaultChampionPlayer =>
+        PlayerBuilder
+            .Create()
+            .WithProfile(RoleType.Champion, RoleType.Champion.ToString())
+            .WithStats()
+            .WithEquipment(WeaponsFactory.BareHands)
+            .WithConditions()
+            .Build();
+}
+
 public class PlayerBuilder
 {
     private Profile? _profile;
     private Equipment? _equipment;
     private Stats? _stats;
+    private Conditions? _conditions;
 
     public static PlayerBuilder Create() => new();
 
@@ -17,18 +48,18 @@ public class PlayerBuilder
         {
             Profile = _profile ?? throw new ArgumentNullException("Profile is null"),
             Equipment = _equipment ?? throw new ArgumentNullException("Equipment is null"),
-            Stats = _stats ?? throw new ArgumentNullException("Stats is null")
+            Stats = _stats ?? throw new ArgumentNullException("Stats is null"),
+            Conditions = _conditions ?? throw new ArgumentNullException("Conditions is null"),
         };
     }
 
-    public PlayerBuilder WithStats(int hitPoints = 20, int staminaPoints = 10)
+    public PlayerBuilder WithStats(int hitPoints = 20, int staminaPoints = 10, int armorClass = 10)
     {
         _stats = new Stats()
         {
-            HitPointsCurrent = hitPoints,
-            HitPointsMax = hitPoints,
-            StaminaPointsCurrent = staminaPoints,
-            StaminaPointsMax = staminaPoints
+            HitPoints = hitPoints,
+            StaminaPoints = staminaPoints,
+            ArmorClass = armorClass
         };
 
         return this;
@@ -50,6 +81,16 @@ public class PlayerBuilder
         _equipment = new()
         {
             Weapon = weapon
+        };
+
+        return this;
+    }
+
+    public PlayerBuilder WithConditions()
+    {
+        _conditions = new()
+        {
+            StanceType = StanceType.Default
         };
 
         return this;
