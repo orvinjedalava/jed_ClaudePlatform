@@ -1,6 +1,7 @@
 using System.Text;
 using GameScratch.Core.Common;
 using GameScratch.Core.Common.Players;
+using GameScratch.Core.Common.Responses;
 
 namespace GameScratch.Core.Services;
 
@@ -15,7 +16,7 @@ public sealed record ActionContext(Player Attacker, Player Defender) : IActionCo
 public class ActionService : IActionService
 {
     private IDiceService _diceService;
-    public Dictionary<string, Func<IActionContext, string>> Actions { get; init; }
+    public Dictionary<string, Func<IActionContext, ActionResponse>> Actions { get; init; }
 
     public ActionService(IDiceService diceService)
     {
@@ -24,20 +25,19 @@ public class ActionService : IActionService
         Actions = new()
         {
             { nameof(Attack), ctx => Attack(ctx.Attacker, ctx.Defender) },
-            { nameof(GuardStance), ctx => GuardStance(ctx.Attacker) }
+            { nameof(Guard), ctx => Guard(ctx.Attacker) },
+            { nameof(EndTurn), ctx => EndTurn(ctx.Attacker) }
         };
     }
 
-    public string Attack(Player attacker, Player defender)
+    public ActionResponse Attack(Player attacker, Player defender)
     {
         var sb = new StringBuilder();
-        sb.AppendLine($"{attacker.Profile.Name} ATTACKS {defender.Profile.Name} with {attacker.Equipment.Weapon.Name}");
+        sb.Append($"{attacker.Profile.Name} ATTACKS {defender.Profile.Name} with {attacker.Equipment.Weapon.Name}");
 
-        attacker.UseWeapon();
-        
         int attackRoll = _diceService.Roll(DiceType.D20);
-        int defenderArmorClass = defender.GetArmorClass();
-        bool attackSuccessfull = attackRoll >= defenderArmorClass;
+        int defenderTotalArmorClass = defender.GetTotalArmorClass();
+        bool attackSuccessfull = attackRoll >= defenderTotalArmorClass;
 
         if (attackSuccessfull)
         {
@@ -50,20 +50,38 @@ public class ActionService : IActionService
             sb.Append($" but missed!");
         }
 
-        sb.AppendLine();
+        attacker.UseWeapon();
 
-        string rollSummaryMsg = $"ArmorClass: {defenderArmorClass}\nRoll:{attackRoll}\nHit:{attackSuccessfull}";
-        sb.AppendLine(rollSummaryMsg);
-
-        return sb.ToString();
+        return new ActionResponse()
+        {
+            Message = sb.ToString(),
+            TargetName = "Total Armor Class",
+            TargetValue = defenderTotalArmorClass,
+            TargetValueModifiers = defender.GetArmorClassModifiers(),
+            DiceRoll = attackRoll,
+            SwitchPlayerTurn = attacker.GetStaminaPointsRemaining() <= 0
+        };
     }
 
-    public string GuardStance(Player attacker)
+    public ActionResponse Guard(Player attacker)
     {
-        return $"{attacker.Profile.Name} goes into GUARD STANCE";
+        return new ActionResponse() 
+        {
+            Message = $"{attacker.Profile.Name} goes into GUARD STANCE",
+            SwitchPlayerTurn = true
+        };
     }
 
-    public string InvokeAction(string actionName, Player attacker, Player defender)
+    public ActionResponse EndTurn(Player attacker)
+    {
+        return new()
+        {
+            Message = $"{attacker.Profile.Name} ends turn.",
+            SwitchPlayerTurn = true
+        };
+    }
+
+    public ActionResponse InvokeAction(string actionName, Player attacker, Player defender)
     {
         if (!Actions.TryGetValue(actionName, out var action))
             throw new ArgumentException($"Unknown action: {actionName}", nameof(actionName));
@@ -71,5 +89,16 @@ public class ActionService : IActionService
         IActionContext context = new ActionContext(attacker, defender);
 
         return action(context);
+    }
+
+    public ActionResponse RollIniative(Player player)
+    {
+        int result = _diceService.Roll(DiceType.D20) + player.GetInitiativeModifier();
+
+        return new()
+        {
+            Message = $"{player.Profile.Name} rolls {result}",
+            DiceRoll = result
+        };
     }
 }

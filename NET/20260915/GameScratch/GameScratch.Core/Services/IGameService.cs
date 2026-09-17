@@ -1,5 +1,6 @@
 using GameScratch.Core.Common;
 using GameScratch.Core.Common.Players;
+using GameScratch.Core.Common.Responses;
 
 namespace GameScratch.Core.Services;
 
@@ -11,12 +12,17 @@ public interface IGameService
 
     Task<string> SendMessageToLLMAsync(string message);
 
-    string ShowMainMenu();
+    GameResponse ShowMainMenu();
     string Reset();
-    string Start();
+    GameResponse StartMatch(bool continueState);
+    GameResponse StartPlayerTurn(bool continueState, string message = "");
+    GameResponse CloseGame(bool continueState);
+    GameResponse Surrender(bool continueState);
+    GameResponse HandleInput(char keyChar);
+    Task<GameResponse> ExecuteChampionTurnAsync();
 
-    (bool continueGame, string responseMsg) HandleInput(char keyChar);
-    (bool continueGame, string responseMsg) HandleChallengerInput(char keyChar);
-    (bool continueGame, string responseMsg) HandleGameStateNoneInput(char keyChar);
-    Task<string> ExecuteChampionTurnAsync();
+    Player GetAttackingPlayer();
+    Player GetDefendingPlayer();
+
+    void SwitchPlayerTurn();
 }

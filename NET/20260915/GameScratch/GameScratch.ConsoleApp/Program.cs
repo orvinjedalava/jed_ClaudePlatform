@@ -27,55 +27,55 @@ async Task EnterMainMenu()
 {
     Console.WriteLine(gameService.ShowMainMenu());
 
-    while(true)
-    {
-        char inputChar = Console.IsInputRedirected ? 
-            (Console.ReadLine()?.FirstOrDefault() ?? '\0')
-            : Console.ReadKey(true).KeyChar;
+    // while(true)
+    // {
+    //     char inputChar = Console.IsInputRedirected ? 
+    //         (Console.ReadLine()?.FirstOrDefault() ?? '\0')
+    //         : Console.ReadKey(true).KeyChar;
 
-        (bool isContinue, string responseMsg) = gameService.HandleInput(inputChar);
-        Console.WriteLine("\n");
+    //     (bool isContinue, string responseMsg) = gameService.HandleInput(inputChar);
+    //     Console.WriteLine("\n");
 
-        Console.WriteLine(responseMsg);
+    //     Console.WriteLine(responseMsg);
 
-        if (isContinue)
-        {
-            if (gameService.LatestGameState == GameState.ChallengerTurn)
-            {
-                await EnterMatch();
-            }
-        }
-        else
-        {
-            break;
-        }
-    }
+    //     if (isContinue)
+    //     {
+    //         if (gameService.LatestGameState == GameState.ChallengerTurn)
+    //         {
+    //             await EnterMatch();
+    //         }
+    //     }
+    //     else
+    //     {
+    //         break;
+    //     }
+    // }
 }
 
 async Task EnterMatch()
 {
-    while(true)
-    {
-        char inputChar = Console.IsInputRedirected ? 
-            (Console.ReadLine()?.FirstOrDefault() ?? '\0')
-            : Console.ReadKey(true).KeyChar;
+    // while(true)
+    // {
+    //     char inputChar = Console.IsInputRedirected ? 
+    //         (Console.ReadLine()?.FirstOrDefault() ?? '\0')
+    //         : Console.ReadKey(true).KeyChar;
 
-        (bool isContinue, string responseMsg) = gameService.HandleInput(inputChar);
-        Console.WriteLine("\n");
+    //     (bool isContinue, string responseMsg) = gameService.HandleInput(inputChar);
+    //     Console.WriteLine("\n");
 
-        Console.WriteLine(responseMsg);
+    //     Console.WriteLine(responseMsg);
 
-        if (isContinue)
-        {
-            if (gameService.LatestGameState == GameState.ChampionTurn)
-            {
-                Console.WriteLine(await gameService.ExecuteChampionTurnAsync());
-            }
-        }
-        else
-        {
-            break;
-        }
-    }
+    //     if (isContinue)
+    //     {
+    //         if (gameService.LatestGameState == GameState.ChampionTurn)
+    //         {
+    //             Console.WriteLine(await gameService.ExecuteChampionTurnAsync());
+    //         }
+    //     }
+    //     else
+    //     {
+    //         break;
+    //     }
+    // }
 }
 

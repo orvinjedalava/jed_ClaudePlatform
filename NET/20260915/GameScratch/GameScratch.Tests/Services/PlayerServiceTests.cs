@@ -66,7 +66,7 @@ public class PlayerServiceTests
     {
         Player challenger = PlayersFactory.DefaultChallengerPlayer;
         Player champion = PlayersFactory.DefaultChampionPlayer;
-        var exception = Record.Exception(() => _playerService.AttackChampion(challenger, champion));
+        var exception = Record.Exception(() => _playerService.Attack(challenger, champion));
 
         Assert.Null(exception);
     }
@@ -75,7 +75,16 @@ public class PlayerServiceTests
     public void GuardStance_Success()
     {
         Player challenger = PlayersFactory.DefaultChallengerPlayer;
-        var exception = Record.Exception(() => _playerService.GuardStance(challenger));
+        var exception = Record.Exception(() => _playerService.Guard(challenger));
+
+        Assert.Null(exception);
+    }
+
+    [Fact]
+    public void StartPlayerTurn_Success()
+    {
+        Player challenger = PlayersFactory.DefaultChallengerPlayer;
+        var exception = Record.Exception(() => _playerService.StartPlayerTurn(challenger));
 
         Assert.Null(exception);
     }

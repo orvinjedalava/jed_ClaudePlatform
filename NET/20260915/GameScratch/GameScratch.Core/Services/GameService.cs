@@ -1,6 +1,7 @@
 using GameScratch.Core.Common;
 using GameScratch.Core.Common.Players;
 using GameScratch.Core.Common.Weapons;
+using GameScratch.Core.Common.Responses;
 using GameScratch.Core.LLM;
 
 namespace GameScratch.Core.Services;
@@ -9,15 +10,18 @@ public class GameService: IGameService
 {
     private readonly ILLMService _llmService;
     private readonly IPlayerService _playerService;
+    private readonly IInputService _inputService;
 
     private readonly Dictionary<string, string> _promptsMap;
 
     public GameService(
         ILLMService llmService,
-        IPlayerService playerService)
+        IPlayerService playerService,
+        IInputService inputService)
     {
         _llmService = llmService ?? throw new ArgumentNullException("LLMService not injected.");
         _playerService = playerService ?? throw new ArgumentNullException("PlayerService not injected.");
+        _inputService = inputService ?? throw new ArgumentNullException("InputService not injected.");
 
         LatestGameState = GameState.None;
 
@@ -33,11 +37,16 @@ public class GameService: IGameService
         return await _llmService.SendMessageAsync(message);
     }
 
-    public string ShowMainMenu()
+    public GameResponse ShowMainMenu()
     {
         LatestGameState = GameState.None;
 
-        return _promptsMap[LatestGameState.ToString()];
+        return new()
+        {
+            ContinueState = true,
+            GameState = LatestGameState,
+            PlayerOptions = _inputService.GetPlayerOptions(LatestGameState)
+        };
     }
 
     public string Reset()
@@ -51,7 +60,7 @@ public class GameService: IGameService
         return _promptsMap[LatestGameState.ToString()];
     }
 
-    public string Start()
+    public GameResponse StartMatch(bool continueState)
     {
         _llmService.ClearChatHistory();
 
@@ -67,91 +76,164 @@ public class GameService: IGameService
             WeaponType.BareHands
         );
 
-        LatestGameState = GameState.ChallengerTurn;
+        ( ActionResponse actionResponse, Player player) = _playerService.RollIniative(Challenger, Champion);
 
-        return _promptsMap[LatestGameState.ToString()];
+        LatestGameState = player.Profile.RoleType == RoleType.Challenger ? 
+            GameState.ChallengerTurn 
+            : GameState.ChampionTurn;
+
+        return StartPlayerTurn(continueState, actionResponse.Message);
     }
 
-    public (bool continueGame, string responseMsg) HandleInput(char keyChar)
+    public GameResponse StartPlayerTurn(bool continueState, string message = "")
+    {
+        string preText = string.IsNullOrWhiteSpace(message) ? 
+            ""
+            : $"{message}\n\n";
+
+        Player player = GetAttackingPlayer();
+        ActionResponse response = _playerService.StartPlayerTurn(player);
+
+        return new()
+        {
+            ContinueState = continueState,
+            GameState = LatestGameState,
+            Challenger = Challenger,
+            Champion = Champion,
+            PlayerOptions = _inputService.GetPlayerOptions(LatestGameState),
+            Message = $"{preText}{response.Message}.",
+            
+        };
+    }
+
+    public GameResponse CloseGame(bool continueState)
+    {
+        LatestGameState = GameState.None;
+        return new()
+        {
+            ContinueState = continueState,
+            GameState = LatestGameState,
+            Challenger = Challenger,
+            Champion = Champion,
+            Message = "Goodbye!"
+        };
+    }
+
+    public GameResponse Surrender(bool continueState)
+    {
+        Player attacker = GetAttackingPlayer();
+        Player defender = GetDefendingPlayer();
+        LatestGameState = GameState.None;
+
+        return new()
+        {
+            ContinueState = continueState,
+            GameState = LatestGameState,
+            Challenger = Challenger,
+            Champion = Champion,
+            Message = $"{attacker.Profile.Name} surrenders. {defender.Profile.Name} wins the match!"
+        };
+    }
+
+    public Player GetAttackingPlayer()
     {
         switch(LatestGameState)
         {
             case GameState.ChallengerTurn:
-                return HandleChallengerInput(keyChar);
-            case GameState.None:
-                return HandleGameStateNoneInput(keyChar);
+                return Challenger;
+            case GameState.ChampionTurn:
+                return Champion;
+            default:
+                throw new NotImplementedException();
         }
-
-        return (false, string.Empty);
     }
 
-    public (bool continueGame, string responseMsg) HandleChallengerInput(char keyChar)
+    public Player GetDefendingPlayer()
     {
-        bool isContinue = false;
-        string responseMsg = string.Empty;
-        string actionResponseMsg = string.Empty;
-
-        switch(keyChar)
+        switch(LatestGameState)
         {
-            case '1':
-                actionResponseMsg = _playerService.AttackChampion(Challenger, Champion);
+            case GameState.ChallengerTurn:
+                return Champion;
+            case GameState.ChampionTurn:
+                return Challenger;
+            default:
+                throw new NotImplementedException();
+        }
+    }
+
+    public GameResponse HandleInput(char keyChar)
+    {
+        PlayerOption option = _inputService.GetPlayerOption(keyChar, LatestGameState);
+
+        switch(option.ServiceName)
+        {
+            case "Game":
+                if (option.ActionName == "StartMatch")
+                    return StartMatch(option.ContinueState);
+                if (option.ActionName == "CloseGame")
+                    return CloseGame(option.ContinueState);
+                if (option.ActionName == "Surrender")
+                    return Surrender(option.ContinueState);
+                else
+                    throw new NotImplementedException();
+            case "Player":
+                var attacker = GetAttackingPlayer();
+                var defender = GetDefendingPlayer();
+                var actionResponse = new ActionResponse();
+                if (option.ActionName == "Attack")
+                    actionResponse = _playerService.Attack(attacker, defender);
+                if (option.ActionName == "Guard")
+                    actionResponse = _playerService.Guard(attacker);
+                if (option.ActionName == "EndTurn")
+                    actionResponse = _playerService.EndTurn(attacker);
+                
+                if (actionResponse.SwitchPlayerTurn)
+                {
+                    SwitchPlayerTurn();
+                }
+                
+                return new GameResponse()
+                {
+                    ContinueState = option.ContinueState,
+                    GameState = LatestGameState,
+                    Challenger = Challenger,
+                    Champion = Champion,
+                    PlayerOptions = _inputService.GetPlayerOptions(LatestGameState),
+                    Message = "Please choose an action."
+                };
+            default:
+                throw new NotImplementedException();
+        }
+    }
+
+    public void SwitchPlayerTurn()
+    {
+        switch(LatestGameState)
+        {
+            case GameState.ChallengerTurn:
                 LatestGameState = GameState.ChampionTurn;
-                isContinue = true;
-                responseMsg = $"{actionResponseMsg}\n\n{_promptsMap[LatestGameState.ToString()]}";
                 break;
-            case '2':
-                actionResponseMsg = _playerService.GuardStance(Challenger);
-                LatestGameState = GameState.ChampionTurn;
-                isContinue = true;
-                responseMsg = $"{actionResponseMsg}\n\n{_promptsMap[LatestGameState.ToString()]}";
-                break;
-            case 'r':
-                isContinue = true;
-                responseMsg = Reset();
-                break;
-            case 'q':
-                isContinue = false;
-                responseMsg = $"{_promptsMap[nameof(PromptFactory.QuiteMatchMsg)]}\n\n{ShowMainMenu()}";
+            case GameState.ChampionTurn:
+                LatestGameState = GameState.ChallengerTurn;
                 break;
             default:
-                isContinue = true;
-                responseMsg = $"Invalid input.\n\n{_promptsMap[LatestGameState.ToString()]}";
-                break;
+                throw new NotImplementedException();
         }
-
-        return (isContinue, responseMsg);
+        
     }
 
-    public (bool continueGame, string responseMsg) HandleGameStateNoneInput(char keyChar)
+    public async Task<GameResponse> ExecuteChampionTurnAsync()
     {
-        bool isContinue = false;
-        string responseMsg = string.Empty;
+        GameResponse response = StartPlayerTurn(true);
 
-        switch(keyChar)
+        while(LatestGameState == GameState.ChampionTurn)
         {
-            case 's':
-                isContinue = true;
-                responseMsg = Start();
-                break;
-            case 'c':
-                isContinue = false;
-                responseMsg = _promptsMap[nameof(PromptFactory.CloseGameMsg)];
-                break;
-            default:
-                isContinue = true;
-                responseMsg = $"Invalid input.\n\n{_promptsMap[LatestGameState.ToString()]}";
-                break;
+            char keyChar = await _llmService.ChooseActionAsync(response);
+            response = HandleInput(keyChar);
         }
 
-        return (isContinue, responseMsg);
-    }
-
-    public async Task<string> ExecuteChampionTurnAsync()
-    {
-        string actionMsg = await _llmService.ExecuteTurnAsync(Champion, Challenger);
-
-        LatestGameState = GameState.ChallengerTurn;
-
-        return $"{actionMsg}\n\n{_promptsMap[LatestGameState.ToString()]}";
+        return LatestGameState == GameState.None ? 
+            ShowMainMenu() 
+            : StartPlayerTurn(true);
     }
 }

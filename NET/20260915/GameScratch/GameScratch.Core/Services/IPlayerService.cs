@@ -1,3 +1,4 @@
+using GameScratch.Core.Common.Responses;
 using GameScratch.Core.Common.Players;
 using GameScratch.Core.Common.Weapons;
 
@@ -9,6 +10,11 @@ public interface IPlayerService
 
     Player CreatePlayer(RoleType roleType, string name, WeaponType weaponType);
 
-    string AttackChampion(Player player, Player champion);
-    string GuardStance(Player player);
+    ActionResponse StartPlayerTurn(Player player);
+
+    ActionResponse Attack(Player attacker, Player defender);
+    ActionResponse Guard(Player player);
+    ActionResponse EndTurn(Player player);
+    ActionResponse InvokeRandomAction(Player attacker, Player defender); 
+    (ActionResponse, Player) RollIniative(Player challenger, Player champion);
 }

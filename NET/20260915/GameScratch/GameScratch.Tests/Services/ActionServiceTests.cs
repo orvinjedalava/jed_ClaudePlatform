@@ -36,6 +36,6 @@ public class ActionServiceTests
 
         Player attacker = PlayersFactory.DefaultChallengerPlayer;
 
-        Assert.NotNull(_actionService.GuardStance(attacker));
+        Assert.NotNull(_actionService.Guard(attacker));
     }
 }

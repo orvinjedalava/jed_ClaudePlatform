@@ -1,5 +1,7 @@
 using GameScratch.Core.Common.Players;
 using GameScratch.Core.Common.Weapons;
+using GameScratch.Core.Common.Responses;
+using System.Text;
 
 namespace GameScratch.Core.Services;
 
@@ -32,13 +34,63 @@ public class PlayerService : IPlayerService
         return player;
     }
 
-    public string AttackChampion(Player player, Player champion)
+    public ActionResponse StartPlayerTurn(Player player)
     {
-        return _actionService.Attack(player, champion);
+        player.StartTurn();
+        
+        return new()
+        {
+            Message = $"Start turn for {player.Profile.Name}. Current stamina points: {player.GetStaminaPointsRemaining()}"
+        };
     }
 
-    public string GuardStance(Player player)
+    public ActionResponse Attack(Player attacker, Player defender)
     {
-        return _actionService.GuardStance(player);
+        return _actionService.Attack(attacker, defender);
+    }
+
+    public ActionResponse Guard(Player player)
+    {
+        return _actionService.Guard(player);
+    }
+
+    public ActionResponse EndTurn(Player player)
+    {
+        return _actionService.EndTurn(player);
+    }
+
+    public ActionResponse InvokeRandomAction(Player attacker, Player defender)
+    {
+        var actionNames = _actionService.Actions.Keys.ToList();
+        
+        string chosenAction = actionNames[Random.Shared.Next(actionNames.Count)];
+
+        IActionContext context = new ActionContext(attacker, defender);
+
+        return _actionService.Actions[chosenAction](context);
+    }
+
+    public (ActionResponse, Player) RollIniative(Player challenger, Player champion)
+    {
+        ActionResponse challengerRoll = _actionService.RollIniative(challenger);
+        ActionResponse championRoll = _actionService.RollIniative(champion);
+
+        var sb = new StringBuilder();
+
+        sb.AppendLine($"{challengerRoll.Message}. {championRoll.DiceRoll}.");
+        Player winningPlayer;
+
+        if (championRoll.DiceRoll >= challengerRoll.DiceRoll)
+        {
+            sb.AppendLine($"{champion.Profile.Name} goes first.");
+            winningPlayer = champion;
+        }
+        else
+        {
+            sb.AppendLine($"{challenger.Profile.Name} goes first.");
+            winningPlayer = challenger;
+        }
+
+        return (new ActionResponse() { Message = sb.ToString() }, winningPlayer );
     }
 }

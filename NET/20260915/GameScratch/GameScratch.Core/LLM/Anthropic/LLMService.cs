@@ -7,7 +7,7 @@ using Anthropic.Models.Messages;
 using System.Text;
 
 using GameScratch.Core.Services;
-using GameScratch.Core.Common.Players;
+using GameScratch.Core.Common.Responses;
 
 namespace GameScratch.Core.LLM.Anthropic;
 
@@ -16,20 +16,20 @@ public class LLMService : LLMServiceBase, ILLMService
     private readonly LLMServiceOptions _options;
     private readonly AnthropicClient _client;
 
-    public LLMService(IOptions<LLMServiceOptions> options, IActionService actionService)
-        : base(actionService)
+    public LLMService(IOptions<LLMServiceOptions> options, IPlayerService playerService)
+        : base(playerService)
     {
         _options = options?.Value ?? throw new ArgumentNullException("LLMServiceOptions not dependency injected.");
         _client = new AnthropicClient(new ClientOptions { ApiKey = _options.ApiKey });
 
     }
 
-    public new async Task<string> ExecuteTurnAsync(Player champion, Player challenger)
+    public new async Task<char> ChooseActionAsync(GameResponse gameResponse)
     {
         if (!_options.Enabled)
-            return await base.ExecuteTurnAsync(champion, challenger);
+            return await base.ChooseActionAsync(gameResponse);
         
-        return await SendMessageAsync("TODO message");
+        return '1';
     }
     
     public new async Task<string> SendMessageAsync(string message)
