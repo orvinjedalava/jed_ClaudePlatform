@@ -21,6 +21,7 @@ public class ActionResponse
         
         if (Attack != null)
         {
+            sb.AppendLine();
             sb.AppendLine(Attack.ToConsoleString());
         }
 

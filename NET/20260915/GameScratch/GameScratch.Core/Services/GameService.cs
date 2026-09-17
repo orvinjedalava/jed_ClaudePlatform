@@ -90,7 +90,7 @@ public class GameService: IGameService
     {
         string preText = string.IsNullOrWhiteSpace(message) ? 
             ""
-            : $"{message}\n\n";
+            : $"{message}";
 
         Player player = GetAttackingPlayer();
         ActionResponse response = _playerService.StartPlayerTurn(player);
@@ -101,7 +101,7 @@ public class GameService: IGameService
             GameState = LatestGameState,
             Players = new() { Challenger = Challenger, Champion = Champion },
             PlayerOptions = _inputService.GetPlayerOptions(LatestGameState),
-            Message = $"{preText}{response.Message}.",
+            Message = $"{preText}{response.Message}",
             
         };
     }
@@ -165,11 +165,11 @@ public class GameService: IGameService
         switch(option.ServiceName)
         {
             case "Game":
-                if (option.ActionName == "StartMatch")
+                if (option.ActionName == ActionNames.StartMatch)
                     return StartMatch(option.ContinueState);
-                if (option.ActionName == "CloseGame")
+                if (option.ActionName == ActionNames.CloseGame)
                     return CloseGame(option.ContinueState);
-                if (option.ActionName == "Surrender")
+                if (option.ActionName == ActionNames.Surrender)
                     return Surrender(option.ContinueState);
                 else
                     throw new NotImplementedException();
@@ -177,11 +177,11 @@ public class GameService: IGameService
                 var attacker = GetAttackingPlayer();
                 var defender = GetDefendingPlayer();
                 var actionResponse = new ActionResponse();
-                if (option.ActionName == "Attack")
+                if (option.ActionName == ActionNames.Attack)
                     actionResponse = _playerService.Attack(attacker, defender);
-                if (option.ActionName == "Guard")
+                if (option.ActionName == ActionNames.Guard)
                     actionResponse = _playerService.Guard(attacker);
-                if (option.ActionName == "EndTurn")
+                if (option.ActionName == ActionNames.Wait)
                     actionResponse = _playerService.EndTurn(attacker);
                 
                 if (actionResponse.SwitchPlayerTurn)
@@ -216,7 +216,7 @@ public class GameService: IGameService
             default:
                 throw new NotImplementedException();
         }
-        
+
         _playerService.StartPlayerTurn(GetAttackingPlayer());
     }
 

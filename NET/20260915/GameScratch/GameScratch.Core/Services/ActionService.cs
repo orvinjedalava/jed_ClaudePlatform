@@ -26,17 +26,15 @@ public class ActionService : IActionService
         {
             { nameof(Attack), ctx => Attack(ctx.Attacker, ctx.Defender) },
             { nameof(Guard), ctx => Guard(ctx.Attacker) },
-            { nameof(EndTurn), ctx => EndTurn(ctx.Attacker) }
+            { nameof(Wait), ctx => Wait(ctx.Attacker) }
         };
     }
 
     public ActionResponse Attack(Player attacker, Player defender)
     {
-        if (attacker.GetStaminaPointsRemaining() <= 0)
-            return Exhausted(attacker, nameof(Attack));
-
         var sb = new StringBuilder();
-        sb.Append($"{attacker.Profile.Name} ATTACKS {defender.Profile.Name} with {attacker.Equipment.Weapon.Name}");
+
+        sb.Append($"{attacker.GetNameWithStatus()} ATTACKS {defender.GetNameWithStatus()} with {attacker.Equipment.Weapon.Name}");
 
         int attackRoll = _diceService.Roll(DiceType.D20);
 
@@ -55,7 +53,7 @@ public class ActionService : IActionService
 
         if (attackSuccessfull)
         {
-            int damage = _diceService.Roll(attacker.Equipment.Weapon.BaseDamage);
+            int damage = _diceService.Roll(attacker.Equipment.Weapon.HitPointsDamageDiceType);
             defender.AddHitPointsDamage(damage);
             sb.Append($" and hits, doing {damage} points of damage.");
         }
@@ -70,28 +68,26 @@ public class ActionService : IActionService
         {
             Message = sb.ToString(),
             Attack = attackResponse,
-            SwitchPlayerTurn = attacker.GetStaminaPointsRemaining() <= 0
+            SwitchPlayerTurn = attacker.IsExhausted()
         };
     }
 
     public ActionResponse Guard(Player attacker)
     {
-        if (attacker.GetStaminaPointsRemaining() <= 0)
-            return Exhausted(attacker, nameof(Guard));
-
         attacker.Conditions.StanceType = StanceType.Guard;
         return new ActionResponse() 
         {
-            Message = $"{attacker.Profile.Name} goes into GUARD STANCE",
+            Message = $"{attacker.GetNameWithStatus()} goes into GUARD STANCE",
             SwitchPlayerTurn = true
         };
     }
 
-    public ActionResponse EndTurn(Player attacker)
+    public ActionResponse Wait(Player attacker)
     {
+        attacker.Conditions.StanceType = StanceType.Neutral;
         return new()
         {
-            Message = $"{attacker.Profile.Name} ends turn.",
+            Message = $"{attacker.GetNameWithStatus()} goes into NEUTRAL STANCE",
             SwitchPlayerTurn = true
         };
     }
@@ -117,17 +113,15 @@ public class ActionService : IActionService
         };
     }
 
-    public ActionResponse Exhausted(Player player, string action)
-    {
-        StringBuilder sb = new();
-        sb.AppendLine($"{player.Profile.Name} tried to {action} but is tired due to having {player.GetStaminaPointsRemaining()} StaminaPoints remaining");
-        sb.AppendLine($"{player.Profile.Name} is now in {StanceType.Exhausted} stance");
-        player.Conditions.StanceType = StanceType.Exhausted;
+    // public ActionResponse Exhausted(Player player, string action)
+    // {
+    //     StringBuilder sb = new();
+    //     sb.AppendLine($"{player.Profile.Name} tried to {action} but is exhausted due to having {player.GetStaminaPointsRemaining()} StaminaPoints remaining");
 
-        return new ActionResponse()
-        {
-            Message = sb.ToString(),
-            SwitchPlayerTurn = player.GetStaminaPointsRemaining() <= 0
-        };
-    }
+    //     return new ActionResponse()
+    //     {
+    //         Message = sb.ToString(),
+    //         SwitchPlayerTurn = player.IsExhausted()
+    //     };
+    // }
 }

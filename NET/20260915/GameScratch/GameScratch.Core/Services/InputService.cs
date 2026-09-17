@@ -5,18 +5,18 @@ namespace GameScratch.Core.Services;
 
 public class InputService : IInputService
 {
-    public static PlayerOption StartMatch => new() { Key = 's', Description = "Start Match", ActionName = "StartMatch", ServiceName = "Game", ContinueState = true };
-    public static PlayerOption CloseGame => new() { Key = 'c', Description = "Close Game", ActionName = "CloseGame", ServiceName = "Game", ContinueState = false };
-    public static PlayerOption Surrender => new() { Key = 'q', Description = "Surrender", ActionName = "Surrender", ServiceName = "Game", ContinueState = false };
-    public static PlayerOption Attack => new() { Key = '1', Description = "Attack", ActionName = "Attack", ServiceName = "Player", ContinueState = true };
-    public static PlayerOption Guard => new() { Key = '2', Description = "Guard", ActionName = "Guard", ServiceName = "Player", ContinueState = true };
-    public static PlayerOption EndTurn => new() { Key = '3', Description = "End Turn", ActionName = "EndTurn", ServiceName = "Player", ContinueState = true };
+    public static PlayerOption StartMatch => new() { Key = 's', Description = "Start Match", ActionName = ActionNames.StartMatch, ServiceName = "Game", ContinueState = true };
+    public static PlayerOption CloseGame => new() { Key = 'c', Description = "Close Game", ActionName = ActionNames.CloseGame, ServiceName = "Game", ContinueState = false };
+    public static PlayerOption Surrender => new() { Key = 'q', Description = "Surrender ( Ends the match )", ActionName = ActionNames.Surrender, ServiceName = "Game", ContinueState = false };
+    public static PlayerOption Attack => new() { Key = '1', Description = "Attack", ActionName = ActionNames.Attack, ServiceName = "Player", ContinueState = true };
+    public static PlayerOption Guard => new() { Key = '2', Description = "Guard ( Ends your turn )", ActionName = ActionNames.Guard, ServiceName = "Player", ContinueState = true };
+    public static PlayerOption Wait => new() { Key = '3', Description = "Wait ( Ends your turn )", ActionName = ActionNames.Wait, ServiceName = "Player", ContinueState = true };
 
     public static Dictionary<GameState, PlayerOptionsResponse> Map => new()
     {
         { GameState.None, new() { Options = [StartMatch, CloseGame] }},
-        { GameState.ChallengerTurn, new() { Options = [Attack, Guard, EndTurn, Surrender ]}},
-        { GameState.ChampionTurn, new() { Options = [Attack, Guard, EndTurn, Surrender ]}}
+        { GameState.ChallengerTurn, new() { Options = [Attack, Guard, Wait, Surrender ]}},
+        { GameState.ChampionTurn, new() { Options = [Attack, Guard, Wait, Surrender ]}}
     };
     
     public PlayerOptionsResponse GetPlayerOptions(GameState gameState)

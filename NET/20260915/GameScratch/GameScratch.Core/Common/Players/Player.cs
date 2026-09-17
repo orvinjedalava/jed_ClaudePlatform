@@ -15,15 +15,17 @@ public class Player
     {
         StringBuilder sb = new();
 
-        sb.AppendLine($"*** The {Profile.RoleType} ***");
-        sb.AppendLine($"Name: {Profile.Name}");
-        sb.AppendLine($"ArmorClass: {Stats.ArmorClass}");
-        sb.AppendLine($"HitPoints Remaining: {GetHitPointsRemaining()}");
+        sb.AppendLine($"****** The {Profile.RoleType} ******");
+        sb.AppendLine();
+        sb.AppendLine($"Name: {GetNameWithStatus()}");
         sb.AppendLine($"StaminaPoints Remaining: {GetStaminaPointsRemaining()}");
+        sb.AppendLine($"HitPoints Remaining: {GetHitPointsRemaining()}");
+        sb.AppendLine($"ArmorClass: {Stats.ArmorClass}");
         sb.AppendLine($"Stance: {Conditions.StanceType}");
         sb.AppendLine($"Weapon: {Equipment.Weapon.Name}");
         sb.AppendLine($"Weapon StaminaPoints Cost: {Equipment.Weapon.StaminaCost}");
-        sb.AppendLine($"Weapon BaseDamage Dice: {Equipment.Weapon.BaseDamage}");
+        sb.AppendLine($"Weapon HitPoints DamageDiceType: {Equipment.Weapon.HitPointsDamageDiceType}");
+        sb.AppendLine();
 
         return sb.ToString();
     }
@@ -42,10 +44,10 @@ public class Player
             case StanceType.Guard:
                 result.Add(2);
                 break;
-            case StanceType.Exhausted:
-                result.Add(-2);
-                break;
         }
+
+        if (IsExhausted())
+            result.Add(-2);
 
         return result;
     }
@@ -53,6 +55,10 @@ public class Player
     public List<int> GetAttackDiceRollModifiers()
     {
         List<int> result = [];
+
+        if (IsExhausted())
+            result.Add(-2);
+
         return result;
     }
 
@@ -71,21 +77,24 @@ public class Player
         Conditions.HitPointsDamage += damage;
     }
 
+    public bool IsExhausted()
+    {
+        return GetStaminaPointsRemaining() < 0;
+    }
+
     public void StartTurn()
     {
         switch(Conditions.StanceType)
         {
-            case StanceType.Default:
+            case StanceType.Neutral:
                 Conditions.StaminaPointsDamage = int.Max(0, Conditions.StaminaPointsDamage - 2); 
                 break;
             case StanceType.Guard:
                 Conditions.StaminaPointsDamage = int.Max(0, Conditions.StaminaPointsDamage - 1); 
                 break;
-            case StanceType.Exhausted:
-                break;
         }
-        
-        Conditions.StanceType = StanceType.Default;
+
+        Conditions.StanceType = StanceType.Neutral;
     }
 
     public void UseWeapon()
@@ -101,6 +110,12 @@ public class Player
     public int GetInitiativeModifier()
     {
         return 0;
+    }
+
+    public string GetNameWithStatus()
+    {
+        string preText = IsExhausted() ? "(EXHAUSTED) " : string.Empty;
+        return $"{preText}{Profile.Name}";
     }
     
 }

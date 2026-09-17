@@ -11,6 +11,7 @@ public class PlayerOptionsResponse
         StringBuilder sb = new();
         sb.AppendLine("---------------------------------");
         sb.AppendLine("Please choose an option:");
+        sb.AppendLine();
 
         foreach(PlayerOption option in Options)
         {

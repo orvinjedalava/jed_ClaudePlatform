@@ -38,7 +38,7 @@ public class PlayerServiceTests
         Assert.Equal(name, player.Profile.Name);
         Assert.Equal(player.Stats.HitPoints, player.GetHitPointsRemaining());
         Assert.Equal(player.Stats.StaminaPoints, player.GetStaminaPointsRemaining());
-        Assert.Equal(StanceType.Default, player.Conditions.StanceType);
+        Assert.Equal(StanceType.Neutral, player.Conditions.StanceType);
     }
 
     [Theory]
@@ -58,7 +58,7 @@ public class PlayerServiceTests
         Assert.Equal(roleType, result.Profile.RoleType);
         Assert.Equal(name, result.Profile.Name);
         Assert.True(result.Equipment.Weapon.Equals(weapon));
-        Assert.Equal(StanceType.Default, result.Conditions.StanceType);
+        Assert.Equal(StanceType.Neutral, result.Conditions.StanceType);
     }
 
     [Fact]

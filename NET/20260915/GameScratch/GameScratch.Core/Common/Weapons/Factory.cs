@@ -21,7 +21,7 @@ public class WeaponBuilder
                 _weapon = new()
                 {
                     Name = weaponType.Value.ToString(),
-                    BaseDamage = weaponType.Value.GetDiceType(),
+                    HitPointsDamageDiceType = weaponType.Value.GetHitPointsDamageDiceType(),
                     StaminaCost = weaponType.Value.GetStaminaCost(),
                     WeaponType = weaponType.Value
                 };

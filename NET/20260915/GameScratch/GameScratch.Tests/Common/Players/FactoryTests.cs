@@ -29,6 +29,6 @@ public class FactoryTests
         Assert.Equal(20, player.Stats.HitPoints);
         Assert.Equal(10, player.Stats.StaminaPoints);
         Assert.Equal(10, player.Stats.ArmorClass);
-        Assert.Equal(StanceType.Default, player.Conditions.StanceType);
+        Assert.Equal(StanceType.Neutral, player.Conditions.StanceType);
     }
 }

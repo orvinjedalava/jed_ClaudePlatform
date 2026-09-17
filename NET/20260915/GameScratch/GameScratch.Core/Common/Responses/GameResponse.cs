@@ -21,6 +21,7 @@ public class GameResponse
 
         sb.AppendLine("---------------------------------");
         sb.AppendLine(Message);
+        sb.AppendLine();
         if (Action != null)
             sb.AppendLine(Action.ToConsoleString());
         if (Players != null)

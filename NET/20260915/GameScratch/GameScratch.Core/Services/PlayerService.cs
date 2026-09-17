@@ -38,10 +38,7 @@ public class PlayerService : IPlayerService
     {
         player.StartTurn();
 
-        return new()
-        {
-            Message = $"Start turn for {player.Profile.Name}."
-        };
+        return new();
     }
 
     public ActionResponse Attack(Player attacker, Player defender)
@@ -56,7 +53,7 @@ public class PlayerService : IPlayerService
 
     public ActionResponse EndTurn(Player player)
     {
-        return _actionService.EndTurn(player);
+        return _actionService.Wait(player);
     }
 
     public ActionResponse InvokeRandomAction(Player attacker, Player defender)

@@ -90,8 +90,8 @@ public class PlayerBuilder
     {
         _conditions = new()
         {
-            StanceType = StanceType.Default,
-            StaminaPointsDamage = 10
+            StanceType = StanceType.Neutral,
+            StaminaPointsDamage = 9
         };
 
         return this;

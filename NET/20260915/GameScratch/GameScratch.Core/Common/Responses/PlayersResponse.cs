@@ -14,9 +14,9 @@ public class PlayersResponse
         switch(gameState)
         {
             case GameState.ChallengerTurn:
-                return Challenger?.Profile.Name ?? string.Empty;
+                return Challenger?.GetNameWithStatus() ?? string.Empty;
             case GameState.ChampionTurn:
-                return Champion?.Profile.Name ?? string.Empty;
+                return Champion?.GetNameWithStatus() ?? string.Empty;
             default:
                 throw new NotImplementedException();
         }
@@ -30,7 +30,7 @@ public class PlayersResponse
         StringBuilder sb = new();
 
         sb.AppendLine("---------------------------------");
-        sb.AppendLine("Gladiatior Current Stats:");
+        sb.AppendLine("Gladiatiors Current Stats:");
         if (Challenger != null)
         {
             sb.AppendLine();
