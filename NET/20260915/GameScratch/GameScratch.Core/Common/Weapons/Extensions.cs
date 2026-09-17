@@ -10,7 +10,7 @@ public static class WeaponExtensions
 
     public static int GetStaminaCost(this WeaponType weaponType) => weaponType switch
     {
-        WeaponType.BareHands => 2,
+        WeaponType.BareHands => 3,
         _ => throw new ArgumentOutOfRangeException(nameof(weaponType), weaponType, "Unknown weapon type.")
     };
 } 

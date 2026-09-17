@@ -32,6 +32,9 @@ public class ActionService : IActionService
 
     public ActionResponse Attack(Player attacker, Player defender)
     {
+        if (attacker.GetStaminaPointsRemaining() <= 0)
+            return Exhausted(attacker, nameof(Attack));
+
         var sb = new StringBuilder();
         sb.Append($"{attacker.Profile.Name} ATTACKS {defender.Profile.Name} with {attacker.Equipment.Weapon.Name}");
 
@@ -73,6 +76,9 @@ public class ActionService : IActionService
 
     public ActionResponse Guard(Player attacker)
     {
+        if (attacker.GetStaminaPointsRemaining() <= 0)
+            return Exhausted(attacker, nameof(Guard));
+
         attacker.Conditions.StanceType = StanceType.Guard;
         return new ActionResponse() 
         {
@@ -108,6 +114,20 @@ public class ActionService : IActionService
         {
             Message = $"{player.Profile.Name} rolls {result}",
             RollInitiative = new() { DiceRoll = result }
+        };
+    }
+
+    public ActionResponse Exhausted(Player player, string action)
+    {
+        StringBuilder sb = new();
+        sb.AppendLine($"{player.Profile.Name} tried to {action} but is tired due to having {player.GetStaminaPointsRemaining()} StaminaPoints remaining");
+        sb.AppendLine($"{player.Profile.Name} is now in {StanceType.Exhausted} stance");
+        player.Conditions.StanceType = StanceType.Exhausted;
+
+        return new ActionResponse()
+        {
+            Message = sb.ToString(),
+            SwitchPlayerTurn = player.GetStaminaPointsRemaining() <= 0
         };
     }
 }

@@ -19,7 +19,7 @@ public class Player
         sb.AppendLine($"Name: {Profile.Name}");
         sb.AppendLine($"ArmorClass: {Stats.ArmorClass}");
         sb.AppendLine($"HitPoints Remaining: {GetHitPointsRemaining()}");
-        sb.AppendLine($"Stamina Remaining: {GetStaminaPointsRemaining()}");
+        sb.AppendLine($"StaminaPoints Remaining: {GetStaminaPointsRemaining()}");
         sb.AppendLine($"Stance: {Conditions.StanceType}");
         sb.AppendLine($"Weapon: {Equipment.Weapon.Name}");
         sb.AppendLine($"Weapon StaminaPoints Cost: {Equipment.Weapon.StaminaCost}");
@@ -41,6 +41,9 @@ public class Player
         {
             case StanceType.Guard:
                 result.Add(2);
+                break;
+            case StanceType.Exhausted:
+                result.Add(-2);
                 break;
         }
 
@@ -78,7 +81,10 @@ public class Player
             case StanceType.Guard:
                 Conditions.StaminaPointsDamage = int.Max(0, Conditions.StaminaPointsDamage - 1); 
                 break;
+            case StanceType.Exhausted:
+                break;
         }
+        
         Conditions.StanceType = StanceType.Default;
     }
 

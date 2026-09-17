@@ -11,4 +11,5 @@ public interface IActionService
     ActionResponse Guard(Player attacker);
     ActionResponse EndTurn(Player attacker);
     ActionResponse RollIniative(Player player);
+    ActionResponse Exhausted(Player player, string message);
 }
