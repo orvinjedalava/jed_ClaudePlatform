@@ -37,7 +37,7 @@ public class PlayerService : IPlayerService
     public ActionResponse StartPlayerTurn(Player player)
     {
         player.StartTurn();
-        
+
         return new()
         {
             Message = $"Start turn for {player.Profile.Name}. Current stamina points: {player.GetStaminaPointsRemaining()}"
@@ -77,10 +77,11 @@ public class PlayerService : IPlayerService
 
         var sb = new StringBuilder();
 
-        sb.AppendLine($"{challengerRoll.Message}. {championRoll.DiceRoll}.");
+        sb.AppendLine($"{challengerRoll.Message}. {challengerRoll.RollInitiative?.DiceRoll}.");
+        sb.AppendLine($"{championRoll.Message}. {championRoll.RollInitiative?.DiceRoll}.");
         Player winningPlayer;
 
-        if (championRoll.DiceRoll >= challengerRoll.DiceRoll)
+        if (championRoll.RollInitiative?.DiceRoll >= challengerRoll.RollInitiative?.DiceRoll)
         {
             sb.AppendLine($"{champion.Profile.Name} goes first.");
             winningPlayer = champion;

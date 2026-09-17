@@ -36,8 +36,19 @@ public class ActionService : IActionService
         sb.Append($"{attacker.Profile.Name} ATTACKS {defender.Profile.Name} with {attacker.Equipment.Weapon.Name}");
 
         int attackRoll = _diceService.Roll(DiceType.D20);
+
+        AttackResponse attackResponse = new()
+        {
+            DefenderArmorClass = defender.Stats.ArmorClass,
+            DefenderArmorClassModifiers = defender.GetArmorClassModifiers(),
+            DefenderTotalArmorClass = defender.GetTotalArmorClass(),
+            AttackerDiceRoll = attackRoll,
+            AttackerDiceRollModifiers = attacker.GetAttackDiceRollModifiers(),
+            AttackerTotalDiceRoll = attackRoll + attacker.GetAttackDiceRollModifiers().Sum()
+        };
+
         int defenderTotalArmorClass = defender.GetTotalArmorClass();
-        bool attackSuccessfull = attackRoll >= defenderTotalArmorClass;
+        bool attackSuccessfull = attackResponse.AttackerTotalDiceRoll >= attackResponse.DefenderTotalArmorClass;
 
         if (attackSuccessfull)
         {
@@ -55,16 +66,14 @@ public class ActionService : IActionService
         return new ActionResponse()
         {
             Message = sb.ToString(),
-            TargetName = "Total Armor Class",
-            TargetValue = defenderTotalArmorClass,
-            TargetValueModifiers = defender.GetArmorClassModifiers(),
-            DiceRoll = attackRoll,
+            Attack = attackResponse,
             SwitchPlayerTurn = attacker.GetStaminaPointsRemaining() <= 0
         };
     }
 
     public ActionResponse Guard(Player attacker)
     {
+        attacker.Conditions.StanceType = StanceType.Guard;
         return new ActionResponse() 
         {
             Message = $"{attacker.Profile.Name} goes into GUARD STANCE",
@@ -98,7 +107,7 @@ public class ActionService : IActionService
         return new()
         {
             Message = $"{player.Profile.Name} rolls {result}",
-            DiceRoll = result
+            RollInitiative = new() { DiceRoll = result }
         };
     }
 }

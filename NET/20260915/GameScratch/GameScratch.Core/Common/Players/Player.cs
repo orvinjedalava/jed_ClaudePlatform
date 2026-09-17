@@ -1,3 +1,5 @@
+using System.Text;
+using Anthropic.Models.Beta.Messages;
 using GameScratch.Core.Common.Weapons;
 
 namespace GameScratch.Core.Common.Players;
@@ -8,6 +10,23 @@ public class Player
     public required Stats Stats { get; init; }
     public required Equipment Equipment { get; init; }
     public required Conditions Conditions { get; set; }
+
+    public string ToConsoleString()
+    {
+        StringBuilder sb = new();
+
+        sb.AppendLine($"*** The {Profile.RoleType} ***");
+        sb.AppendLine($"Name: {Profile.Name}");
+        sb.AppendLine($"ArmorClass: {Stats.ArmorClass}");
+        sb.AppendLine($"HitPoints Remaining: {GetHitPointsRemaining()}");
+        sb.AppendLine($"Stamina Remaining: {GetStaminaPointsRemaining()}");
+        sb.AppendLine($"Stance: {Conditions.StanceType}");
+        sb.AppendLine($"Weapon: {Equipment.Weapon.Name}");
+        sb.AppendLine($"Weapon StaminaPoints Cost: {Equipment.Weapon.StaminaCost}");
+        sb.AppendLine($"Weapon BaseDamage Dice: {Equipment.Weapon.BaseDamage}");
+
+        return sb.ToString();
+    }
 
     public int GetTotalArmorClass()
     {
@@ -28,6 +47,11 @@ public class Player
         return result;
     }
 
+    public List<int> GetAttackDiceRollModifiers()
+    {
+        return [0];
+    }
+
     public int GetHitPointsRemaining()
     {
         return Stats.HitPoints - Conditions.HitPointsDamage;
@@ -35,7 +59,7 @@ public class Player
 
     public int GetStaminaPointsRemaining()
     {
-        return Stats.StaminaPoints - Conditions.StaminaPointsDamage;
+        return int.Min(Stats.StaminaPoints, Stats.StaminaPoints - Conditions.StaminaPointsDamage);
     }
 
     public void AddHitPointsDamage(int damage)
@@ -48,10 +72,10 @@ public class Player
         switch(Conditions.StanceType)
         {
             case StanceType.Default:
-                Conditions.StaminaPointsDamage += 3;
+                Conditions.StaminaPointsDamage = int.Max(0, Conditions.StaminaPointsDamage - 3); 
                 break;
             case StanceType.Guard:
-                Conditions.StaminaPointsDamage += 1;
+                Conditions.StaminaPointsDamage = int.Max(0, Conditions.StaminaPointsDamage - 1); 
                 break;
         }
         Conditions.StanceType = StanceType.Default;

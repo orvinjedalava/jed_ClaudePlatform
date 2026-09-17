@@ -45,6 +45,7 @@ public class GameService: IGameService
         {
             ContinueState = true,
             GameState = LatestGameState,
+            Message = "Welcome to the Arena!",
             PlayerOptions = _inputService.GetPlayerOptions(LatestGameState)
         };
     }
@@ -66,13 +67,13 @@ public class GameService: IGameService
 
         Challenger = _playerService.CreatePlayer(
             RoleType.Challenger,
-            "Player",
+            "Spartacus",
             WeaponType.BareHands
         );
 
         Champion = _playerService.CreatePlayer(
             RoleType.Champion,
-            "Champion",
+            "Dario",
             WeaponType.BareHands
         );
 
@@ -98,8 +99,7 @@ public class GameService: IGameService
         {
             ContinueState = continueState,
             GameState = LatestGameState,
-            Challenger = Challenger,
-            Champion = Champion,
+            Players = new() { Challenger = Challenger, Champion = Champion },
             PlayerOptions = _inputService.GetPlayerOptions(LatestGameState),
             Message = $"{preText}{response.Message}.",
             
@@ -113,8 +113,7 @@ public class GameService: IGameService
         {
             ContinueState = continueState,
             GameState = LatestGameState,
-            Challenger = Challenger,
-            Champion = Champion,
+            Players = new() { Challenger = Challenger, Champion = Champion },
             Message = "Goodbye!"
         };
     }
@@ -129,8 +128,6 @@ public class GameService: IGameService
         {
             ContinueState = continueState,
             GameState = LatestGameState,
-            Challenger = Challenger,
-            Champion = Champion,
             Message = $"{attacker.Profile.Name} surrenders. {defender.Profile.Name} wins the match!"
         };
     }
@@ -196,10 +193,10 @@ public class GameService: IGameService
                 {
                     ContinueState = option.ContinueState,
                     GameState = LatestGameState,
-                    Challenger = Challenger,
-                    Champion = Champion,
+                    Players = new() { Challenger = Challenger, Champion = Champion },
                     PlayerOptions = _inputService.GetPlayerOptions(LatestGameState),
-                    Message = "Please choose an action."
+                    Action = actionResponse,
+                    Message = "The crowd roars!"
                 };
             default:
                 throw new NotImplementedException();
