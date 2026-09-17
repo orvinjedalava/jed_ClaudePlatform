@@ -6,8 +6,8 @@ namespace GameScratch.Tests.Common.Weapons;
 public class FactoryTests
 {
     [Theory]
-    [InlineData(null, DiceType.D4, 3)]
-    [InlineData(WeaponType.OneHandShortSword, DiceType.D4, 3)]
+    [InlineData(null, DiceType.D6, 3)]
+    [InlineData(WeaponType.OneHandShortSword, DiceType.D6, 3)]
     public void BuildWeapon_Success(WeaponType? weaponType, DiceType expectedHitPointsDamageDiceType, int expectedStaminaCost)
     {
         string expectedName = weaponType?.ToString() ?? WeaponType.OneHandShortSword.ToString();

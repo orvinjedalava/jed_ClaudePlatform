@@ -4,7 +4,7 @@ public static class WeaponExtensions
 {
     public static DiceType GetHitPointsDamageDiceType(this WeaponType weaponType) => weaponType switch
     {
-        WeaponType.OneHandShortSword => DiceType.D4,
+        WeaponType.OneHandShortSword => DiceType.D6,
         _ => throw new ArgumentOutOfRangeException(nameof(weaponType), weaponType, "Unknown weapon type.")
     };
 
