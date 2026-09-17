@@ -48,14 +48,14 @@ public class ActionService : IActionService
             AttackerTotalDiceRoll = attackRoll + attacker.GetAttackDiceRollModifiers().Sum()
         };
 
-        int defenderTotalArmorClass = defender.GetTotalArmorClass();
         bool attackSuccessfull = attackResponse.AttackerTotalDiceRoll >= attackResponse.DefenderTotalArmorClass;
 
         if (attackSuccessfull)
         {
             int damage = _diceService.Roll(attacker.Equipment.Weapon.HitPointsDamageDiceType);
             defender.AddHitPointsDamage(damage);
-            sb.Append($" and hits, doing {damage} points of damage.");
+            defender.AddStaminaPointsDamage(attacker.Equipment.Weapon.StaminaPointsDamage);
+            sb.Append($" and hits, doing {damage} HitPoints damage and {attacker.Equipment.Weapon.StaminaPointsDamage} StaminaPoints damage ");
         }
         else
         {

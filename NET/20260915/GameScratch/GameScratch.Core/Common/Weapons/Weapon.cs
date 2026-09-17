@@ -5,6 +5,7 @@ namespace GameScratch.Core.Common.Weapons;
 public class Weapon
 {
     public required DiceType HitPointsDamageDiceType { get; init; }
+    public required int StaminaPointsDamage { get; init; }
     public required string Name { get; init; }
     public required int StaminaCost { get; set; }
     public required WeaponType WeaponType { get; set; }
@@ -17,6 +18,7 @@ public class Weapon
             return false;
 
         return HitPointsDamageDiceType == weapon.HitPointsDamageDiceType
+            && StaminaPointsDamage == weapon.StaminaPointsDamage
             && Name == weapon.Name
             && StaminaCost == weapon.StaminaCost
             && WeaponType == weapon.WeaponType;

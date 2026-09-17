@@ -25,6 +25,7 @@ public class Player
         sb.AppendLine($"Weapon: {Equipment.Weapon.Name}");
         sb.AppendLine($"Weapon StaminaPoints Cost: {Equipment.Weapon.StaminaCost}");
         sb.AppendLine($"Weapon HitPoints DamageDiceType: {Equipment.Weapon.HitPointsDamageDiceType}");
+        sb.AppendLine($"Weapon StaminaPoints Damage: {Equipment.Weapon.StaminaPointsDamage}");
         sb.AppendLine();
 
         return sb.ToString();
@@ -47,7 +48,7 @@ public class Player
         }
 
         if (IsExhausted())
-            result.Add(-2);
+            result.Add(-3);
 
         return result;
     }
@@ -57,7 +58,7 @@ public class Player
         List<int> result = [];
 
         if (IsExhausted())
-            result.Add(-2);
+            result.Add(-3);
 
         return result;
     }
@@ -77,6 +78,11 @@ public class Player
         Conditions.HitPointsDamage += damage;
     }
 
+    public void AddStaminaPointsDamage(int damage)
+    {
+        Conditions.StaminaPointsDamage += damage;
+    }
+
     public bool IsExhausted()
     {
         return GetStaminaPointsRemaining() < 0;
@@ -87,10 +93,10 @@ public class Player
         switch(Conditions.StanceType)
         {
             case StanceType.Neutral:
-                Conditions.StaminaPointsDamage = int.Max(0, Conditions.StaminaPointsDamage - 2); 
+                Conditions.StaminaPointsDamage -= 2; 
                 break;
             case StanceType.Guard:
-                Conditions.StaminaPointsDamage = int.Max(0, Conditions.StaminaPointsDamage - 1); 
+                Conditions.StaminaPointsDamage -= 1; 
                 break;
         }
 
@@ -99,7 +105,7 @@ public class Player
 
     public void UseWeapon()
     {
-        Conditions.StaminaPointsDamage += Equipment.Weapon.StaminaCost;
+        AddStaminaPointsDamage(Equipment.Weapon.StaminaCost);
     }
 
     public void ClearConditions()

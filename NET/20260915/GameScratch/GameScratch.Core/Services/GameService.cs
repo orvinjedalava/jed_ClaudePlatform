@@ -68,13 +68,13 @@ public class GameService: IGameService
         Challenger = _playerService.CreatePlayer(
             RoleType.Challenger,
             "Spartacus",
-            WeaponType.BareHands
+            WeaponType.OneHandShortSword
         );
 
         Champion = _playerService.CreatePlayer(
             RoleType.Champion,
             "Dario",
-            WeaponType.BareHands
+            WeaponType.OneHandShortSword
         );
 
         ( ActionResponse actionResponse, Player player) = _playerService.RollIniative(Challenger, Champion);
