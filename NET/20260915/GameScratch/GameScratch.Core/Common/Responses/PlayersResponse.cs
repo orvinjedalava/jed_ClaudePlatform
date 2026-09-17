@@ -30,7 +30,7 @@ public class PlayersResponse
         StringBuilder sb = new();
 
         sb.AppendLine("---------------------------------");
-        sb.AppendLine("Gladiatiors:");
+        sb.AppendLine("Gladiatior Current Stats:");
         if (Challenger != null)
         {
             sb.AppendLine();

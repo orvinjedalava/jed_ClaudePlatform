@@ -40,7 +40,7 @@ public class Player
         switch(Conditions.StanceType)
         {
             case StanceType.Guard:
-                result.Add(5);
+                result.Add(2);
                 break;
         }
 
@@ -49,7 +49,8 @@ public class Player
 
     public List<int> GetAttackDiceRollModifiers()
     {
-        return [0];
+        List<int> result = [];
+        return result;
     }
 
     public int GetHitPointsRemaining()
@@ -72,7 +73,7 @@ public class Player
         switch(Conditions.StanceType)
         {
             case StanceType.Default:
-                Conditions.StaminaPointsDamage = int.Max(0, Conditions.StaminaPointsDamage - 3); 
+                Conditions.StaminaPointsDamage = int.Max(0, Conditions.StaminaPointsDamage - 2); 
                 break;
             case StanceType.Guard:
                 Conditions.StaminaPointsDamage = int.Max(0, Conditions.StaminaPointsDamage - 1); 

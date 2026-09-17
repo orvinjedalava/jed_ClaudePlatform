@@ -21,8 +21,7 @@ public class ActionResponse
         
         if (Attack != null)
         {
-            sb.AppendLine($"Total ArmorClass: {Attack.DefenderArmorClass} {string.Join(" ", Attack.DefenderArmorClassModifiers?.Select(m => m.ToString("+0;-0")) ?? Enumerable.Empty<string>())}" );
-            sb.AppendLine($"Total DiceRoll: {Attack.AttackerDiceRoll} {string.Join(" ", Attack.AttackerDiceRollModifiers?.Select(m => m.ToString("+0;-0")) ?? Enumerable.Empty<string>())}");
+            sb.AppendLine(Attack.ToConsoleString());
         }
 
         return sb.ToString();

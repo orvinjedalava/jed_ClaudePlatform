@@ -217,6 +217,7 @@ public class GameService: IGameService
                 throw new NotImplementedException();
         }
         
+        _playerService.StartPlayerTurn(GetAttackingPlayer());
     }
 
     public async Task<GameResponse> ExecuteChampionTurnAsync()
