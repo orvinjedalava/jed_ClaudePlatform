@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-Console.WriteLine("Hello, World!");
+Console.WriteLine("Gladiator Fight!");
 
 HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 
@@ -25,31 +25,31 @@ await EnterMainMenu();
 
 async Task EnterMainMenu()
 {
-    Console.WriteLine(gameService.ShowMainMenu());
+    Console.WriteLine(gameService.ShowMainMenu().ToConsoleString());
 
-    // while(true)
-    // {
-    //     char inputChar = Console.IsInputRedirected ? 
-    //         (Console.ReadLine()?.FirstOrDefault() ?? '\0')
-    //         : Console.ReadKey(true).KeyChar;
+    while(true)
+    {
+        char inputChar = Console.IsInputRedirected ? 
+            (Console.ReadLine()?.FirstOrDefault() ?? '\0')
+            : Console.ReadKey(true).KeyChar;
 
-    //     (bool isContinue, string responseMsg) = gameService.HandleInput(inputChar);
-    //     Console.WriteLine("\n");
+        var response = gameService.HandleInput(inputChar);
 
-    //     Console.WriteLine(responseMsg);
+        Console.WriteLine(response.ToConsoleString());
+        Console.WriteLine("\n");
 
-    //     if (isContinue)
-    //     {
-    //         if (gameService.LatestGameState == GameState.ChallengerTurn)
-    //         {
-    //             await EnterMatch();
-    //         }
-    //     }
-    //     else
-    //     {
-    //         break;
-    //     }
-    // }
+        if (response.ContinueState)
+        {
+            if (response.GameState == GameState.ChallengerTurn)
+            {
+                await EnterMatch();
+            }
+        }
+        else
+        {
+            break;
+        }
+    }
 }
 
 async Task EnterMatch()
