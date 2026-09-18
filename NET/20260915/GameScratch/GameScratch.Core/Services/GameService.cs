@@ -187,9 +187,9 @@ public class GameService: IGameService
                     if (option.ActionName == ActionNames.Attack)
                         actionResponse = _playerService.Attack(attacker, defender);
                     if (option.ActionName == ActionNames.Guard)
-                        actionResponse = _playerService.Guard(attacker);
+                        actionResponse = _playerService.Guard(attacker, defender);
                     if (option.ActionName == ActionNames.Wait)
-                        actionResponse = _playerService.EndTurn(attacker);
+                        actionResponse = _playerService.Wait(attacker, defender);
                     
                     if (actionResponse.SwitchPlayerTurn)
                     {

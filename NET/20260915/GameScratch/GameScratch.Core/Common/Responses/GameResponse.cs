@@ -24,8 +24,8 @@ public class GameResponse
         sb.AppendLine();
         if (Action != null)
             sb.AppendLine(Action.ToConsoleString());
-        if (Players != null)
-            sb.AppendLine(Players.ToConsoleString());
+        if (Players != null && Players.Challenger != null && Players.Champion != null)
+            sb.AppendLine(Players.ToConsoleString(GameState));
         if (GameState == GameState.ChallengerTurn || GameState == GameState.ChampionTurn)
         {
 

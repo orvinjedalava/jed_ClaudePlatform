@@ -13,8 +13,8 @@ public interface IPlayerService
     ActionResponse StartPlayerTurn(Player player);
 
     ActionResponse Attack(Player attacker, Player defender);
-    ActionResponse Guard(Player player);
-    ActionResponse EndTurn(Player player);
+    ActionResponse Guard(Player attacker, Player defender);
+    ActionResponse Wait(Player attacker, Player defender);
     ActionResponse InvokeRandomAction(Player attacker, Player defender); 
     (ActionResponse, Player) RollIniative(Player challenger, Player champion);
 }

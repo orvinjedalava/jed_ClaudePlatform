@@ -25,8 +25,8 @@ public class ActionService : IActionService
         Actions = new()
         {
             { nameof(Attack), ctx => Attack(ctx.Attacker, ctx.Defender) },
-            { nameof(Guard), ctx => Guard(ctx.Attacker) },
-            { nameof(Wait), ctx => Wait(ctx.Attacker) }
+            { nameof(Guard), ctx => Guard(ctx.Attacker, ctx.Defender) },
+            { nameof(Wait), ctx => Wait(ctx.Attacker, ctx.Defender) }
         };
     }
 
@@ -151,7 +151,9 @@ public class ActionService : IActionService
             if (defender.Conditions.StanceType == StanceType.Staggered)
                 recoverMsg = "steadies himself and ";
 
-            defender.Conditions.StanceType = StanceType.Neutral;
+            if (defender.Conditions.StanceType != StanceType.Guard )
+                defender.Conditions.StanceType = defender.Conditions.StanceType = StanceType.Neutral;
+                
             sb.AppendLine($"{defender.Profile.Name} {recoverMsg}takes the initiative.");
         }
 
@@ -163,22 +165,46 @@ public class ActionService : IActionService
         };
     }
 
-    public ActionResponse Guard(Player attacker)
+    public ActionResponse Guard(Player attacker, Player defender)
     {
+        StringBuilder sb = new();
+        sb.AppendLine($"{attacker.GetNameWithStatus()} braces and goes into GUARD STANCE.");
+        
         attacker.Conditions.StanceType = StanceType.Guard;
+
+        string recoverMsg = string.Empty;
+            if (defender.Conditions.StanceType == StanceType.Staggered || defender.Conditions.StanceType == StanceType.Unbalanced)
+                recoverMsg = "steadies himself and ";
+        sb.AppendLine($"{defender.Profile.Name} {recoverMsg}takes the initiative.");
+
+        if (defender.Conditions.StanceType != StanceType.Guard )
+            defender.Conditions.StanceType = defender.Conditions.StanceType = StanceType.Neutral;
+
         return new ActionResponse() 
         {
-            Message = $"{attacker.GetNameWithStatus()} goes into GUARD STANCE",
+            Message = sb.ToString(),
             SwitchPlayerTurn = true
         };
     }
 
-    public ActionResponse Wait(Player attacker)
+    public ActionResponse Wait(Player attacker, Player defender)
     {
+        StringBuilder sb = new();
+        sb.AppendLine($"{attacker.GetNameWithStatus()} waits and goes into NEUTRAL STANCE.");
+        
         attacker.Conditions.StanceType = StanceType.Neutral;
+
+        string recoverMsg = string.Empty;
+            if (defender.Conditions.StanceType == StanceType.Staggered || defender.Conditions.StanceType == StanceType.Unbalanced)
+                recoverMsg = "steadies himself and ";
+        sb.AppendLine($"{defender.Profile.Name} {recoverMsg}takes the initiative.");
+
+        if (defender.Conditions.StanceType != StanceType.Guard )
+            defender.Conditions.StanceType = defender.Conditions.StanceType = StanceType.Neutral;
+        
         return new()
         {
-            Message = $"{attacker.GetNameWithStatus()} goes into NEUTRAL STANCE",
+            Message = sb.ToString(),
             SwitchPlayerTurn = true
         };
     }

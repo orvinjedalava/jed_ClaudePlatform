@@ -35,7 +35,8 @@ public class ActionServiceTests
         Weapon weapon = WeaponBuilder.Create().FromWeaponType(WeaponType.ShortSword).Build();
 
         Player attacker = PlayersFactory.DefaultChallengerPlayer;
+        Player defender = PlayersFactory.DefaultChampionPlayer;
 
-        Assert.NotNull(_actionService.Guard(attacker));
+        Assert.NotNull(_actionService.Guard(attacker, defender));
     }
 }

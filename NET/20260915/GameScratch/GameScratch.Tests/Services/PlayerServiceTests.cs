@@ -75,7 +75,8 @@ public class PlayerServiceTests
     public void GuardStance_Success()
     {
         Player challenger = PlayersFactory.DefaultChallengerPlayer;
-        var exception = Record.Exception(() => _playerService.Guard(challenger));
+        Player champion = PlayersFactory.DefaultChampionPlayer;
+        var exception = Record.Exception(() => _playerService.Guard(challenger, champion));
 
         Assert.Null(exception);
     }

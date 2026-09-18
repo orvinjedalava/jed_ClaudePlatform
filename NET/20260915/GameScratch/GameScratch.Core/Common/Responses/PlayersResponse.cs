@@ -22,7 +22,7 @@ public class PlayersResponse
         }
     }
 
-    public string ToConsoleString()
+    public string ToConsoleString(GameState gameState)
     {
         if (Challenger == null && Champion == null)
             return string.Empty;
@@ -31,16 +31,34 @@ public class PlayersResponse
 
         sb.AppendLine("---------------------------------");
         sb.AppendLine("Gladiatiors Current Stats:");
-        if (Challenger != null)
+
+        if (gameState == GameState.ChallengerTurn)
         {
-            sb.AppendLine();
-            sb.AppendLine(Challenger.ToConsoleString());
+            if (Champion != null)
+            {
+                sb.AppendLine();
+                sb.AppendLine(Champion.ToConsoleString());
+            }
+            if (Challenger != null)
+            {
+                sb.AppendLine();
+                sb.AppendLine(Challenger.ToConsoleString());
+            }     
         }
-        if (Champion != null)
+        else if (gameState == GameState.ChampionTurn)
         {
-            sb.AppendLine();
-            sb.AppendLine(Champion.ToConsoleString());
+            if (Challenger != null)
+            {
+                sb.AppendLine();
+                sb.AppendLine(Challenger.ToConsoleString());
+            }
+            if (Champion != null)
+            {
+                sb.AppendLine();
+                sb.AppendLine(Champion.ToConsoleString());
+            }
         }
+        
         return sb.ToString();
     }
 }

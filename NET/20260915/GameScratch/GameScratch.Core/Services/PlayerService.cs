@@ -46,14 +46,14 @@ public class PlayerService : IPlayerService
         return _actionService.Attack(attacker, defender);
     }
 
-    public ActionResponse Guard(Player player)
+    public ActionResponse Guard(Player attacker, Player defender)
     {
-        return _actionService.Guard(player);
+        return _actionService.Guard(attacker, defender);
     }
 
-    public ActionResponse EndTurn(Player player)
+    public ActionResponse Wait(Player attacker, Player defender)
     {
-        return _actionService.Wait(player);
+        return _actionService.Wait(attacker, defender);
     }
 
     public ActionResponse InvokeRandomAction(Player attacker, Player defender)
