@@ -61,12 +61,9 @@ public class ActionService : IActionService
         }
         else
         {
-            if (defender.Conditions.StanceType == StanceType.Unbalanced || defender.Conditions.StanceType == StanceType.Staggered)
-                defender.Conditions.StanceType = StanceType.Neutral;
-
             // check if attacker is unbalanced
             int counterRoll = _diceService.Roll(DiceType.D20);
-            int defenderTotalCounterRoll = counterRoll +  defender.GetCounterDiceRollModifiers().Sum();
+            int defenderTotalCounterRoll = counterRoll + defender.GetCounterDiceRollModifiers().Sum();
             int attackerMissModifier = attackResponse.DefenderTotalArmorClass - int.Max(0, attackResponse.AttackerTotalDiceRoll);
 
             bool counterSuccessfull = defenderTotalCounterRoll >= attacker.GetTotalBalanceClass() - attackerMissModifier;
@@ -91,6 +88,10 @@ public class ActionService : IActionService
             {
                 sb.Append($" but missed!");
             }
+
+            if (defender.Conditions.StanceType == StanceType.Unbalanced || defender.Conditions.StanceType == StanceType.Staggered)
+                defender.Conditions.StanceType = StanceType.Neutral;
+
         }
 
         return new ActionResponse()

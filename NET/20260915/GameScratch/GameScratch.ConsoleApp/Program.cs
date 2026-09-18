@@ -26,6 +26,7 @@ await EnterMainMenu();
 
 async Task EnterMainMenu()
 {
+    Console.Clear();
     Console.WriteLine(gameService.ShowMainMenu().ToConsoleString());
 
     while(true)
@@ -36,6 +37,7 @@ async Task EnterMainMenu()
 
         var response = gameService.HandleInput(inputChar);
 
+        Console.Clear();
         Console.WriteLine(response.ToConsoleString());
         Console.WriteLine("\n");
 
@@ -63,6 +65,7 @@ async Task EnterMatch()
 
         var response = gameService.HandleInput(inputChar);
 
+        Console.Clear();
         Console.WriteLine(response.ToConsoleString());
         Console.WriteLine("\n");
 

@@ -25,6 +25,8 @@ public class GameService: IGameService
         _inputService = inputService ?? throw new ArgumentNullException("InputService not injected.");
 
         LatestGameState = GameState.None;
+        LastGameResponse = new() { ContinueState = true, GameState = LatestGameState };
+        ;
 
         _promptsMap = PromptFactory.Create().Build();
     }
@@ -32,6 +34,7 @@ public class GameService: IGameService
     public Player Challenger { get; set; } = null!;
     public Player Champion { get; set; } = null!;
     public GameState LatestGameState { get; set; }
+    public GameResponse LastGameResponse { get; set; }
 
     async Task<string> IGameService.SendMessageToLLMAsync(string message)
     {
@@ -42,7 +45,7 @@ public class GameService: IGameService
     {
         LatestGameState = GameState.None;
 
-        return new()
+        return LastGameResponse = new()
         {
             ContinueState = true,
             GameState = LatestGameState,
@@ -161,48 +164,57 @@ public class GameService: IGameService
 
     public GameResponse HandleInput(char keyChar)
     {
-        PlayerOption option = _inputService.GetPlayerOption(keyChar, LatestGameState);
-
-        switch(option.ServiceName)
+        try
         {
-            case "Game":
-                if (option.ActionName == ActionNames.StartMatch)
-                    return StartMatch(option.ContinueState);
-                if (option.ActionName == ActionNames.CloseGame)
-                    return CloseGame(option.ContinueState);
-                if (option.ActionName == ActionNames.Surrender)
-                    return Surrender(option.ContinueState);
-                else
+            PlayerOption option = _inputService.GetPlayerOption(keyChar, LatestGameState);
+
+            switch(option.ServiceName)
+            {
+                case "Game":
+                    if (option.ActionName == ActionNames.StartMatch)
+                        return LastGameResponse = StartMatch(option.ContinueState);
+                    
+                    if (option.ActionName == ActionNames.CloseGame)
+                        return LastGameResponse = CloseGame(option.ContinueState);
+                    if (option.ActionName == ActionNames.Surrender)
+                        return LastGameResponse = Surrender(option.ContinueState);
+                    else
+                        throw new NotImplementedException();
+                case "Player":
+                    var attacker = GetAttackingPlayer();
+                    var defender = GetDefendingPlayer();
+                    var actionResponse = new ActionResponse();
+                    if (option.ActionName == ActionNames.Attack)
+                        actionResponse = _playerService.Attack(attacker, defender);
+                    if (option.ActionName == ActionNames.Guard)
+                        actionResponse = _playerService.Guard(attacker);
+                    if (option.ActionName == ActionNames.Wait)
+                        actionResponse = _playerService.EndTurn(attacker);
+                    
+                    if (actionResponse.SwitchPlayerTurn)
+                    {
+                        SwitchPlayerTurn();
+                    }
+
+                    bool isMatchOver = IsMatchOver(actionResponse);
+
+                    return LastGameResponse = new GameResponse()
+                    {
+                        ContinueState = !isMatchOver && option.ContinueState,
+                        GameState = LatestGameState,
+                        Players = new() { Challenger = Challenger, Champion = Champion },
+                        PlayerOptions = _inputService.GetPlayerOptions(LatestGameState),
+                        Action = actionResponse,
+                        Message = isMatchOver ? "Match is over!" : "The crowd roars!"
+                    };
+
+                default:
                     throw new NotImplementedException();
-            case "Player":
-                var attacker = GetAttackingPlayer();
-                var defender = GetDefendingPlayer();
-                var actionResponse = new ActionResponse();
-                if (option.ActionName == ActionNames.Attack)
-                    actionResponse = _playerService.Attack(attacker, defender);
-                if (option.ActionName == ActionNames.Guard)
-                    actionResponse = _playerService.Guard(attacker);
-                if (option.ActionName == ActionNames.Wait)
-                    actionResponse = _playerService.EndTurn(attacker);
-                
-                if (actionResponse.SwitchPlayerTurn)
-                {
-                    SwitchPlayerTurn();
-                }
-
-                bool isMatchOver = IsMatchOver(actionResponse);
-
-                return new GameResponse()
-                {
-                    ContinueState = !isMatchOver && option.ContinueState,
-                    GameState = LatestGameState,
-                    Players = new() { Challenger = Challenger, Champion = Champion },
-                    PlayerOptions = _inputService.GetPlayerOptions(LatestGameState),
-                    Action = actionResponse,
-                    Message = isMatchOver ? "Match is over!" : "The crowd roars!"
-                };
-            default:
-                throw new NotImplementedException();
+            }
+        }
+        catch
+        {
+            return LastGameResponse;
         }
     }
 
@@ -243,12 +255,12 @@ public class GameService: IGameService
             else if(isChamptionDefeated)
             {
                 sb.AppendLine($"{Champion.Profile.Name} falls to the ground.");
-                sb.AppendLine($"{Challenger.Profile.Name} wins! You are the new champion!");
+                sb.AppendLine($"{Challenger.Profile.Name} wins!");
             }
             else if(isChallengerDefeated)
             {
                 sb.AppendLine($"{Challenger.Profile.Name} falls to the ground.");
-                sb.AppendLine($"{Champion.Profile.Name} wins! You are an embarassment!");
+                sb.AppendLine($"{Champion.Profile.Name} wins!");
             }
 
             actionResponse.Message = sb.ToString();
