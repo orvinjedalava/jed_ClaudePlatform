@@ -14,9 +14,9 @@ public class PlayersResponse
         switch(gameState)
         {
             case GameState.ChallengerTurn:
-                return Challenger?.GetNameWithStatus() ?? string.Empty;
+                return Challenger?.Profile.Name ?? string.Empty;
             case GameState.ChampionTurn:
-                return Champion?.GetNameWithStatus() ?? string.Empty;
+                return Champion?.Profile.Name ?? string.Empty;
             default:
                 throw new NotImplementedException();
         }

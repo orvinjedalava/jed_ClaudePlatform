@@ -4,6 +4,7 @@ using GameScratch.Core.Common.Weapons;
 using GameScratch.Core.Common.Responses;
 using GameScratch.Core.LLM;
 using System.Text;
+using GameScrach.Core.Common;
 
 namespace GameScratch.Core.Services;
 
@@ -25,9 +26,9 @@ public class GameService: IGameService
         _inputService = inputService ?? throw new ArgumentNullException("InputService not injected.");
 
         LatestGameState = GameState.None;
-        LastGameResponse = new() { ContinueState = true, GameState = LatestGameState };
-        ;
-
+        GameMode = GameMode.None;
+        LastGameResponse = new() { ContinueState = true, GameState = LatestGameState, GameMode = GameMode };
+        
         _promptsMap = PromptFactory.Create().Build();
     }
 
@@ -35,6 +36,7 @@ public class GameService: IGameService
     public Player Champion { get; set; } = null!;
     public GameState LatestGameState { get; set; }
     public GameResponse LastGameResponse { get; set; }
+    public GameMode GameMode { get; set; }
 
     async Task<string> IGameService.SendMessageToLLMAsync(string message)
     {
@@ -49,6 +51,7 @@ public class GameService: IGameService
         {
             ContinueState = true,
             GameState = LatestGameState,
+            GameMode = GameMode,
             Message = "Welcome to the Arena!",
             PlayerOptions = _inputService.GetPlayerOptions(LatestGameState)
         };
@@ -103,6 +106,7 @@ public class GameService: IGameService
         {
             ContinueState = continueState,
             GameState = LatestGameState,
+            GameMode = GameMode,
             Players = new() { Challenger = Challenger, Champion = Champion },
             PlayerOptions = _inputService.GetPlayerOptions(LatestGameState),
             Message = $"{preText}{response.Message}",
@@ -117,6 +121,7 @@ public class GameService: IGameService
         {
             ContinueState = continueState,
             GameState = LatestGameState,
+            GameMode = GameMode,
             Message = "Goodbye!"
         };
     }
@@ -131,6 +136,7 @@ public class GameService: IGameService
         {
             ContinueState = continueState,
             GameState = LatestGameState,
+            GameMode = GameMode, 
             Message = $"{attacker.Profile.Name} surrenders. {defender.Profile.Name} wins the match!",
             PlayerOptions = _inputService.GetPlayerOptions(LatestGameState)
         };
@@ -171,8 +177,16 @@ public class GameService: IGameService
             switch(option.ServiceName)
             {
                 case "Game":
-                    if (option.ActionName == ActionNames.StartMatch)
+                    if (option.ActionName == ActionNames.StartSinglePlayerMatch)
+                    {
+                        GameMode = GameMode.SinglePlayer;
                         return LastGameResponse = StartMatch(option.ContinueState);
+                    }
+                    if (option.ActionName == ActionNames.StartTwoPlayerMatch)
+                    {
+                        GameMode = GameMode.TwoPlayers;
+                        return LastGameResponse = StartMatch(option.ContinueState);
+                    }
                     
                     if (option.ActionName == ActionNames.CloseGame)
                         return LastGameResponse = CloseGame(option.ContinueState);
@@ -202,6 +216,7 @@ public class GameService: IGameService
                     {
                         ContinueState = !isMatchOver && option.ContinueState,
                         GameState = LatestGameState,
+                        GameMode = GameMode,
                         Players = new() { Challenger = Challenger, Champion = Champion },
                         PlayerOptions = _inputService.GetPlayerOptions(LatestGameState),
                         Action = actionResponse,

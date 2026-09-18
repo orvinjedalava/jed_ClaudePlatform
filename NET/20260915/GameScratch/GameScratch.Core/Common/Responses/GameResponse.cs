@@ -1,4 +1,5 @@
 using System.Text;
+using GameScrach.Core.Common;
 using GameScratch.Core.Common.Players;
 
 namespace GameScratch.Core.Common.Responses;
@@ -7,6 +8,7 @@ public class GameResponse
 {
     public required bool ContinueState { get; init; }
     public required GameState GameState { get; init; }
+    public required GameMode GameMode { get; init; }
 
     public string Message { get; set; } = string.Empty;
 
@@ -34,7 +36,7 @@ public class GameResponse
         }
         if (PlayerOptions != null)
         {
-            if (GameState != GameState.ChampionTurn)
+            if (GameState != GameState.ChampionTurn || GameMode == GameMode.TwoPlayers)
                 sb.AppendLine(PlayerOptions.ToConsoleString());
             else
                 sb.AppendLine($"{Players!.Champion!.Profile.Name} is thinking...");

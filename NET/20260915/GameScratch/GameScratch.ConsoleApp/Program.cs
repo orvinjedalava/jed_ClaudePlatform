@@ -4,6 +4,7 @@ using GameScratch.Core.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using GameScrach.Core.Common;
 
 Console.WriteLine("---------------------------------");
 Console.WriteLine("Gladiator Fight!");
@@ -45,7 +46,7 @@ async Task EnterMainMenu()
         {
             if (response.GameState == GameState.ChallengerTurn || response.GameState == GameState.ChampionTurn)
             {
-                await EnterMatch(response.GameState);
+                await EnterMatch(response.GameState, response.GameMode);
             }
         }
         else
@@ -55,12 +56,12 @@ async Task EnterMainMenu()
     }
 }
 
-async Task EnterMatch(GameState gameState)
+async Task EnterMatch(GameState gameState, GameMode gameMode)
 {
     while(true)
     {
         char inputChar = '\0';
-        if (gameState == GameState.ChallengerTurn)
+        if (gameState == GameState.ChallengerTurn || gameMode == GameMode.TwoPlayers)
         {
             inputChar = Console.IsInputRedirected ? 
                 (Console.ReadLine()?.FirstOrDefault() ?? '\0')
@@ -79,7 +80,7 @@ async Task EnterMatch(GameState gameState)
 
         if (!response.ContinueState)
             break;
-            
+
         gameState = response.GameState;
     }
 }
