@@ -43,9 +43,9 @@ async Task EnterMainMenu()
 
         if (response.ContinueState)
         {
-            if (response.GameState == GameState.ChallengerTurn)
+            if (response.GameState == GameState.ChallengerTurn || response.GameState == GameState.ChampionTurn)
             {
-                await EnterMatch();
+                await EnterMatch(response.GameState);
             }
         }
         else
@@ -55,15 +55,23 @@ async Task EnterMainMenu()
     }
 }
 
-async Task EnterMatch()
+async Task EnterMatch(GameState gameState)
 {
     while(true)
     {
-        char inputChar = Console.IsInputRedirected ? 
-            (Console.ReadLine()?.FirstOrDefault() ?? '\0')
-            : Console.ReadKey(true).KeyChar;
-
-        var response = gameService.HandleInput(inputChar);
+        char inputChar = '\0';
+        if (gameState == GameState.ChallengerTurn)
+        {
+            inputChar = Console.IsInputRedirected ? 
+                (Console.ReadLine()?.FirstOrDefault() ?? '\0')
+                : Console.ReadKey(true).KeyChar;
+        }
+        else
+        {
+            inputChar = await gameService.ExecuteChampionTurnAsync();
+        }
+        
+        var response =  gameService.HandleInput(inputChar);
 
         Console.Clear();
         Console.WriteLine(response.ToConsoleString());
@@ -71,6 +79,8 @@ async Task EnterMatch()
 
         if (!response.ContinueState)
             break;
+            
+        gameState = response.GameState;
     }
 }
 

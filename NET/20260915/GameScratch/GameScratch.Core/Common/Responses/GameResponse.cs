@@ -33,7 +33,12 @@ public class GameResponse
             sb.AppendLine($"It's your turn, {Players?.GetCurrentPlayerTurnName(GameState)}.");
         }
         if (PlayerOptions != null)
-            sb.AppendLine(PlayerOptions.ToConsoleString());
+        {
+            if (GameState != GameState.ChampionTurn)
+                sb.AppendLine(PlayerOptions.ToConsoleString());
+            else
+                sb.AppendLine($"{Players!.Champion!.Profile.Name} is thinking...");
+        }
 
         return sb.ToString();
     }

@@ -23,6 +23,9 @@ public class LLMServiceBase : ILLMService
 
     public async Task<char> ChooseActionAsync(GameResponse gameResponse)
     {
+        // simulate model thinking.
+        await Task.Delay(5000);
+
         var choices = gameResponse.PlayerOptions!.Options
             .Where(o => o.Key != 'q')
             .ToList();

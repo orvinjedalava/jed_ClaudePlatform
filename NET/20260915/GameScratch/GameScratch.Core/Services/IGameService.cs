@@ -19,7 +19,7 @@ public interface IGameService
     GameResponse CloseGame(bool continueState);
     GameResponse Surrender(bool continueState);
     GameResponse HandleInput(char keyChar);
-    Task<GameResponse> ExecuteChampionTurnAsync();
+    Task<char> ExecuteChampionTurnAsync();
 
     Player GetAttackingPlayer();
     Player GetDefendingPlayer();

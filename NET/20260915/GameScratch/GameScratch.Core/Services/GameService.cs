@@ -271,18 +271,8 @@ public class GameService: IGameService
         return false;
     }
 
-    public async Task<GameResponse> ExecuteChampionTurnAsync()
+    public async Task<char> ExecuteChampionTurnAsync()
     {
-        GameResponse response = StartPlayerTurn(true);
-
-        while(LatestGameState == GameState.ChampionTurn)
-        {
-            char keyChar = await _llmService.ChooseActionAsync(response);
-            response = HandleInput(keyChar);
-        }
-
-        return LatestGameState == GameState.None ? 
-            ShowMainMenu() 
-            : StartPlayerTurn(true);
+        return await _llmService.ChooseActionAsync(LastGameResponse);
     }
 }
