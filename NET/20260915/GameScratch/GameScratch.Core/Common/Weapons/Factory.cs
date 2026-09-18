@@ -2,7 +2,7 @@ namespace GameScratch.Core.Common.Weapons;
 
 public class WeaponsFactory
 {
-    public static Weapon BareHands = WeaponBuilder.Create().FromWeaponType(WeaponType.OneHandShortSword).Build();
+    public static Weapon BareHands = WeaponBuilder.Create().FromWeaponType(WeaponType.ShortSword).Build();
 }
 
 public class WeaponBuilder
@@ -13,17 +13,18 @@ public class WeaponBuilder
     public WeaponBuilder FromWeaponType(WeaponType? weaponType)
     {
         if (weaponType == null)
-            weaponType = WeaponType.OneHandShortSword;
+            weaponType = WeaponType.ShortSword;
 
         switch(weaponType)
         {
-            case WeaponType.OneHandShortSword:
+            case WeaponType.ShortSword:
                 _weapon = new()
                 {
                     Name = weaponType.Value.ToString(),
                     HitPointsDamageDiceType = weaponType.Value.GetHitPointsDamageDiceType(),
                     StaminaPointsDamage = weaponType.Value.GetStaminaPointsDamage(),
                     StaminaCost = weaponType.Value.GetStaminaCost(),
+                    PoiseDamageModifier = weaponType.Value.GetPoiseDamageModifier(),
                     WeaponType = weaponType.Value
                 };
                 break;

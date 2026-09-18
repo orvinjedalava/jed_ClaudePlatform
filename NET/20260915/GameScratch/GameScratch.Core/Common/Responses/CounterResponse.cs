@@ -17,6 +17,10 @@ public class CounterResponse
     {
         StringBuilder sb = new();
 
+        sb.AppendLine("---------------------------------");
+        sb.AppendLine("Counter DiceRoll values:");
+        sb.AppendLine();
+
         sb.AppendLine($"Total BalanceClass: {AttackerTotalBalanceClass} = {AttackerBalanceClass} {string.Join(" ", AttackerBalanceClassModifiers?.Select(m => m.ToString("+0;-0")) ?? Enumerable.Empty<string>())} -{AttackerMissModifier}" );
         sb.AppendLine($"Total Counter DiceRoll: {DefenderTotalDiceRoll} = {DefenderDiceRoll} {string.Join(" ", DefenderDiceRollModifiers?.Select(m => m.ToString("+0;-0")) ?? Enumerable.Empty<string>())}");
 

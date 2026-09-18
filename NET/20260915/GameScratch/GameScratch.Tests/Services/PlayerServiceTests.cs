@@ -42,15 +42,15 @@ public class PlayerServiceTests
     }
 
     [Theory]
-    [InlineData(RoleType.Challenger, WeaponType.OneHandShortSword)]
-    [InlineData(RoleType.Champion, WeaponType.OneHandShortSword)]
+    [InlineData(RoleType.Challenger, WeaponType.ShortSword)]
+    [InlineData(RoleType.Champion, WeaponType.ShortSword)]
     public void CreatePlayer_Success(RoleType roleType, WeaponType weaponType)
     {
         string name = roleType.ToString();
 
         Weapon weapon = WeaponBuilder
             .Create()
-            .FromWeaponType(WeaponType.OneHandShortSword)
+            .FromWeaponType(WeaponType.ShortSword)
             .Build();
         
         Player result = _playerService.CreatePlayer(roleType, name, weaponType);

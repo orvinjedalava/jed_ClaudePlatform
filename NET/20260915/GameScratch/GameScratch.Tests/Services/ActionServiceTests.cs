@@ -21,7 +21,7 @@ public class ActionServiceTests
     [Fact]
     public void Attack_Success()
     {
-        Weapon weapon = WeaponBuilder.Create().FromWeaponType(WeaponType.OneHandShortSword).Build();
+        Weapon weapon = WeaponBuilder.Create().FromWeaponType(WeaponType.ShortSword).Build();
 
         Player attacker = PlayersFactory.DefaultChallengerPlayer;
         Player defender = PlayersFactory.DefaultChampionPlayer;
@@ -32,7 +32,7 @@ public class ActionServiceTests
     [Fact]
     public void GuardStance_Success()
     {
-        Weapon weapon = WeaponBuilder.Create().FromWeaponType(WeaponType.OneHandShortSword).Build();
+        Weapon weapon = WeaponBuilder.Create().FromWeaponType(WeaponType.ShortSword).Build();
 
         Player attacker = PlayersFactory.DefaultChallengerPlayer;
 

@@ -34,8 +34,6 @@ public class ActionService : IActionService
     {
         var sb = new StringBuilder();
 
-        attacker.UseWeapon();
-
         sb.Append($"{attacker.GetNameWithStatus()} ATTACKS {defender.GetNameWithStatus()} with {attacker.Equipment.Weapon.Name}");
 
         int attackRoll = _diceService.Roll(DiceType.D20);
@@ -57,7 +55,47 @@ public class ActionService : IActionService
             int damage = _diceService.Roll(attacker.Equipment.Weapon.HitPointsDamageDiceType);
             defender.AddHitPointsDamage(damage);
             defender.AddStaminaPointsDamage(attacker.Equipment.Weapon.StaminaPointsDamage);
-            sb.Append($" and hits, doing {damage} HitPoints damage and {attacker.Equipment.Weapon.StaminaPointsDamage} StaminaPoints damage ");
+            string unbalancedMsg = string.Empty;
+            if (defender.Conditions.StanceType == StanceType.Unbalanced)
+                unbalancedMsg = $" {defender.Profile.Name} remains off balance.";
+
+            sb.Append($" and hits, doing {damage} HitPoints damage and {attacker.Equipment.Weapon.StaminaPointsDamage} StaminaPoints damage.");
+
+            // check if defender is staggered
+            int pushRoll = _diceService.Roll(DiceType.D20);
+            int attackerTotalPushRoll = pushRoll + attacker.GetPushDiceRollModifiers().Sum();
+            int attackerPushModifier = damage;
+            int defenderTotalPoiseClass = defender.GetTotalPoiseClass(attackerPushModifier);
+
+            bool pushSuccessfull = attackerTotalPushRoll >= defenderTotalPoiseClass;
+
+            if (pushSuccessfull)
+            {
+                attackResponse.Push = new()
+                {
+                    DefenderPoiseClass = defender.Stats.PoiseClass,
+                    DefenderPoiseClassModifiers = defender.GetPoiseClassModifiers(),
+                    DefenderTotalPoiseClass = defenderTotalPoiseClass,
+                    AttackerPushModifier = attackerPushModifier,
+                    AttackerDiceRoll = pushRoll,
+                    AttackerDiceRollModifiers = attacker.GetPushDiceRollModifiers(),
+                    AttackerTotalDiceRoll = attackerTotalPushRoll 
+                };
+
+                if (defender.Conditions.StanceType == StanceType.Staggered)
+                {
+                    sb.Append($" {defender.Profile.Name} still reeling!");
+                }
+                else
+                {
+                    defender.Conditions.StanceType = StanceType.Staggered;
+                    sb.Append($" {defender.Profile.Name} is visibly shaken from that attack!");
+                }                
+            }
+            else
+            {
+                sb.Append(unbalancedMsg);
+            }
         }
         else
         {
@@ -65,8 +103,9 @@ public class ActionService : IActionService
             int counterRoll = _diceService.Roll(DiceType.D20);
             int defenderTotalCounterRoll = counterRoll + defender.GetCounterDiceRollModifiers().Sum();
             int attackerMissModifier = attackResponse.DefenderTotalArmorClass - int.Max(0, attackResponse.AttackerTotalDiceRoll);
+            int attackerTotalBalanceClass = attacker.GetTotalBalanceClass(attackerMissModifier);
 
-            bool counterSuccessfull = defenderTotalCounterRoll >= attacker.GetTotalBalanceClass() - attackerMissModifier;
+            bool counterSuccessfull = defenderTotalCounterRoll >= attackerTotalBalanceClass;
 
             if (counterSuccessfull)
             {
@@ -74,7 +113,7 @@ public class ActionService : IActionService
                 {
                     AttackerBalanceClass = attacker.Stats.BalanceClass,
                     AttackerBalanceClassModifiers = attacker.GetBalanceClassModifiers(),
-                    AttackerTotalBalanceClass = attacker.GetTotalBalanceClass() - attackerMissModifier,
+                    AttackerTotalBalanceClass = attackerTotalBalanceClass,
                     AttackerMissModifier = attackerMissModifier,
                     DefenderDiceRoll = counterRoll,
                     DefenderDiceRollModifiers = defender.GetCounterDiceRollModifiers(),
@@ -82,7 +121,7 @@ public class ActionService : IActionService
                 };
 
                 attacker.Conditions.StanceType = StanceType.Unbalanced;
-                sb.Append($" but missed and lost balance!");
+                sb.Append($" but missed and lost his footing!");
             }
             else
             {
@@ -90,15 +129,37 @@ public class ActionService : IActionService
             }
 
             if (defender.Conditions.StanceType == StanceType.Unbalanced || defender.Conditions.StanceType == StanceType.Staggered)
+            {
                 defender.Conditions.StanceType = StanceType.Neutral;
+                sb.AppendLine($" {defender.Profile.Name} regains composure.");
+            }
+                
+        }
 
+        attacker.UseWeapon();
+
+        bool switchPlayerTurn = attacker.IsExhausted() || attacker.Conditions.StanceType == StanceType.Unbalanced;
+
+        if (switchPlayerTurn)
+        {
+            
+            sb.AppendLine();
+            if (attacker.Conditions.StanceType != StanceType.Unbalanced && attacker.IsExhausted())
+                sb.AppendLine($"{attacker.Profile.Name} pushed too hard and runs out of steam.");
+
+            string recoverMsg = string.Empty;
+            if (defender.Conditions.StanceType == StanceType.Staggered)
+                recoverMsg = "steadies himself and ";
+
+            defender.Conditions.StanceType = StanceType.Neutral;
+            sb.AppendLine($"{defender.Profile.Name} {recoverMsg}takes the initiative.");
         }
 
         return new ActionResponse()
         {
             Message = sb.ToString(),
             Attack = attackResponse,
-            SwitchPlayerTurn = attacker.IsExhausted() || attacker.Conditions.StanceType == StanceType.Unbalanced
+            SwitchPlayerTurn = switchPlayerTurn
         };
     }
 
@@ -142,16 +203,4 @@ public class ActionService : IActionService
             RollInitiative = new() { DiceRoll = result }
         };
     }
-
-    // public ActionResponse Exhausted(Player player, string action)
-    // {
-    //     StringBuilder sb = new();
-    //     sb.AppendLine($"{player.Profile.Name} tried to {action} but is exhausted due to having {player.GetStaminaPointsRemaining()} StaminaPoints remaining");
-
-    //     return new ActionResponse()
-    //     {
-    //         Message = sb.ToString(),
-    //         SwitchPlayerTurn = player.IsExhausted()
-    //     };
-    // }
 }

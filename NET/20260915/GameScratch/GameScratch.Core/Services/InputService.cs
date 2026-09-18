@@ -7,10 +7,10 @@ public class InputService : IInputService
 {
     public static PlayerOption StartMatch => new() { Key = 's', Description = "Start Match", ActionName = ActionNames.StartMatch, ServiceName = "Game", ContinueState = true };
     public static PlayerOption CloseGame => new() { Key = 'c', Description = "Close Game", ActionName = ActionNames.CloseGame, ServiceName = "Game", ContinueState = false };
-    public static PlayerOption Surrender => new() { Key = 'q', Description = "Surrender ( Ends the match )", ActionName = ActionNames.Surrender, ServiceName = "Game", ContinueState = false };
-    public static PlayerOption Attack => new() { Key = '1', Description = "Attack", ActionName = ActionNames.Attack, ServiceName = "Player", ContinueState = true };
-    public static PlayerOption Guard => new() { Key = '2', Description = "Guard ( Ends your turn )", ActionName = ActionNames.Guard, ServiceName = "Player", ContinueState = true };
-    public static PlayerOption Wait => new() { Key = '3', Description = "Wait ( Ends your turn )", ActionName = ActionNames.Wait, ServiceName = "Player", ContinueState = true };
+    public static PlayerOption Surrender => new() { Key = 'q', Description = "Surrender and admit defeat. ( Ends the match )", ActionName = ActionNames.Surrender, ServiceName = "Game", ContinueState = false };
+    public static PlayerOption Attack => new() { Key = '1', Description = "Attack with your weapon." , ActionName = ActionNames.Attack, ServiceName = "Player", ContinueState = true };
+    public static PlayerOption Guard => new() { Key = '2', Description = "Brace yourself and go to Guard Stance. ( Ends your turn )", ActionName = ActionNames.Guard, ServiceName = "Player", ContinueState = true };
+    public static PlayerOption Wait => new() { Key = '3', Description = "Wait and go to Neutral Stance. ( Ends your turn )", ActionName = ActionNames.Wait, ServiceName = "Player", ContinueState = true };
 
     public static Dictionary<GameState, PlayerOptionsResponse> Map => new()
     {

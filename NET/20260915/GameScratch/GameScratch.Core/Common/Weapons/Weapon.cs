@@ -8,6 +8,7 @@ public class Weapon
     public required int StaminaPointsDamage { get; init; }
     public required string Name { get; init; }
     public required int StaminaCost { get; set; }
+    public required int PoiseDamageModifier { get; set; }
     public required WeaponType WeaponType { get; set; }
 
     public override bool Equals(object? obj)
@@ -21,6 +22,7 @@ public class Weapon
             && StaminaPointsDamage == weapon.StaminaPointsDamage
             && Name == weapon.Name
             && StaminaCost == weapon.StaminaCost
+            && PoiseDamageModifier == weapon.PoiseDamageModifier
             && WeaponType == weapon.WeaponType;
     }
 

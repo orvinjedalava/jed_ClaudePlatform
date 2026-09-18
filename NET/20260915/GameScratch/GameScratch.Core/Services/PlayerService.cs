@@ -75,6 +75,7 @@ public class PlayerService : IPlayerService
         var sb = new StringBuilder();
 
         sb.AppendLine("Initiative Roll:");
+        sb.AppendLine();
         sb.AppendLine($"{challengerRoll.Message}");
         sb.AppendLine($"{championRoll.Message}");
         sb.AppendLine();

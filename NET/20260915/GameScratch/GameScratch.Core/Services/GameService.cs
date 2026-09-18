@@ -72,13 +72,13 @@ public class GameService: IGameService
         Challenger = _playerService.CreatePlayer(
             RoleType.Challenger,
             "Spartacus",
-            WeaponType.OneHandShortSword
+            WeaponType.ShortSword
         );
 
         Champion = _playerService.CreatePlayer(
             RoleType.Champion,
             "Dario",
-            WeaponType.OneHandShortSword
+            WeaponType.ShortSword
         );
 
         ( ActionResponse actionResponse, Player player) = _playerService.RollIniative(Challenger, Champion);
@@ -254,12 +254,12 @@ public class GameService: IGameService
             }
             else if(isChamptionDefeated)
             {
-                sb.AppendLine($"{Champion.Profile.Name} falls to the ground.");
+                sb.AppendLine($"{Champion.Profile.Name} falls in defeat.");
                 sb.AppendLine($"{Challenger.Profile.Name} wins!");
             }
             else if(isChallengerDefeated)
             {
-                sb.AppendLine($"{Challenger.Profile.Name} falls to the ground.");
+                sb.AppendLine($"{Challenger.Profile.Name} is struck down.");
                 sb.AppendLine($"{Champion.Profile.Name} wins!");
             }
 

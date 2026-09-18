@@ -53,14 +53,15 @@ public class PlayerBuilder
         };
     }
 
-    public PlayerBuilder WithStats(int hitPoints = 20, int staminaPoints = 10, int armorClass = 10, int balanceClass = 15)
+    public PlayerBuilder WithStats(int hitPoints = 20, int staminaPoints = 10, int armorClass = 10, int balanceClass = 15, int poiseClass = 20)
     {
         _stats = new Stats()
         {
             HitPoints = hitPoints,
             StaminaPoints = staminaPoints,
             ArmorClass = armorClass,
-            BalanceClass = balanceClass
+            BalanceClass = balanceClass,
+            PoiseClass = poiseClass
         };
 
         return this;

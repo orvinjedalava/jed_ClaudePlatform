@@ -23,11 +23,13 @@ public class Player
         sb.AppendLine($"HitPoints Remaining: {GetHitPointsRemaining()}");
         sb.AppendLine($"ArmorClass: {Stats.ArmorClass}");
         sb.AppendLine($"BalanceClass: {Stats.BalanceClass}");
+        sb.AppendLine($"PoiseClass: {Stats.PoiseClass}");
         sb.AppendLine($"Stance: {Conditions.StanceType}");
         sb.AppendLine($"Weapon: {Equipment.Weapon.Name}");
         sb.AppendLine($"Weapon StaminaPoints Cost: {Equipment.Weapon.StaminaCost}");
         sb.AppendLine($"Weapon HitPoints DamageDiceType: {Equipment.Weapon.HitPointsDamageDiceType}");
         sb.AppendLine($"Weapon StaminaPoints Damage: {Equipment.Weapon.StaminaPointsDamage}");
+        sb.AppendLine($"Weapon Poise Damage Modifier: {Equipment.Weapon.PoiseDamageModifier}");
         sb.AppendLine();
 
         return sb.ToString();
@@ -38,9 +40,37 @@ public class Player
         return Stats.ArmorClass + GetArmorClassModifiers().Sum();
     }
 
-    public int GetTotalBalanceClass()
+    public int GetTotalBalanceClass(int attackerMissModifier = 0)
     {
-        return Stats.BalanceClass + GetBalanceClassModifiers().Sum();
+        return Stats.BalanceClass + GetBalanceClassModifiers().Sum() - attackerMissModifier;
+    }
+
+    public int GetTotalPoiseClass(int attackerPushModifier = 0)
+    {
+        return Stats.PoiseClass + GetPoiseClassModifiers().Sum() - attackerPushModifier;
+    }
+
+    public List<int> GetPoiseClassModifiers()
+    {
+        List<int> result = [];
+
+        switch(Conditions.StanceType)
+        {
+            case StanceType.Guard:
+                result.Add(2);
+                break;
+            case StanceType.Unbalanced:
+                result.Add(-2);
+                break;
+            case StanceType.Staggered:
+                result.Add(-2);
+                break;
+        }
+
+        if (IsExhausted())
+            result.Add(-3);
+
+        return result;
     }
 
     public List<int> GetArmorClassModifiers()
@@ -109,6 +139,18 @@ public class Player
         return result;
     }
 
+    public List<int> GetPushDiceRollModifiers()
+    {
+        List<int> result = [];
+
+        result.Add(Equipment.Weapon.PoiseDamageModifier);
+
+        if (IsExhausted())
+            result.Add(-3);
+
+        return result;
+    }
+
     public int GetHitPointsRemaining()
     {
         return Stats.HitPoints - Conditions.HitPointsDamage;
@@ -166,7 +208,12 @@ public class Player
 
     public string GetNameWithStatus()
     {
-        return $"{GetStatus()}{Profile.Name}";
+        string status = GetStatus();
+
+        if (string.IsNullOrEmpty(status))
+            return $"{Profile.Name}";
+
+        return $"{GetStatus()}-{Profile.Name}";
     }
 
     public string GetStatus()
@@ -196,7 +243,7 @@ public class Player
             statusList.Add("DEAD");
         }
 
-        return statusList.Count > 0 ? $"[{string.Join(",", statusList)}] " : string.Empty;
+        return statusList.Count > 0 ? $"[{string.Join(",", statusList)}]" : string.Empty;
     }
     
 }

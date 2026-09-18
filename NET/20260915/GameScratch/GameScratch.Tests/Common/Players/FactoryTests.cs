@@ -7,8 +7,8 @@ namespace GameScratch.Tests.Common.Players;
 public class FactoryTests
 {
     [Theory]
-    [InlineData(WeaponType.OneHandShortSword, RoleType.Challenger)]
-    [InlineData(WeaponType.OneHandShortSword, RoleType.Champion)]
+    [InlineData(WeaponType.ShortSword, RoleType.Challenger)]
+    [InlineData(WeaponType.ShortSword, RoleType.Champion)]
     public void BuildPlayer_Success(WeaponType weaponType, RoleType roleType)
     {
         Player player = PlayersFactory.DefaultPlayer;
