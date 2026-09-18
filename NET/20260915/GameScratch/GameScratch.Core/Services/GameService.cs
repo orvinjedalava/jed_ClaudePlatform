@@ -3,6 +3,7 @@ using GameScratch.Core.Common.Players;
 using GameScratch.Core.Common.Weapons;
 using GameScratch.Core.Common.Responses;
 using GameScratch.Core.LLM;
+using System.Text;
 
 namespace GameScratch.Core.Services;
 
@@ -113,7 +114,6 @@ public class GameService: IGameService
         {
             ContinueState = continueState,
             GameState = LatestGameState,
-            Players = new() { Challenger = Challenger, Champion = Champion },
             Message = "Goodbye!"
         };
     }
@@ -128,7 +128,8 @@ public class GameService: IGameService
         {
             ContinueState = continueState,
             GameState = LatestGameState,
-            Message = $"{attacker.Profile.Name} surrenders. {defender.Profile.Name} wins the match!"
+            Message = $"{attacker.Profile.Name} surrenders. {defender.Profile.Name} wins the match!",
+            PlayerOptions = _inputService.GetPlayerOptions(LatestGameState)
         };
     }
 
@@ -188,15 +189,17 @@ public class GameService: IGameService
                 {
                     SwitchPlayerTurn();
                 }
-                
+
+                bool isMatchOver = IsMatchOver(actionResponse);
+
                 return new GameResponse()
                 {
-                    ContinueState = option.ContinueState,
+                    ContinueState = !isMatchOver && option.ContinueState,
                     GameState = LatestGameState,
                     Players = new() { Challenger = Challenger, Champion = Champion },
                     PlayerOptions = _inputService.GetPlayerOptions(LatestGameState),
                     Action = actionResponse,
-                    Message = "The crowd roars!"
+                    Message = isMatchOver ? "Match is over!" : "The crowd roars!"
                 };
             default:
                 throw new NotImplementedException();
@@ -218,6 +221,42 @@ public class GameService: IGameService
         }
 
         _playerService.StartPlayerTurn(GetAttackingPlayer());
+    }
+
+    public bool IsMatchOver(ActionResponse actionResponse)
+    {
+        StringBuilder sb = new();
+
+        sb.AppendLine(actionResponse.Message);
+
+        bool isChallengerDefeated = Challenger.GetHitPointsRemaining() <= 0;
+        bool isChamptionDefeated = Champion.GetHitPointsRemaining() <= 0;
+
+        if (isChallengerDefeated || isChamptionDefeated)
+        {
+            LatestGameState = GameState.None;
+
+            if (isChallengerDefeated && isChamptionDefeated)
+            {
+                sb.AppendLine("We have a draw!");
+            }
+            else if(isChamptionDefeated)
+            {
+                sb.AppendLine($"{Champion.Profile.Name} falls to the ground.");
+                sb.AppendLine($"{Challenger.Profile.Name} wins! You are the new champion!");
+            }
+            else if(isChallengerDefeated)
+            {
+                sb.AppendLine($"{Challenger.Profile.Name} falls to the ground.");
+                sb.AppendLine($"{Champion.Profile.Name} wins! You are an embarassment!");
+            }
+
+            actionResponse.Message = sb.ToString();
+
+            return true;
+        }
+
+        return false;
     }
 
     public async Task<GameResponse> ExecuteChampionTurnAsync()

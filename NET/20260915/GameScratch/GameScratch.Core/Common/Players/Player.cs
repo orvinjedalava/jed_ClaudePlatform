@@ -17,10 +17,12 @@ public class Player
 
         sb.AppendLine($"****** The {Profile.RoleType} ******");
         sb.AppendLine();
-        sb.AppendLine($"Name: {GetNameWithStatus()}");
+        sb.AppendLine($"Name: {Profile.Name}");
+        sb.AppendLine($"Status: {(string.IsNullOrWhiteSpace(GetStatus()) ? StanceType.Neutral.ToString() : GetStatus())}");
         sb.AppendLine($"StaminaPoints Remaining: {GetStaminaPointsRemaining()}");
         sb.AppendLine($"HitPoints Remaining: {GetHitPointsRemaining()}");
         sb.AppendLine($"ArmorClass: {Stats.ArmorClass}");
+        sb.AppendLine($"BalanceClass: {Stats.BalanceClass}");
         sb.AppendLine($"Stance: {Conditions.StanceType}");
         sb.AppendLine($"Weapon: {Equipment.Weapon.Name}");
         sb.AppendLine($"Weapon StaminaPoints Cost: {Equipment.Weapon.StaminaCost}");
@@ -33,7 +35,12 @@ public class Player
 
     public int GetTotalArmorClass()
     {
-        return Stats.ArmorClass + GetArmorClassModifiers().Sum(x => x);
+        return Stats.ArmorClass + GetArmorClassModifiers().Sum();
+    }
+
+    public int GetTotalBalanceClass()
+    {
+        return Stats.BalanceClass + GetBalanceClassModifiers().Sum();
     }
 
     public List<int> GetArmorClassModifiers()
@@ -45,7 +52,23 @@ public class Player
             case StanceType.Guard:
                 result.Add(2);
                 break;
+            case StanceType.Unbalanced:
+                result.Add(-2);
+                break;
+            case StanceType.Staggered:
+                result.Add(-2);
+                break;
         }
+
+        if (IsExhausted())
+            result.Add(-3);
+
+        return result;
+    }
+
+    public List<int> GetBalanceClassModifiers()
+    {
+        List<int> result = [];
 
         if (IsExhausted())
             result.Add(-3);
@@ -56,6 +79,29 @@ public class Player
     public List<int> GetAttackDiceRollModifiers()
     {
         List<int> result = [];
+
+        if (IsExhausted())
+            result.Add(-3);
+
+        return result;
+    }
+
+    public List<int> GetCounterDiceRollModifiers()
+    {
+        List<int> result = [];
+
+        switch(Conditions.StanceType)
+        {
+            case StanceType.Guard:
+                result.Add(-1);
+                break;
+            case StanceType.Unbalanced:
+                result.Add(-3);
+                break;
+            case StanceType.Staggered:
+                result.Add(-3);
+                break;
+        }
 
         if (IsExhausted())
             result.Add(-3);
@@ -93,10 +139,10 @@ public class Player
         switch(Conditions.StanceType)
         {
             case StanceType.Neutral:
-                Conditions.StaminaPointsDamage -= 2; 
+                Conditions.StaminaPointsDamage = int.Max(0, Conditions.StaminaPointsDamage - 2); 
                 break;
             case StanceType.Guard:
-                Conditions.StaminaPointsDamage -= 1; 
+                Conditions.StaminaPointsDamage = int.Max(0, Conditions.StaminaPointsDamage - 1); 
                 break;
         }
 
@@ -120,8 +166,37 @@ public class Player
 
     public string GetNameWithStatus()
     {
-        string preText = IsExhausted() ? "(EXHAUSTED) " : string.Empty;
-        return $"{preText}{Profile.Name}";
+        return $"{GetStatus()}{Profile.Name}";
+    }
+
+    public string GetStatus()
+    {
+        List<string> statusList = [];
+
+        if (GetHitPointsRemaining() > 0)
+        {
+            if (IsExhausted())
+            statusList.Add("EXHAUSTED");
+        
+            switch(Conditions.StanceType)
+            {
+                case StanceType.Guard:
+                    statusList.Add("GUARDED");
+                    break;
+                case StanceType.Staggered:
+                    statusList.Add("STAGGERED");
+                    break;
+                case StanceType.Unbalanced:
+                    statusList.Add("UNBALANCED");
+                    break;
+            }
+        }
+        else
+        {
+            statusList.Add("DEAD");
+        }
+
+        return statusList.Count > 0 ? $"[{string.Join(",", statusList)}] " : string.Empty;
     }
     
 }

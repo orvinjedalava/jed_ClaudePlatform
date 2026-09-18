@@ -34,6 +34,8 @@ public class ActionService : IActionService
     {
         var sb = new StringBuilder();
 
+        attacker.UseWeapon();
+
         sb.Append($"{attacker.GetNameWithStatus()} ATTACKS {defender.GetNameWithStatus()} with {attacker.Equipment.Weapon.Name}");
 
         int attackRoll = _diceService.Roll(DiceType.D20);
@@ -59,16 +61,43 @@ public class ActionService : IActionService
         }
         else
         {
-            sb.Append($" but missed!");
-        }
+            if (defender.Conditions.StanceType == StanceType.Unbalanced || defender.Conditions.StanceType == StanceType.Staggered)
+                defender.Conditions.StanceType = StanceType.Neutral;
 
-        attacker.UseWeapon();
+            // check if attacker is unbalanced
+            int counterRoll = _diceService.Roll(DiceType.D20);
+            int defenderTotalCounterRoll = counterRoll +  defender.GetCounterDiceRollModifiers().Sum();
+            int attackerMissModifier = attackResponse.DefenderTotalArmorClass - int.Max(0, attackResponse.AttackerTotalDiceRoll);
+
+            bool counterSuccessfull = defenderTotalCounterRoll >= attacker.GetTotalBalanceClass() - attackerMissModifier;
+
+            if (counterSuccessfull)
+            {
+                attackResponse.Counter = new()
+                {
+                    AttackerBalanceClass = attacker.Stats.BalanceClass,
+                    AttackerBalanceClassModifiers = attacker.GetBalanceClassModifiers(),
+                    AttackerTotalBalanceClass = attacker.GetTotalBalanceClass() - attackerMissModifier,
+                    AttackerMissModifier = attackerMissModifier,
+                    DefenderDiceRoll = counterRoll,
+                    DefenderDiceRollModifiers = defender.GetCounterDiceRollModifiers(),
+                    DefenderTotalDiceRoll = defenderTotalCounterRoll 
+                };
+
+                attacker.Conditions.StanceType = StanceType.Unbalanced;
+                sb.Append($" but missed and lost balance!");
+            }
+            else
+            {
+                sb.Append($" but missed!");
+            }
+        }
 
         return new ActionResponse()
         {
             Message = sb.ToString(),
             Attack = attackResponse,
-            SwitchPlayerTurn = attacker.IsExhausted()
+            SwitchPlayerTurn = attacker.IsExhausted() || attacker.Conditions.StanceType == StanceType.Unbalanced
         };
     }
 

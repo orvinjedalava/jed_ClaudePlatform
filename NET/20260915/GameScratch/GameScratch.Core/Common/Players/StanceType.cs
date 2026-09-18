@@ -4,4 +4,6 @@ public enum StanceType
 {
     Neutral,
     Guard,
+    Unbalanced,
+    Staggered,
 }

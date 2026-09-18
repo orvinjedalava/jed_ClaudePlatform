@@ -55,28 +55,19 @@ async Task EnterMainMenu()
 
 async Task EnterMatch()
 {
-    // while(true)
-    // {
-    //     char inputChar = Console.IsInputRedirected ? 
-    //         (Console.ReadLine()?.FirstOrDefault() ?? '\0')
-    //         : Console.ReadKey(true).KeyChar;
+    while(true)
+    {
+        char inputChar = Console.IsInputRedirected ? 
+            (Console.ReadLine()?.FirstOrDefault() ?? '\0')
+            : Console.ReadKey(true).KeyChar;
 
-    //     (bool isContinue, string responseMsg) = gameService.HandleInput(inputChar);
-    //     Console.WriteLine("\n");
+        var response = gameService.HandleInput(inputChar);
 
-    //     Console.WriteLine(responseMsg);
+        Console.WriteLine(response.ToConsoleString());
+        Console.WriteLine("\n");
 
-    //     if (isContinue)
-    //     {
-    //         if (gameService.LatestGameState == GameState.ChampionTurn)
-    //         {
-    //             Console.WriteLine(await gameService.ExecuteChampionTurnAsync());
-    //         }
-    //     }
-    //     else
-    //     {
-    //         break;
-    //     }
-    // }
+        if (!response.ContinueState)
+            break;
+    }
 }
 

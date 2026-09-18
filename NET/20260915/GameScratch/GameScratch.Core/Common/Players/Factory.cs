@@ -53,13 +53,14 @@ public class PlayerBuilder
         };
     }
 
-    public PlayerBuilder WithStats(int hitPoints = 20, int staminaPoints = 10, int armorClass = 10)
+    public PlayerBuilder WithStats(int hitPoints = 20, int staminaPoints = 10, int armorClass = 10, int balanceClass = 20)
     {
         _stats = new Stats()
         {
             HitPoints = hitPoints,
             StaminaPoints = staminaPoints,
             ArmorClass = armorClass,
+            BalanceClass = balanceClass
         };
 
         return this;
@@ -91,7 +92,7 @@ public class PlayerBuilder
         _conditions = new()
         {
             StanceType = StanceType.Neutral,
-            StaminaPointsDamage = 9
+            StaminaPointsDamage = 0
         };
 
         return this;
