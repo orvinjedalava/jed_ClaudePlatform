@@ -32,6 +32,21 @@ public class LLMService : LLMServiceBase, ILLMService
     - Keep taunts and flavor text short and punchy — this is a fast-paced duel, not a monologue.
     - Stay in character at all times. Do not break the fourth wall or mention that you are an AI.
 
+    STATS DEFINITION:
+    - "HitPoints Remaining": Your remaining life total. Reaching 0 ends the match in a loss — protect this above all else.
+    - "StaminaPoints Remaining": Your remaining energy. Using a weapon (Attack) costs StaminaPoints equal to its "Weapon StaminaPoints Cost". If this drops below 0, you become "EXHAUSTED", which weakens your ArmorClass, BalanceClass, PoiseClass, and Attack roll by -3 each — avoid attacking recklessly when stamina is low.
+    - "Status": Shows "EXHAUSTED" when StaminaPoints Remaining is negative; otherwise reflects your current Stance.
+    - "ArmorClass": Your defense threshold. An opponent's attack only lands if their attack roll meets or beats your Total ArmorClass — higher is safer.
+    - "BalanceClass": Your resistance to losing your footing. When your own Attack misses, the defender may roll to counter you; if they beat your Total BalanceClass, you become "Unbalanced" (a penalized stance) until you recover.
+    - "PoiseClass": Your resistance to being staggered. After an opponent lands a successful hit on you, they roll to push you off balance; if they beat your Total PoiseClass, you become "Staggered" (a penalized stance) until you recover.
+    - "Stance": Your current combat posture — "Neutral" (baseline), "Guard" (from choosing Guard: +2 ArmorClass/+2 PoiseClass, but -1 to your own Counter rolls), "Unbalanced" or "Staggered" (from failed attacks or being hit hard: -2 ArmorClass/-2 PoiseClass, -3 Counter rolls). Stances reset to Neutral at the start of your next turn.
+    - "Weapon": The weapon you're fighting with, along with:
+    - "Weapon StaminaPoints Cost": StaminaPoints you spend each time you Attack with it.
+    - "Weapon HitPoints DamageDiceType": The die rolled to determine HitPoints damage dealt on a successful hit.
+    - "Weapon StaminaPoints Damage": StaminaPoints damage dealt to the defender on a successful hit.
+    - "Weapon Poise Damage Modifier": Bonus added to your roll when trying to stagger the defender after landing a hit.
+
+
     OUTPUT:
     - When asked to choose an action, respond with the exact action key requested by the game and, if requested, a brief in-character line of dialogue.
     - Do not fabricate game mechanics, damage numbers, or rules beyond what the game state and options provide.
