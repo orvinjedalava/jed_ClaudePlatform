@@ -12,6 +12,7 @@ public class GameResponse
 
     public string Message { get; set; } = string.Empty;
 
+    public List<string> History { get; set; } = null!;
     public PlayersResponse? Players { get; set; }
     public ActionResponse? Action { get; set; }
     public StartTurnResponse? StartTurn { get; set; }
@@ -26,6 +27,11 @@ public class GameResponse
         sb.AppendLine();
         if (Action != null)
             sb.AppendLine(Action.ToConsoleString());
+
+        sb.AppendLine("---------------------------------");
+        sb.AppendLine("History:");
+        sb.AppendLine(string.Join(Environment.NewLine, History));
+            
         if (Players != null && Players.Challenger != null && Players.Champion != null)
             sb.AppendLine(Players.ToConsoleString(GameState));
         if (GameState == GameState.ChallengerTurn || GameState == GameState.ChampionTurn)

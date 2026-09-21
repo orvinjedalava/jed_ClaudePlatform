@@ -19,14 +19,6 @@ public class LLMServiceBaseTests
         _llmServiceBase = new LLMServiceBase(_playerServiceMock.Object);
     }
 
-    [Fact]
-    public void ClearChatHistory_Success()
-    {
-        _llmServiceBase.ClearChatHistory();
-
-        Assert.Empty(_llmServiceBase.ChatHistory);
-    }
-
     // [Fact]
     // public async Task ExecuterTurnAsync_Success()
     // {

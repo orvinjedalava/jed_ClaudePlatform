@@ -10,8 +10,6 @@ public interface IGameService
     Player Champion { get; set; }
     GameState LatestGameState { get; set; }
 
-    Task<string> SendMessageToLLMAsync(string message);
-
     GameResponse ShowMainMenu();
     string Reset();
     GameResponse StartMatch(bool continueState);
@@ -19,7 +17,7 @@ public interface IGameService
     GameResponse CloseGame(bool continueState);
     GameResponse Surrender(bool continueState);
     GameResponse HandleInput(char keyChar);
-    Task<char> ExecuteChampionTurnAsync();
+    Task<GameResponse> ExecuteChampionTurnAsync();
 
     Player GetAttackingPlayer();
     Player GetDefendingPlayer();

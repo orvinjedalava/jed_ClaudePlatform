@@ -16,6 +16,8 @@ public class GameService: IGameService
 
     private readonly Dictionary<string, string> _promptsMap;
 
+    public List<string> _history;
+
     public GameService(
         ILLMService llmService,
         IPlayerService playerService,
@@ -30,6 +32,7 @@ public class GameService: IGameService
         LastGameResponse = new() { ContinueState = true, GameState = LatestGameState, GameMode = GameMode };
         
         _promptsMap = PromptFactory.Create().Build();
+        _history = new List<string>();
     }
 
     public Player Challenger { get; set; } = null!;
@@ -37,11 +40,6 @@ public class GameService: IGameService
     public GameState LatestGameState { get; set; }
     public GameResponse LastGameResponse { get; set; }
     public GameMode GameMode { get; set; }
-
-    async Task<string> IGameService.SendMessageToLLMAsync(string message)
-    {
-        return await _llmService.SendMessageAsync(message);
-    }
 
     public GameResponse ShowMainMenu()
     {
@@ -51,6 +49,7 @@ public class GameService: IGameService
         {
             ContinueState = true,
             GameState = LatestGameState,
+            History = GetLatestHistory(),
             GameMode = GameMode,
             Message = "Welcome to the Arena!",
             PlayerOptions = _inputService.GetPlayerOptions(LatestGameState)
@@ -59,7 +58,7 @@ public class GameService: IGameService
 
     public string Reset()
     {
-        _llmService.ClearChatHistory();
+        _history.Clear();
         _playerService.ResetPlayer(Challenger);
         _playerService.ResetPlayer(Champion);
 
@@ -70,8 +69,8 @@ public class GameService: IGameService
 
     public GameResponse StartMatch(bool continueState)
     {
-        _llmService.ClearChatHistory();
-
+        _history.Clear(); 
+        
         Challenger = _playerService.CreatePlayer(
             RoleType.Challenger,
             "Spartacus",
@@ -106,6 +105,7 @@ public class GameService: IGameService
         {
             ContinueState = continueState,
             GameState = LatestGameState,
+            History = GetLatestHistory(),
             GameMode = GameMode,
             Players = new() { Challenger = Challenger, Champion = Champion },
             PlayerOptions = _inputService.GetPlayerOptions(LatestGameState),
@@ -121,6 +121,7 @@ public class GameService: IGameService
         {
             ContinueState = continueState,
             GameState = LatestGameState,
+            History = GetLatestHistory(),
             GameMode = GameMode,
             Message = "Goodbye!"
         };
@@ -136,6 +137,7 @@ public class GameService: IGameService
         {
             ContinueState = continueState,
             GameState = LatestGameState,
+            History = GetLatestHistory(),
             GameMode = GameMode, 
             Message = $"{attacker.Profile.Name} surrenders. {defender.Profile.Name} wins the match!",
             PlayerOptions = _inputService.GetPlayerOptions(LatestGameState)
@@ -204,6 +206,8 @@ public class GameService: IGameService
                         actionResponse = _playerService.Guard(attacker, defender);
                     if (option.ActionName == ActionNames.Wait)
                         actionResponse = _playerService.Wait(attacker, defender);
+
+                    _history.Add(actionResponse.Message);
                     
                     if (actionResponse.SwitchPlayerTurn)
                     {
@@ -217,6 +221,7 @@ public class GameService: IGameService
                         ContinueState = !isMatchOver && option.ContinueState,
                         GameState = LatestGameState,
                         GameMode = GameMode,
+                        History = GetLatestHistory(),
                         Players = new() { Challenger = Challenger, Champion = Champion },
                         PlayerOptions = _inputService.GetPlayerOptions(LatestGameState),
                         Action = actionResponse,
@@ -286,8 +291,17 @@ public class GameService: IGameService
         return false;
     }
 
-    public async Task<char> ExecuteChampionTurnAsync()
+    public async Task<GameResponse> ExecuteChampionTurnAsync()
     {
-        return await _llmService.ChooseActionAsync(LastGameResponse);
+        // return await _llmService.ChooseActionAsync(LastGameResponse);
+        // _llmService.SendMessageAsync()
+        var inputChar = await _llmService.ChooseActionAsync(LastGameResponse);
+
+        return  LastGameResponse = HandleInput(inputChar);
+    }
+
+    public List<string> GetLatestHistory()
+    {
+        return _history.TakeLast(10).ToList();
     }
 }

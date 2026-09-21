@@ -5,6 +5,7 @@ namespace GameScratch.Core.Common.Responses;
 public class ActionResponse
 {
     public string Message { get; set; } = string.Empty;
+    public string LLMMessage { get; set; } = string.Empty;
 
     public AttackResponse? Attack { get; set; }
     public RollIniativeResponse? RollInitiative { get; set; }
@@ -18,6 +19,12 @@ public class ActionResponse
 
         if (!string.IsNullOrWhiteSpace(Message))
             sb.AppendLine(Message);
+
+        if (string.IsNullOrWhiteSpace(LLMMessage))
+        {
+            sb.AppendLine();
+            sb.AppendLine(LLMMessage);
+        }
         
         if (Attack != null)
         {

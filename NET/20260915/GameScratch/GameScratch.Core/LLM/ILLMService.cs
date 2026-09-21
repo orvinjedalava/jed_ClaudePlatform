@@ -5,8 +5,6 @@ namespace GameScratch.Core.LLM;
 
 public interface ILLMService
 {
-    List<Chat> ChatHistory { get; init; }
-    void ClearChatHistory();
     Task<char> ChooseActionAsync(GameResponse gameResponse);
-    Task<string> SendMessageAsync(string message);
+    Task<(char, string)> SendMessageAsync(string message);
 }

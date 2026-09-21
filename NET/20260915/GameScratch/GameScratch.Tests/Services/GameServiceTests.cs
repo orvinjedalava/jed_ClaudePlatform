@@ -33,20 +33,20 @@ public class GameServiceTests
         
     }
 
-    [Fact]
-    public async Task SendMessageToLLMAsync_Success()
-    {
-        string expectedResponse = "Mocked Response";
-        string message = "My message";
+    // [Fact]
+    // public async Task SendMessageToLLMAsync_Success()
+    // {
+    //     string expectedResponse = "Mocked Response";
+    //     string message = "My message";
 
-        _llmServiceMock
-            .Setup(m => m.SendMessageAsync(message))
-            .ReturnsAsync(expectedResponse);
+    //     _llmServiceMock
+    //         .Setup(m => m.SendMessageAsync(message))
+    //         .ReturnsAsync(expectedResponse);
 
-        var result = await _gameService.SendMessageToLLMAsync(message);
+    //     var result = await _gameService.SendMessageToLLMAsync(message);
 
-        Assert.Equal(expectedResponse, result);
-    }
+    //     Assert.Equal(expectedResponse, result);
+    // }
 
     [Fact]
     public void Reset_Success()

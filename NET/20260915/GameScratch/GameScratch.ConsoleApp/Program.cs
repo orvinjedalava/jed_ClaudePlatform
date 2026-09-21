@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using GameScrach.Core.Common;
+using GameScratch.Core.Common.Responses;
 
 Console.WriteLine("---------------------------------");
 Console.WriteLine("Gladiator Fight!");
@@ -58,6 +59,7 @@ async Task EnterMainMenu()
 
 async Task EnterMatch(GameState gameState, GameMode gameMode)
 {
+    GameResponse gameResponse;
     while(true)
     {
         char inputChar = '\0';
@@ -69,19 +71,20 @@ async Task EnterMatch(GameState gameState, GameMode gameMode)
         }
         else
         {
-            inputChar = await gameService.ExecuteChampionTurnAsync();
+            Console.WriteLine($"The champion is about to make a move...");
+            gameResponse = await gameService.ExecuteChampionTurnAsync();
         }
         
-        var response =  gameService.HandleInput(inputChar);
+        gameResponse =  gameService.HandleInput(inputChar);
 
         Console.Clear();
-        Console.WriteLine(response.ToConsoleString());
+        Console.WriteLine(gameResponse.ToConsoleString());
         Console.WriteLine("\n");
 
-        if (!response.ContinueState)
+        if (!gameResponse.ContinueState)
             break;
 
-        gameState = response.GameState;
+        gameState = gameResponse.GameState;
     }
 }
 

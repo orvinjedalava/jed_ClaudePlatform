@@ -10,15 +10,6 @@ public class LLMServiceBase : ILLMService
     public LLMServiceBase(IPlayerService playerService)
     {
         _playerService = playerService ?? throw new ArgumentNullException("PlayerService not dependency injected.");
-
-        ChatHistory = [];
-    }
-
-    public List<Chat> ChatHistory { get; init; }
-
-    void ILLMService.ClearChatHistory()
-    {
-        ChatHistory.Clear();
     }
 
     public async Task<char> ChooseActionAsync(GameResponse gameResponse)
@@ -34,7 +25,7 @@ public class LLMServiceBase : ILLMService
         return choices[random.Next(choices.Count)].Key;
     }
 
-    public Task<string> SendMessageAsync(string message)
+    public async Task<(char, string)> SendMessageAsync(string message)
     {
         throw new NotImplementedException();
     }

@@ -18,6 +18,7 @@ public class Player
         sb.AppendLine($"****** The {Profile.RoleType} ******");
         sb.AppendLine();
         sb.AppendLine($"Name: {Profile.Name}");
+        sb.AppendLine($"RoleType: {Profile.RoleType}");
         sb.AppendLine($"Status: {(string.IsNullOrWhiteSpace(GetStatus()) ? StanceType.Neutral.ToString() : GetStatus())}");
         sb.AppendLine($"StaminaPoints Remaining: {GetStaminaPointsRemaining()}");
         sb.AppendLine($"HitPoints Remaining: {GetHitPointsRemaining()}");
