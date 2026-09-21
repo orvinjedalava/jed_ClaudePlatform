@@ -16,15 +16,14 @@ public class ActionResponse
         var sb = new StringBuilder();
 
         sb.AppendLine("---------------------------------");
+        if (!string.IsNullOrWhiteSpace(LLMMessage))
+        {
+            sb.AppendLine(LLMMessage);
+            sb.AppendLine();
+        }
 
         if (!string.IsNullOrWhiteSpace(Message))
             sb.AppendLine(Message);
-
-        if (string.IsNullOrWhiteSpace(LLMMessage))
-        {
-            sb.AppendLine();
-            sb.AppendLine(LLMMessage);
-        }
         
         if (Attack != null)
         {

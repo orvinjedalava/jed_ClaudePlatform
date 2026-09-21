@@ -62,7 +62,10 @@ public class LLMService : LLMServiceBase, ILLMService
     public new async Task<(char, string)> SendMessageAsync(GameResponse gameResponse)
     {
         if (!_options.Enabled)
-            return ('x', "LLM is not enabled.");
+        {
+            var inputKey = await ChooseActionAsync(gameResponse);
+            return (inputKey, "I am choosing an action at random!");
+        }
 
         StringBuilder sbMessage = new();
         sbMessage.AppendLine(gameResponse.ToConsoleString());

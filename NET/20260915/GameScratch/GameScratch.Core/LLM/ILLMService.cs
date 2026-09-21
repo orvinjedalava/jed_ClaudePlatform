@@ -6,5 +6,5 @@ namespace GameScratch.Core.LLM;
 public interface ILLMService
 {
     Task<char> ChooseActionAsync(GameResponse gameResponse);
-    Task<(char, string)> SendMessageAsync(string message);
+    Task<(char, string)> SendMessageAsync(GameResponse gameResponse);
 }

@@ -25,7 +25,7 @@ public class LLMServiceBase : ILLMService
         return choices[random.Next(choices.Count)].Key;
     }
 
-    public async Task<(char, string)> SendMessageAsync(string message)
+    public async Task<(char, string)> SendMessageAsync(GameResponse gameResponse)
     {
         throw new NotImplementedException();
     }

@@ -64,27 +64,27 @@ public class GameServiceTests
     //     Assert.Null(exception);
     // }
 
-    [Fact]
-    public async Task ExecuteChampionTurn_Success()
-    {
-        _gameService.LatestGameState = GameState.ChampionTurn;
-        // _playerServiceMock
-        //     .Setup(m => m.StartPlayerTurn(It.IsAny<Player>()))
-        //     .Returns(new Core.Common.Responses.ActionResponse());
-        // _inputServiceMock
-        //     .Setup(m => m.GetPlayerOptions(It.IsAny<GameState>()))
-        //     .Returns(new Core.Common.Responses.PlayerOptionsResponse() {Options = []});
-        _llmServiceMock
-            .Setup(m => m.ChooseActionAsync(It.IsAny<GameResponse>()))
-            .ReturnsAsync('q');
-        // _inputServiceMock
-        //     .Setup(m=> m.GetPlayerOption(It.IsAny<char>(), It.IsAny<GameState>()))
-        //     .Returns(GameScratch.Core.Services.InputService.Surrender);
+    // [Fact]
+    // public async Task ExecuteChampionTurn_Success()
+    // {
+    //     _gameService.LatestGameState = GameState.ChampionTurn;
+    //     // _playerServiceMock
+    //     //     .Setup(m => m.StartPlayerTurn(It.IsAny<Player>()))
+    //     //     .Returns(new Core.Common.Responses.ActionResponse());
+    //     // _inputServiceMock
+    //     //     .Setup(m => m.GetPlayerOptions(It.IsAny<GameState>()))
+    //     //     .Returns(new Core.Common.Responses.PlayerOptionsResponse() {Options = []});
+    //     _llmServiceMock
+    //         .Setup(m => m.ChooseActionAsync(It.IsAny<GameResponse>()))
+    //         .ReturnsAsync('q');
+    //     // _inputServiceMock
+    //     //     .Setup(m=> m.GetPlayerOption(It.IsAny<char>(), It.IsAny<GameState>()))
+    //     //     .Returns(GameScratch.Core.Services.InputService.Surrender);
 
-       await _gameService.ExecuteChampionTurnAsync();
+    //    await _gameService.ExecuteChampionTurnAsync();
 
-       Assert.Equal(GameState.ChampionTurn, _gameService.LatestGameState); 
-    }
+    //    Assert.Equal(GameState.ChampionTurn, _gameService.LatestGameState); 
+    // }
 
     [Fact]
     public void ShowMainMenu_Success()

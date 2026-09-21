@@ -295,9 +295,12 @@ public class GameService: IGameService
     {
         // return await _llmService.ChooseActionAsync(LastGameResponse);
         // _llmService.SendMessageAsync()
-        var inputChar = await _llmService.ChooseActionAsync(LastGameResponse);
+        (char inputChar, string response) = await _llmService.SendMessageAsync(LastGameResponse);
 
-        return  LastGameResponse = HandleInput(inputChar);
+        LastGameResponse = HandleInput(inputChar);
+        LastGameResponse!.Action!.LLMMessage = response;
+
+        return LastGameResponse!;
     }
 
     public List<string> GetLatestHistory()
