@@ -28,9 +28,13 @@ public class GameResponse
         if (Action != null)
             sb.AppendLine(Action.ToConsoleString());
 
-        sb.AppendLine("---------------------------------");
-        sb.AppendLine("History:");
-        sb.AppendLine(string.Join(Environment.NewLine, History));
+        if (History.Count > 0)
+        {
+            sb.AppendLine("---------------------------------");
+            sb.AppendLine("History:");
+            sb.AppendLine(string.Join(Environment.NewLine, History));
+        }
+       
             
         if (Players != null && Players.Challenger != null && Players.Champion != null)
             sb.AppendLine(Players.ToConsoleString(GameState));

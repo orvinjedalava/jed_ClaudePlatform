@@ -295,21 +295,18 @@ public class GameService: IGameService
     {
         // return await _llmService.ChooseActionAsync(LastGameResponse);
         // _llmService.SendMessageAsync()
-        while(true)
+        (char inputChar, string response) = await _llmService.SendMessageAsync(LastGameResponse);
+
+        LastGameResponse = HandleInput(inputChar);
+        if (LastGameResponse?.Action != null)
         {
-            
-            (char inputChar, string response) = await _llmService.SendMessageAsync(LastGameResponse);
-
-            LastGameResponse = HandleInput(inputChar);
-            if (LastGameResponse?.Action == null)
-            {
-                continue;
-            }
             LastGameResponse!.Action!.LLMMessage = response;
-            break;
-
         }
-        
+        else
+        {
+            LastGameResponse!.Message += $"\n{response}";
+        }
+            
         return LastGameResponse!;
     }
 
