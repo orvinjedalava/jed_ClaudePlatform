@@ -295,16 +295,26 @@ public class GameService: IGameService
     {
         // return await _llmService.ChooseActionAsync(LastGameResponse);
         // _llmService.SendMessageAsync()
-        (char inputChar, string response) = await _llmService.SendMessageAsync(LastGameResponse);
+        while(true)
+        {
+            
+            (char inputChar, string response) = await _llmService.SendMessageAsync(LastGameResponse);
 
-        LastGameResponse = HandleInput(inputChar);
-        LastGameResponse!.Action!.LLMMessage = response;
+            LastGameResponse = HandleInput(inputChar);
+            if (LastGameResponse?.Action == null)
+            {
+                continue;
+            }
+            LastGameResponse!.Action!.LLMMessage = response;
+            break;
 
+        }
+        
         return LastGameResponse!;
     }
 
     public List<string> GetLatestHistory()
     {
-        return _history.TakeLast(10).ToList();
+        return _history.TakeLast(6).ToList();
     }
 }

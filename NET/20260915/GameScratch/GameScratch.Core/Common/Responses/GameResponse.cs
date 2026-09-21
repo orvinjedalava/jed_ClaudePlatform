@@ -42,10 +42,8 @@ public class GameResponse
         }
         if (PlayerOptions != null)
         {
-            if (GameState != GameState.ChampionTurn || GameMode == GameMode.TwoPlayers)
-                sb.AppendLine(PlayerOptions.ToConsoleString());
-            else
-                sb.AppendLine($"{Players!.Champion!.Profile.Name} is thinking...");
+            sb.AppendLine(PlayerOptions.ToConsoleString());
+                
         }
 
         return sb.ToString();

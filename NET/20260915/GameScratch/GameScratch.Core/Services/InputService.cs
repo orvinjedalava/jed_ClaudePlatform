@@ -30,7 +30,9 @@ public class InputService : IInputService
 
     public PlayerOption GetPlayerOption(char keyChar, GameState gameState)
     {
-        PlayerOption? option = GetPlayerOptions(gameState).Options.Find(x => x.Key == keyChar) ?? 
+        char normalizedKeyChar = char.ToLowerInvariant(keyChar);
+
+        PlayerOption? option = GetPlayerOptions(gameState).Options.Find(x => char.ToLowerInvariant(x.Key) == normalizedKeyChar) ?? 
             throw new NotImplementedException($"Key '{keyChar}' not implemented for GameState {gameState}");
 
         return option;

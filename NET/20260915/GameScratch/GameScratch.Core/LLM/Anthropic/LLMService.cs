@@ -49,6 +49,7 @@ public class LLMService : LLMServiceBase, ILLMService
 
     OUTPUT:
     - When asked to choose an action, respond with the exact action key requested by the game and, if requested, a brief in-character line of dialogue.
+    The action keys are single character values enclosed in [] , and is at the beginning of a listed option under 'Please Choose an Option: section. (e.g. If you choose to [1] Attack, use the character '1'. If you choose [q] Surrender, use the character 'q' )'
     - Do not fabricate game mechanics, damage numbers, or rules beyond what the game state and options provide.
 
     """;
@@ -76,6 +77,8 @@ public class LLMService : LLMServiceBase, ILLMService
     
     public new async Task<(char, string)> SendMessageAsync(GameResponse gameResponse)
     {
+        var testVal = gameResponse.ToConsoleString();
+
         if (!_options.Enabled)
         {
             var inputKey = await ChooseActionAsync(gameResponse);
@@ -114,7 +117,7 @@ public class LLMService : LLMServiceBase, ILLMService
 
         var response = sb.ToString().Split(":");
 
-        return (response[0][0], response[1]);
+        return (response[0][0], response.Length > 1 ? response[1].Trim() : string.Empty);
     }
 
     // public List<MessageParam> GetHistoryContext()
