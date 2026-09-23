@@ -19,6 +19,9 @@ public interface IGameService
     GameResponse HandleInput(char keyChar);
     Task<GameResponse> ExecuteChampionTurnAsync();
 
+    Task<GameResponse> GetChampionActionChoiceAsync();
+    Task<GameResponse> GetChampionActionResultAsync();
+
     Player GetAttackingPlayer();
     Player GetDefendingPlayer();
 

@@ -68,6 +68,8 @@ async Task EnterMatch(GameState gameState, GameMode gameMode)
             inputChar = Console.IsInputRedirected ? 
                 (Console.ReadLine()?.FirstOrDefault() ?? '\0')
                 : Console.ReadKey(true).KeyChar;
+            
+            gameResponse =  gameService.HandleInput(inputChar);
         }
         else
         {
@@ -75,8 +77,6 @@ async Task EnterMatch(GameState gameState, GameMode gameMode)
             gameResponse = await gameService.ExecuteChampionTurnAsync();
         }
         
-        gameResponse =  gameService.HandleInput(inputChar);
-
         Console.Clear();
         Console.WriteLine(gameResponse.ToConsoleString());
         Console.WriteLine("\n");

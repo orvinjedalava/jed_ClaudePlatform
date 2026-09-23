@@ -40,6 +40,8 @@ public class GameService: IGameService
     public GameState LatestGameState { get; set; }
     public GameResponse LastGameResponse { get; set; }
     public GameMode GameMode { get; set; }
+    public char? LastChampionActionChoice { get; set; }
+    public string LastLLMMessage { get; set; } = null!;
 
     public GameResponse ShowMainMenu()
     {
@@ -293,25 +295,70 @@ public class GameService: IGameService
 
     public async Task<GameResponse> ExecuteChampionTurnAsync()
     {
-        // return await _llmService.ChooseActionAsync(LastGameResponse);
-        // _llmService.SendMessageAsync()
-        (char inputChar, string response) = await _llmService.SendMessageAsync(LastGameResponse);
+        // (char inputChar, string response) = await _llmService.SendMessageAsync(LastGameResponse);
 
-        LastGameResponse = HandleInput(inputChar);
-        if (LastGameResponse?.Action != null)
+        // LastGameResponse = HandleInput(inputChar);
+        // if (LastGameResponse?.Action != null)
+        // {
+        //     LastGameResponse!.Action!.LLMMessage = response;
+        // }
+        // else
+        // {
+        //     LastGameResponse!.Message += $"\n{response}";
+        // }
+            
+        // return LastGameResponse!;
+        if (LastGameResponse?.Action?.LLMActionChoice == null)
         {
-            LastGameResponse!.Action!.LLMMessage = response;
+            return await GetChampionActionChoiceAsync();
         }
         else
         {
-            LastGameResponse!.Message += $"\n{response}";
+            return await GetChampionActionResultAsync();
         }
-            
-        return LastGameResponse!;
+        
     }
 
     public List<string> GetLatestHistory()
     {
         return _history.TakeLast(6).ToList();
     }
+
+    public async Task<GameResponse> GetChampionActionChoiceAsync()
+    {
+        (char inputChar, string response) = await _llmService.SendMessageAsync(LastGameResponse);
+
+        LastChampionActionChoice = inputChar;
+        LastLLMMessage = response;
+        
+        if (LastGameResponse?.Action != null)
+        {
+            LastGameResponse!.Action!.LLMMessage = response;
+            LastGameResponse!.Action!.LLMActionChoice = inputChar;
+            LastGameResponse!.Action!.Message = string.Empty;
+        }
+        else
+        {
+            LastGameResponse!.Message += $"\n{response}";
+        }
+
+        return LastGameResponse;
+    }
+
+    public async Task<GameResponse> GetChampionActionResultAsync()
+    {
+        await Task.Delay(5000);
+
+        LastGameResponse = HandleInput(LastChampionActionChoice!.Value);
+
+        // call LLM here to get a reaction
+
+        if (LastGameResponse?.Action != null)
+        {
+            LastGameResponse!.Action!.LLMMessage = LastLLMMessage;
+        }
+            
+        return LastGameResponse!;
+    }
+
 }
