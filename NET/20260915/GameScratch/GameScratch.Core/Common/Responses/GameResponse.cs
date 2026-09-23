@@ -44,7 +44,7 @@ public class GameResponse
             sb.AppendLine("---------------------------------");
             sb.AppendLine($"It's your turn, {Players?.GetCurrentPlayerTurnName(GameState)}.");
         }
-        if (PlayerOptions != null)
+        if (PlayerOptions != null && (GameState == GameState.ChallengerTurn || GameMode == GameMode.TwoPlayers || GameState == GameState.None))
         {
             sb.AppendLine(PlayerOptions.ToConsoleString());
                 
