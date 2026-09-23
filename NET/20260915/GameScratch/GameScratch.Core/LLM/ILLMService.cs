@@ -7,4 +7,6 @@ public interface ILLMService
 {
     Task<char> ChooseActionAsync(GameResponse gameResponse);
     Task<(char, string)> SendMessageAsync(GameResponse gameResponse);
+
+    Task<(char, string)> GetToolChoiceAsync(GameResponse gameResponse);
 }

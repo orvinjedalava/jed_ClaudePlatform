@@ -16,6 +16,7 @@ public static class ServicesExtensions
 
         builder.Services.Configure<LLMServiceOptions>(builder.Configuration.GetSection("AnthropicLLMService"));
         builder.Services.AddScoped<ILLMService, LLM.Anthropic.LLMService>();
+        builder.Services.AddSingleton<LLM.Anthropic.ILLMSessionService, LLM.Anthropic.LLMSessionService>();
         return builder;
     }
 }

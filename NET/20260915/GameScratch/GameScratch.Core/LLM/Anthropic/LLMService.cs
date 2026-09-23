@@ -5,10 +5,10 @@ using Anthropic;
 using Anthropic.Core;
 using Anthropic.Models.Messages;
 using System.Text;
+using System.Text.Json;
 
 using GameScratch.Core.Services;
 using GameScratch.Core.Common.Responses;
-using Anthropic.Models.Beta.Organization.Workspaces;
 
 namespace GameScratch.Core.LLM.Anthropic;
 
@@ -54,15 +54,18 @@ public class LLMService : LLMServiceBase, ILLMService
 
     """;
 
-    private string _gameResponsePostMessage = "Respond with only the single character key of the action you choose (from the options above), optionally followed by one short in-character taunt. Use a ':' to separate the single character key and the taunt.";
+    // private string _gameResponsePostMessage = "Respond with only the single character key of the action you choose (from the options above), optionally followed by one short in-character taunt. Use a ':' to separate the single character key and the taunt.";
+    private string _gameResponsePostMessage = "Respond with only the single character key of the action you choose from the Tools provided with the request, optionally followed by one short in-character taunt.";
 
     private readonly LLMServiceOptions _options;
+    private readonly ILLMSessionService _llmSessionService;
     private readonly AnthropicClient _client;
 
-    public LLMService(IOptions<LLMServiceOptions> options, IPlayerService playerService)
+    public LLMService(IOptions<LLMServiceOptions> options, IPlayerService playerService, ILLMSessionService llmSessionService)
         : base(playerService)
     {
         _options = options?.Value ?? throw new ArgumentNullException("LLMServiceOptions not dependency injected.");
+        _llmSessionService = llmSessionService ?? throw new ArgumentException("LLMSessionService not dependency injected.");
         _client = new AnthropicClient(new ClientOptions { ApiKey = _options.ApiKey });
 
     }
@@ -73,6 +76,71 @@ public class LLMService : LLMServiceBase, ILLMService
             return await base.ChooseActionAsync(gameResponse);
         
         return '1';
+    }
+
+    public new async Task<(char, string)> GetToolChoiceAsync(GameResponse gameResponse)
+    {
+        var testVal = gameResponse.ToConsoleString();
+
+        if (!_options.Enabled)
+        {
+            var inputKey = await ChooseActionAsync(gameResponse);
+            return (inputKey, "I am choosing an action at random!");
+        }
+
+        List<ToolUnion> tools = [];
+
+        gameResponse.PlayerOptions?.Options.ForEach(option =>
+        {
+            tools.Add(new ToolUnion(new Tool()
+            {
+                Name = $"{option.Key}",
+                Description = $"{option.ActionName}: {option.Description}.",
+                InputSchema = new InputSchema(),
+            }));
+        });
+
+        // Ask for at most one tool call per turn.
+        var toolChoice = new ToolChoice(new ToolChoiceAuto { DisableParallelToolUse = true });
+
+        // Create MessageParam prompt
+        StringBuilder sbMessage = new();
+        sbMessage.AppendLine(gameResponse.ToConsoleString());
+        sbMessage.AppendLine(_gameResponsePostMessage);
+
+        var userMessage = new MessageParam()
+        {
+            Role = Role.User,
+            Content = new MessageParamContent([new ContentBlockParam(new TextBlockParam(sbMessage.ToString()))])
+        };
+
+        // Send the message to the LLM with providing tools and tool choice option to only choose 1
+        Message responseMsg = await _client.Messages.Create(
+            new MessageCreateParams()
+            {
+                Model = Model.ClaudeHaiku4_5_20251001,
+                MaxTokens = 1024,
+                System = _systemPrompt,
+                Tools = tools,
+                ToolChoice = toolChoice,
+                Messages = [userMessage]  
+            }
+        );
+
+        _llmSessionService.ToolChoiceContent = responseMsg.Content;
+
+        // Get the chosen tool.
+        ToolUseBlock? toolUse = null;
+        StringBuilder sb = new();
+        foreach (var block in _llmSessionService.ToolChoiceContent)
+        {
+            if (block.TryPickToolUse(out var picked))
+                toolUse = picked;
+            else if (block.TryPickText(out TextBlock? textBlock))
+                sb.AppendLine(textBlock.Text);
+        }
+
+        return (toolUse!.Name[0], sb.Length > 0 ? sb.ToString().Trim() : "The model responded with a tool choice");
     }
     
     public new async Task<(char, string)> SendMessageAsync(GameResponse gameResponse)

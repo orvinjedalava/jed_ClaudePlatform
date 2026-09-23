@@ -29,4 +29,9 @@ public class LLMServiceBase : ILLMService
     {
         throw new NotImplementedException();
     }
+
+    public async Task<(char, string)> GetToolChoiceAsync(GameResponse gameResponse)
+    {
+        throw new NotImplementedException();
+    }
 }

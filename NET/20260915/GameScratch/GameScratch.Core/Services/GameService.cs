@@ -295,20 +295,7 @@ public class GameService: IGameService
 
     public async Task<GameResponse> ExecuteChampionTurnAsync()
     {
-        // (char inputChar, string response) = await _llmService.SendMessageAsync(LastGameResponse);
-
-        // LastGameResponse = HandleInput(inputChar);
-        // if (LastGameResponse?.Action != null)
-        // {
-        //     LastGameResponse!.Action!.LLMMessage = response;
-        // }
-        // else
-        // {
-        //     LastGameResponse!.Message += $"\n{response}";
-        // }
-            
-        // return LastGameResponse!;
-        if (LastGameResponse?.Action?.LLMActionChoice == null)
+        if (LastChampionActionChoice == null)
         {
             return await GetChampionActionChoiceAsync();
         }
@@ -326,7 +313,8 @@ public class GameService: IGameService
 
     public async Task<GameResponse> GetChampionActionChoiceAsync()
     {
-        (char inputChar, string response) = await _llmService.SendMessageAsync(LastGameResponse);
+        // (char inputChar, string response) = await _llmService.SendMessageAsync(LastGameResponse);
+        (char inputChar, string response) = await _llmService.GetToolChoiceAsync(LastGameResponse);
 
         LastChampionActionChoice = inputChar;
         LastLLMMessage = response;
@@ -347,7 +335,7 @@ public class GameService: IGameService
 
     public async Task<GameResponse> GetChampionActionResultAsync()
     {
-        await Task.Delay(5000);
+        await Task.Delay(3000);
 
         LastGameResponse = HandleInput(LastChampionActionChoice!.Value);
 
