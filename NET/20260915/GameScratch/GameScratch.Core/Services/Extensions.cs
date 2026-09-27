@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using GameScratch.Core.LLM;
 using Microsoft.Extensions.Hosting;
+using GameScratch.Core.LLM.Anthropic;
 
 namespace GameScratch.Core.Services;
 
@@ -14,9 +15,7 @@ public static class ServicesExtensions
         builder.Services.AddSingleton<IGameService, GameService>();
         builder.Services.AddSingleton<IInputService, InputService>();
 
-        builder.Services.Configure<LLMServiceOptions>(builder.Configuration.GetSection("AnthropicLLMService"));
-        builder.Services.AddScoped<ILLMService, LLM.Anthropic.LLMService>();
-        builder.Services.AddSingleton<LLM.Anthropic.ILLMSessionService, LLM.Anthropic.LLMSessionService>();
+        builder.ConfigureAnthropicServices();
         return builder;
     }
 }
