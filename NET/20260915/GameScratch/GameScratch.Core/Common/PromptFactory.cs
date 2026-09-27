@@ -1,3 +1,5 @@
+using GameScratch.Core.Common.Game;
+
 namespace GameScratch.Core.Common;
 
 public class PromptFactory
@@ -42,9 +44,9 @@ public class PromptFactory
     {
         var _promptsMap = new Dictionary<string, string>()
         {
-            { GameState.ChallengerTurn.ToString(), ChallengerTurnMsg },
-            { GameState.ChampionTurn.ToString(), ChampionTurnMsg },
-            { GameState.None.ToString(), GameStateNoneMsg},
+            { GameTurn.ChallengerTurn.ToString(), ChallengerTurnMsg },
+            { GameTurn.ChampionTurn.ToString(), ChampionTurnMsg },
+            { GameTurn.None.ToString(), GameStateNoneMsg},
             { nameof(QuiteMatchMsg), QuiteMatchMsg },
             { nameof(ChampionActionMsg), ChampionActionMsg},
             { nameof(CloseGameMsg), CloseGameMsg },

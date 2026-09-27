@@ -1,13 +1,13 @@
 using System.Text;
 using GameScrach.Core.Common;
-using GameScratch.Core.Common.Players;
+using GameScratch.Core.Common.Game;
 
 namespace GameScratch.Core.Common.Responses;
 
 public class GameResponse
 {
     public required bool ContinueState { get; init; }
-    public required GameState GameState { get; init; }
+    public required GameTurn GameTurn { get; init; }
     public required GameMode GameMode { get; init; }
 
     public string Message { get; set; } = string.Empty;
@@ -37,14 +37,14 @@ public class GameResponse
        
             
         if (Players != null && Players.Challenger != null && Players.Champion != null)
-            sb.AppendLine(Players.ToConsoleString(GameState));
-        if (GameState == GameState.ChallengerTurn || GameState == GameState.ChampionTurn)
+            sb.AppendLine(Players.ToConsoleString(GameTurn));
+        if (GameTurn == GameTurn.ChallengerTurn || GameTurn == GameTurn.ChampionTurn)
         {
 
             sb.AppendLine("---------------------------------");
-            sb.AppendLine($"It's your turn, {Players?.GetCurrentPlayerTurnName(GameState)}.");
+            sb.AppendLine($"It's your turn, {Players?.GetCurrentPlayerTurnName(GameTurn)}.");
         }
-        if (PlayerOptions != null && (GameState == GameState.ChallengerTurn || GameMode == GameMode.TwoPlayers || GameState == GameState.None))
+        if (PlayerOptions != null && (GameTurn == GameTurn.ChallengerTurn || GameMode == GameMode.TwoPlayers || GameTurn == GameTurn.None))
         {
             sb.AppendLine(PlayerOptions.ToConsoleString());
                 

@@ -154,6 +154,12 @@ public class LLMService : LLMServiceBase, ILLMService
 
     public new async Task<string> GetToolChoiceResponseAsync(GameResponse gameResponse)
     {
+        if (!_options.Enabled)
+        {
+            var inputKey = await ChooseActionAsync(gameResponse);
+            return "I've chosen an action!";
+        }
+
         List<ContentBlockParam> toolResults = [
             new( new ToolResultBlockParam()
             {

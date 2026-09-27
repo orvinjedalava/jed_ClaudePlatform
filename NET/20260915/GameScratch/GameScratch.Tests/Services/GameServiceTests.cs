@@ -2,9 +2,8 @@ using Moq;
 
 using GameScratch.Core.Services;
 using GameScratch.Core.LLM;
-using GameScratch.Core.Common;
+using GameScratch.Core.Common.Game;
 using GameScratch.Core.Common.Players;
-using GameScratch.Core.Common.Responses;
 
 namespace GameScratch.Tests.Services;
 
@@ -91,7 +90,7 @@ public class GameServiceTests
     {
         _gameService.ShowMainMenu();
 
-        Assert.Equal(GameState.None, _gameService.LatestGameState);
+        Assert.Equal(GameTurn.None, _gameService.LatestGameTurn);
     }
 
 }

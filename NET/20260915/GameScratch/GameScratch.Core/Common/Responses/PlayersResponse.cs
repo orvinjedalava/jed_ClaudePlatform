@@ -1,6 +1,7 @@
-using System.Reflection.Metadata.Ecma335;
+
 using System.Text;
 using GameScratch.Core.Common.Players;
+using GameScratch.Core.Common.Game;
 
 namespace GameScratch.Core.Common.Responses;
 
@@ -9,20 +10,20 @@ public class PlayersResponse
     public Player? Challenger { get; init; }
     public Player? Champion { get; init; }
 
-    public string GetCurrentPlayerTurnName(GameState gameState)
+    public string GetCurrentPlayerTurnName(GameTurn gameState)
     {
         switch(gameState)
         {
-            case GameState.ChallengerTurn:
+            case GameTurn.ChallengerTurn:
                 return Challenger?.Profile.Name ?? string.Empty;
-            case GameState.ChampionTurn:
+            case GameTurn.ChampionTurn:
                 return Champion?.Profile.Name ?? string.Empty;
             default:
                 throw new NotImplementedException();
         }
     }
 
-    public string ToConsoleString(GameState gameState)
+    public string ToConsoleString(GameTurn gameState)
     {
         if (Challenger == null && Champion == null)
             return string.Empty;
@@ -32,7 +33,7 @@ public class PlayersResponse
         sb.AppendLine("---------------------------------");
         sb.AppendLine("Gladiatiors Current Stats:");
 
-        if (gameState == GameState.ChallengerTurn)
+        if (gameState == GameTurn.ChallengerTurn)
         {
             if (Champion != null)
             {
@@ -45,7 +46,7 @@ public class PlayersResponse
                 sb.AppendLine(Challenger.ToConsoleString());
             }     
         }
-        else if (gameState == GameState.ChampionTurn)
+        else if (gameState == GameTurn.ChampionTurn)
         {
             if (Challenger != null)
             {

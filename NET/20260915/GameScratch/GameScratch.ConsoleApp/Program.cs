@@ -1,6 +1,6 @@
 ﻿using GameScratch.ConsoleApp;
 using GameScratch.Core.Services;
-using GameScratch.Core.Common;
+using GameScratch.Core.Common.Game;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -45,9 +45,9 @@ async Task EnterMainMenu()
 
         if (response.ContinueState)
         {
-            if (response.GameState == GameState.ChallengerTurn || response.GameState == GameState.ChampionTurn)
+            if (response.GameTurn == GameTurn.ChallengerTurn || response.GameTurn == GameTurn.ChampionTurn)
             {
-                await EnterMatch(response.GameState, response.GameMode);
+                await EnterMatch(response.GameTurn, response.GameMode);
             }
         }
         else
@@ -57,13 +57,13 @@ async Task EnterMainMenu()
     }
 }
 
-async Task EnterMatch(GameState gameState, GameMode gameMode)
+async Task EnterMatch(GameTurn gameState, GameMode gameMode)
 {
     GameResponse gameResponse;
     while(true)
     {
         char inputChar = '\0';
-        if (gameState == GameState.ChallengerTurn || gameMode == GameMode.TwoPlayers)
+        if (gameState == GameTurn.ChallengerTurn || gameMode == GameMode.TwoPlayers)
         {
             inputChar = Console.IsInputRedirected ? 
                 (Console.ReadLine()?.FirstOrDefault() ?? '\0')
@@ -84,7 +84,7 @@ async Task EnterMatch(GameState gameState, GameMode gameMode)
         if (!gameResponse.ContinueState)
             break;
 
-        gameState = gameResponse.GameState;
+        gameState = gameResponse.GameTurn;
     }
 }
 

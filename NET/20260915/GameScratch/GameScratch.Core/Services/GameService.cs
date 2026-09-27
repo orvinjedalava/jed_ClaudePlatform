@@ -2,6 +2,7 @@ using GameScratch.Core.Common;
 using GameScratch.Core.Common.Players;
 using GameScratch.Core.Common.Weapons;
 using GameScratch.Core.Common.Responses;
+using GameScratch.Core.Common.Game;
 using GameScratch.Core.LLM;
 using System.Text;
 using GameScrach.Core.Common;
@@ -27,9 +28,9 @@ public class GameService: IGameService
         _playerService = playerService ?? throw new ArgumentNullException("PlayerService not injected.");
         _inputService = inputService ?? throw new ArgumentNullException("InputService not injected.");
 
-        LatestGameState = GameState.None;
+        LatestGameTurn = GameTurn.None;
         GameMode = GameMode.None;
-        LastGameResponse = new() { ContinueState = true, GameState = LatestGameState, GameMode = GameMode };
+        LastGameResponse = new() { ContinueState = true, GameTurn = LatestGameTurn, GameMode = GameMode };
         
         _promptsMap = PromptFactory.Create().Build();
         _history = new List<string>();
@@ -37,7 +38,7 @@ public class GameService: IGameService
 
     public Player Challenger { get; set; } = null!;
     public Player Champion { get; set; } = null!;
-    public GameState LatestGameState { get; set; }
+    public GameTurn LatestGameTurn { get; set; }
     public GameResponse LastGameResponse { get; set; }
     public GameMode GameMode { get; set; }
     public char? LastChampionActionChoice { get; set; }
@@ -45,16 +46,16 @@ public class GameService: IGameService
 
     public GameResponse ShowMainMenu()
     {
-        LatestGameState = GameState.None;
+        LatestGameTurn = GameTurn.None;
 
         return LastGameResponse = new()
         {
             ContinueState = true,
-            GameState = LatestGameState,
+            GameTurn = LatestGameTurn,
             History = GetLatestHistory(),
             GameMode = GameMode,
             Message = "Welcome to the Arena!",
-            PlayerOptions = _inputService.GetPlayerOptions(LatestGameState)
+            PlayerOptions = _inputService.GetPlayerOptions(LatestGameTurn)
         };
     }
 
@@ -64,9 +65,9 @@ public class GameService: IGameService
         _playerService.ResetPlayer(Challenger);
         _playerService.ResetPlayer(Champion);
 
-        LatestGameState = GameState.ChallengerTurn;
+        LatestGameTurn = GameTurn.ChallengerTurn;
 
-        return _promptsMap[LatestGameState.ToString()];
+        return _promptsMap[LatestGameTurn.ToString()];
     }
 
     public GameResponse StartMatch(bool continueState)
@@ -87,9 +88,9 @@ public class GameService: IGameService
 
         ( ActionResponse actionResponse, Player player) = _playerService.RollIniative(Challenger, Champion);
 
-        LatestGameState = player.Profile.RoleType == RoleType.Challenger ? 
-            GameState.ChallengerTurn 
-            : GameState.ChampionTurn;
+        LatestGameTurn = player.Profile.RoleType == RoleType.Challenger ? 
+            GameTurn.ChallengerTurn 
+            : GameTurn.ChampionTurn;
 
         return StartPlayerTurn(continueState, actionResponse.Message);
     }
@@ -106,11 +107,11 @@ public class GameService: IGameService
         return new()
         {
             ContinueState = continueState,
-            GameState = LatestGameState,
+            GameTurn = LatestGameTurn,
             History = GetLatestHistory(),
             GameMode = GameMode,
             Players = new() { Challenger = Challenger, Champion = Champion },
-            PlayerOptions = _inputService.GetPlayerOptions(LatestGameState),
+            PlayerOptions = _inputService.GetPlayerOptions(LatestGameTurn),
             Message = $"{preText}{response.Message}",
             
         };
@@ -118,11 +119,11 @@ public class GameService: IGameService
 
     public GameResponse CloseGame(bool continueState)
     {
-        LatestGameState = GameState.None;
+        LatestGameTurn = GameTurn.None;
         return new()
         {
             ContinueState = continueState,
-            GameState = LatestGameState,
+            GameTurn = LatestGameTurn,
             History = GetLatestHistory(),
             GameMode = GameMode,
             Message = "Goodbye!"
@@ -133,26 +134,26 @@ public class GameService: IGameService
     {
         Player attacker = GetAttackingPlayer();
         Player defender = GetDefendingPlayer();
-        LatestGameState = GameState.None;
+        LatestGameTurn = GameTurn.None;
 
         return new()
         {
             ContinueState = continueState,
-            GameState = LatestGameState,
+            GameTurn = LatestGameTurn,
             History = GetLatestHistory(),
             GameMode = GameMode, 
             Message = $"{attacker.Profile.Name} surrenders. {defender.Profile.Name} wins the match!",
-            PlayerOptions = _inputService.GetPlayerOptions(LatestGameState)
+            PlayerOptions = _inputService.GetPlayerOptions(LatestGameTurn)
         };
     }
 
     public Player GetAttackingPlayer()
     {
-        switch(LatestGameState)
+        switch(LatestGameTurn)
         {
-            case GameState.ChallengerTurn:
+            case GameTurn.ChallengerTurn:
                 return Challenger;
-            case GameState.ChampionTurn:
+            case GameTurn.ChampionTurn:
                 return Champion;
             default:
                 throw new NotImplementedException();
@@ -161,11 +162,11 @@ public class GameService: IGameService
 
     public Player GetDefendingPlayer()
     {
-        switch(LatestGameState)
+        switch(LatestGameTurn)
         {
-            case GameState.ChallengerTurn:
+            case GameTurn.ChallengerTurn:
                 return Champion;
-            case GameState.ChampionTurn:
+            case GameTurn.ChampionTurn:
                 return Challenger;
             default:
                 throw new NotImplementedException();
@@ -176,7 +177,7 @@ public class GameService: IGameService
     {
         try
         {
-            PlayerOption option = _inputService.GetPlayerOption(keyChar, LatestGameState);
+            PlayerOption option = _inputService.GetPlayerOption(keyChar, LatestGameTurn);
 
             switch(option.ServiceName)
             {
@@ -221,11 +222,11 @@ public class GameService: IGameService
                     return LastGameResponse = new GameResponse()
                     {
                         ContinueState = !isMatchOver && option.ContinueState,
-                        GameState = LatestGameState,
+                        GameTurn = LatestGameTurn,
                         GameMode = GameMode,
                         History = GetLatestHistory(),
                         Players = new() { Challenger = Challenger, Champion = Champion },
-                        PlayerOptions = _inputService.GetPlayerOptions(LatestGameState),
+                        PlayerOptions = _inputService.GetPlayerOptions(LatestGameTurn),
                         Action = actionResponse,
                         Message = isMatchOver ? "Match is over!" : "The crowd roars!"
                     };
@@ -242,13 +243,13 @@ public class GameService: IGameService
 
     public void SwitchPlayerTurn()
     {
-        switch(LatestGameState)
+        switch(LatestGameTurn)
         {
-            case GameState.ChallengerTurn:
-                LatestGameState = GameState.ChampionTurn;
+            case GameTurn.ChallengerTurn:
+                LatestGameTurn = GameTurn.ChampionTurn;
                 break;
-            case GameState.ChampionTurn:
-                LatestGameState = GameState.ChallengerTurn;
+            case GameTurn.ChampionTurn:
+                LatestGameTurn = GameTurn.ChallengerTurn;
                 break;
             default:
                 throw new NotImplementedException();
@@ -268,7 +269,7 @@ public class GameService: IGameService
 
         if (isChallengerDefeated || isChamptionDefeated)
         {
-            LatestGameState = GameState.None;
+            LatestGameTurn = GameTurn.None;
 
             if (isChallengerDefeated && isChamptionDefeated)
             {

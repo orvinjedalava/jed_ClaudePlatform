@@ -1,4 +1,4 @@
-using GameScratch.Core.Common;
+using GameScratch.Core.Common.Game;
 using GameScratch.Core.Common.Players;
 using GameScratch.Core.Common.Responses;
 
@@ -8,7 +8,7 @@ public interface IGameService
 {
     Player Challenger { get; set; }
     Player Champion { get; set; }
-    GameState LatestGameState { get; set; }
+    GameTurn LatestGameTurn { get; set; }
 
     GameResponse ShowMainMenu();
     string Reset();
