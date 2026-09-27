@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="GameScratch.ConsoleApp/GameScratch.ConsoleApp.csproj" />
   <Project Path="GameScratch.Core/GameScratch.Core.csproj" />
+  <Project Path="GameScratch.MinimalApi/GameScratch.MinimalApi.csproj" />
   <Project Path="GameScratch.Tests/GameScratch.Tests.csproj" />
 </Solution>

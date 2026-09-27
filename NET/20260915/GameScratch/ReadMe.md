@@ -6,19 +6,22 @@
 - cd GameScratch
 - dotnet new sln -n GameScratch
 
-## Create the three projects
+## Create the four projects
 - dotnet new console -n GameScratch.ConsoleApp -o GameScratch.ConsoleApp
 - dotnet new classlib -n GameScratch.Core -o GameScratch.Core
 - dotnet new xunit -n GameScratch.Tests -o GameScratch.Tests
+- dotnet new webapi -n GameScratch.MinimalApi -o GameScratch.MinimalApi
 
 ## All the three projects to the solution
 - dotnet sln GameScratch.slnx add GameScratch.ConsoleApp/GameScratch.App.csproj
 - dotnet sln GameScratch.slnx add GameScratch.Core/GameScratch.Core.csproj
 - dotnet sln GameScratch.slnx add GameScratch.Tests/GameScratch.Tests.csproj
+- dotnet sln GameScratch.slnx add GameScratch.MinimalApi/GameScratch.MinimalApi.csproj
 
 ## Wire up project references
 - dotnet add GameScratch.App/GameScratch.ConsoleApp.csproj reference GameScratch.Core/GameScratch.Core.csproj
 - dotnet add GameScratch.Tests/GameScratch.Tests.csproj reference GameScratch.Core/GameScratch.Core.csproj
+- dotnet add GameScratch.MinimalApi/GameScratch.MinimalApi.csproj reference GameScratch.Core/GameScratch.Core.csproj
 
 # Add dotnet package for Generic Host and other configuration packages
 - dotnet add GameScratch.ConsoleApp/GameScratch.ConsoleApp.csproj package Microsoft.Extensions.Hosting
@@ -26,6 +29,9 @@
 - dotnet add GameScratch.Core/GameScratch.Core.csproj package Microsoft.Extensions.Hosting
 - dotnet add GameScratch.Core/GameScratch.Core.csproj package Microsoft.Extensions.Options
 - dotnet add GameScratch.Tests/GameScratch.Tests.csproj package Microsoft.Extensions.Options
+
+# Add Swagger UI NuGet package
+- dotnet add GameScratch.MinimalApi/GameScratch.MinimalApi.csproj package Scalar.AspNetCore
 
 # Add Anthropic package
 - dotnet add GameScratch.Core/GameScratch.Core.csproj package Anthropic

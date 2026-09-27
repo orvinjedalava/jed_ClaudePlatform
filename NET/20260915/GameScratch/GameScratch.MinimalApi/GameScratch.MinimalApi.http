@@ -1,0 +1,6 @@
+@GameScratch.MinimalApi_HostAddress = http://localhost:5291
+
+GET {{GameScratch.MinimalApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
