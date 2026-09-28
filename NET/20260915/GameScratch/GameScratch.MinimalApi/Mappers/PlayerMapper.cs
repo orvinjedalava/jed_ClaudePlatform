@@ -8,9 +8,9 @@ public static class PlayerMapper
     public static PlayerDto ToDto(this Player player) => 
         new()
         {
-            Profile = ProfileMapper.ToDto(player.Profile),
-            Stats = StatsMapper.ToDto(player.Stats),
-            Equipment = EquipmentMapper.ToDto(player.Equipment),
-            Conditions = ConditionsMapper.ToDto(player.Conditions)
+            Profile = player.Profile.ToDto(),
+            Stats = player.Stats.ToDto(),
+            Equipment = player.Equipment.ToDto(),
+            Conditions = player.Conditions.ToDto()
         };
 }

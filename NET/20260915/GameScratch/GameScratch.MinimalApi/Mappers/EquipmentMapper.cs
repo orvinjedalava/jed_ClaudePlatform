@@ -8,6 +8,6 @@ public static class EquipmentMapper
     public static EquipmentDto ToDto(this Equipment equipment) => 
         new()
         {
-            Weapon = WeaponMapper.ToDto(equipment.Weapon)
+            Weapon = equipment.Weapon.ToDto()
         };
 }

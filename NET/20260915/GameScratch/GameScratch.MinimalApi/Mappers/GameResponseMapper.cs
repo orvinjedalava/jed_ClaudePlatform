@@ -12,5 +12,8 @@ public static class GameResponseMapper
             GameTurn = response.GameTurn.ToString(),
             GameMode = response.GameMode.ToString(),
             Message = response.Message,
+            Players = response.Players?.ToDto(),
+            Action = response.Action?.ToDto(),
+            StartTurn = response.StartTurn?.ToDto()
         };
 }
