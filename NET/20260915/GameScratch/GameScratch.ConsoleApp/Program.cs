@@ -1,11 +1,10 @@
 ﻿using GameScratch.ConsoleApp;
 using GameScratch.Core.Services;
-using GameScratch.Core.Common.Game;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using GameScrach.Core.Common;
 using GameScratch.Core.Common.Responses;
+using GameScratch.Contracts.Enums;
 
 Console.WriteLine("---------------------------------");
 Console.WriteLine("Gladiator Fight!");

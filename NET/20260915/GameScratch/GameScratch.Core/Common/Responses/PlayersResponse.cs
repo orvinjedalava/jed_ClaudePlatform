@@ -1,7 +1,7 @@
 
 using System.Text;
 using GameScratch.Core.Common.Players;
-using GameScratch.Core.Common.Game;
+using GameScratch.Contracts.Enums;
 
 namespace GameScratch.Core.Common.Responses;
 

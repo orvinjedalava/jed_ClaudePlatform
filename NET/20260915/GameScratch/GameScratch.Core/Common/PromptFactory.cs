@@ -1,4 +1,4 @@
-using GameScratch.Core.Common.Game;
+using GameScratch.Contracts.Enums;
 
 namespace GameScratch.Core.Common;
 

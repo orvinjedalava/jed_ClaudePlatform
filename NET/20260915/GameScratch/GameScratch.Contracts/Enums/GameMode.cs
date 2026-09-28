@@ -1,4 +1,4 @@
-namespace GameScrach.Core.Common;
+namespace GameScratch.Contracts.Enums;
 
 public enum GameMode
 {

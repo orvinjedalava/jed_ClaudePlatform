@@ -2,10 +2,9 @@ using GameScratch.Core.Common;
 using GameScratch.Core.Common.Players;
 using GameScratch.Core.Common.Weapons;
 using GameScratch.Core.Common.Responses;
-using GameScratch.Core.Common.Game;
 using GameScratch.Core.LLM;
+using GameScratch.Contracts.Enums;
 using System.Text;
-using GameScrach.Core.Common;
 
 namespace GameScratch.Core.Services;
 

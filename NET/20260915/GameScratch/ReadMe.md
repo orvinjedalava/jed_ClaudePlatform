@@ -26,6 +26,7 @@
 - dotnet add GameScratch.MinimalApi/GameScratch.MinimalApi.csproj reference GameScratch.Core/GameScratch.Core.csproj
 - dotnet add GameScratch.MinimalApi/GameScratch.MinimalApi.csproj reference GameScratch.Contracts/GameScratch.Contracts.csproj
 - dotnet add GameScratch.ConsoleApp/GameScratch.ConsoleApp.csproj reference GameScratch.Contracts/GameScratch.Contracts.csproj
+- dotnet add GameScratch.Core/GameScratch.Core.csproj reference GameScratch.Contracts/GameScratch.Contracts.csproj
 
 # Add dotnet package for Generic Host and other configuration packages
 - dotnet add GameScratch.ConsoleApp/GameScratch.ConsoleApp.csproj package Microsoft.Extensions.Hosting

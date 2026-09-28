@@ -1,6 +1,6 @@
 using GameScratch.Core.Common.Responses;
 using GameScratch.Core.Common;
-using GameScratch.Core.Common.Game;
+using GameScratch.Contracts.Enums;
 
 namespace GameScratch.Core.Services;
 

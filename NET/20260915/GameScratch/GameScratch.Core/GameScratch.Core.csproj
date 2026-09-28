@@ -12,4 +12,8 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.12" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GameScratch.Contracts\GameScratch.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>
