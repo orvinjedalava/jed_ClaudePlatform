@@ -20,6 +20,11 @@ builder.ConfigureServices();
 
 using IHost host = builder.Build();
 
+var httpClientFactory = host.Services.GetRequiredService<IHttpClientFactory>();
+var weatherForecast = await GetWeatherForecastAsync(httpClientFactory);
+Console.WriteLine($"Weather Forecast: {weatherForecast}");
+
+
 var gameService = host.Services.GetRequiredService<IGameService>();
 
 // Console.WriteLine(await messageService.SendMessageToLLMAsync("What should I search for to find the latest developments in renewable energy?"));
@@ -28,7 +33,7 @@ await EnterMainMenu();
 
 async Task EnterMainMenu()
 {
-    Console.Clear();
+    // Console.Clear();
     Console.WriteLine(gameService.ShowMainMenu().ToConsoleString());
 
     while(true)
@@ -85,6 +90,29 @@ async Task EnterMatch(GameTurn gameState, GameMode gameMode)
             break;
 
         gameState = gameResponse.GameTurn;
+    }
+}
+
+async Task<string> GetWeatherForecastAsync(IHttpClientFactory clientFactory)
+{
+    try
+    {
+        var client = clientFactory.CreateClient("GameApi");
+        var response = await client.GetAsync("/weatherforecast");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            return content;
+        }
+        else
+        {
+            return $"Error: {response.StatusCode}";
+        }
+    }
+    catch(Exception ex)
+    {
+        return $"Exception: {ex.Message}";
     }
 }
 
