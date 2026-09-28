@@ -11,6 +11,8 @@ public static class ActionResponseMapper
             Message = response.Message,
             LLMMessage = response.LLMMessage,
             LLMActionChoice = response.LLMActionChoice,
-            SwitchPlayerTurn = response.SwitchPlayerTurn
+            SwitchPlayerTurn = response.SwitchPlayerTurn,
+            Attack = response.Attack?.ToDto(),
+            RollInitiative = response.RollInitiative?.ToDto()
         };
 }
