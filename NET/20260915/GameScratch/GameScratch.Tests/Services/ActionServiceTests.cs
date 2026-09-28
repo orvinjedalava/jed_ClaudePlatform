@@ -1,5 +1,6 @@
 using GameScratch.Core.Common.Players;
 using GameScratch.Core.Common.Weapons;
+using GameScratch.Contracts.Enums;
 using GameScratch.Core.Services;
 using Moq;
 
