@@ -1,0 +1,16 @@
+using GameScratch.Contracts.DTOs;
+using GameScratch.Core.Common.Responses;
+
+namespace GameScratch.MinimalApi.Mappers;
+
+public static class GameResponseMapper
+{
+    public static GameResponseDto ToDto(this GameResponse response) =>
+        new()
+        {
+            ContinueState = response.ContinueState,
+            GameTurn = response.GameTurn.ToString(),
+            GameMode = response.GameMode.ToString(),
+            Message = response.Message,
+        };
+}

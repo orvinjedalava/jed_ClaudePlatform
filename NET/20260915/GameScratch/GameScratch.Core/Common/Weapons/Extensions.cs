@@ -1,3 +1,5 @@
+using GameScratch.Contracts.Enums;
+
 namespace GameScratch.Core.Common.Weapons;
 
 public static class WeaponExtensions

@@ -1,9 +1,9 @@
-namespace GameScratch.Core.Common.Players;
+// namespace GameScratch.Core.Common.Players;
 
-public enum StanceType
-{
-    Neutral,
-    Guard,
-    Unbalanced,
-    Staggered,
-}
+// public enum StanceType
+// {
+//     Neutral,
+//     Guard,
+//     Unbalanced,
+//     Staggered,
+// }

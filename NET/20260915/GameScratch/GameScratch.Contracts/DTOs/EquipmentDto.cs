@@ -1,0 +1,2 @@
+namespace GameScratch.Contracts.DTOs;
+

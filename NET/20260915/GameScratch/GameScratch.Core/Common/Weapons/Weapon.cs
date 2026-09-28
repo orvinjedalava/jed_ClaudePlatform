@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+using GameScratch.Contracts.Enums;
 
 namespace GameScratch.Core.Common.Weapons;
 
