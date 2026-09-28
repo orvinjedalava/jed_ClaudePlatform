@@ -13,6 +13,6 @@ public static class ActionResponseMapper
             LLMActionChoice = response.LLMActionChoice,
             SwitchPlayerTurn = response.SwitchPlayerTurn,
             Attack = response.Attack?.ToDto(),
-            RollInitiative = response.RollInitiative?.ToDto()
+            RollInitiative = response.RollInitiative?.ToDto(),
         };
 }

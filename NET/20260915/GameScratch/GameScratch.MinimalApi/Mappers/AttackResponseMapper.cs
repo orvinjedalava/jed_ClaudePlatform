@@ -13,6 +13,7 @@ public static class AttackResponseMapper
             DefenderArmorClassModifiers = response.DefenderArmorClassModifiers,
             AttackerDiceRoll = response.AttackerDiceRoll,
             AttackerTotalDiceRoll = response.AttackerTotalDiceRoll,
-            Counter = response.Counter?.ToDto()
+            Counter = response.Counter?.ToDto(),
+            Push = response.Push?.ToDto()
         };
 }
