@@ -1,4 +1,4 @@
-using GameScratch.Core.Common;
+using GameScratch.Contracts.Enums;
 using GameScratch.Core.Common.Weapons;
 using GameScratch.Core.Common.Players;
 

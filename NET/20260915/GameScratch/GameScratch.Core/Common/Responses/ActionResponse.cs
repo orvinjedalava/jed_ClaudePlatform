@@ -9,7 +9,7 @@ public class ActionResponse
     public char? LLMActionChoice { get; set; }
 
     public AttackResponse? Attack { get; set; }
-    public RollIniativeResponse? RollInitiative { get; set; }
+    public RollInitiativeResponse? RollInitiative { get; set; }
     public bool SwitchPlayerTurn { get; set; }
 
     public string ToConsoleString()

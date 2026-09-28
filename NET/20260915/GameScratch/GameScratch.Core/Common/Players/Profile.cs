@@ -1,3 +1,5 @@
+using GameScratch.Contracts.Enums;
+
 namespace GameScratch.Core.Common.Players;
 
 public class Profile

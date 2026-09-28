@@ -1,8 +1,8 @@
-namespace GameScratch.Core.Common.Players;
+// namespace GameScratch.Core.Common.Players;
 
-public enum RoleType
-{
-    None,
-    Challenger,
-    Champion
-}
+// public enum RoleType
+// {
+//     None,
+//     Challenger,
+//     Champion
+// }

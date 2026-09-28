@@ -1,5 +1,5 @@
-using Anthropic.Models.Beta.Messages;
 using GameScratch.Core.Common.Weapons;
+using GameScratch.Contracts.Enums;
 
 namespace GameScratch.Core.Common.Players;
 

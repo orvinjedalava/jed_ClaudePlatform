@@ -1,6 +1,7 @@
 using GameScratch.Core.Common.Responses;
 using GameScratch.Core.Common.Players;
 using GameScratch.Core.Common.Weapons;
+using GameScratch.Contracts.Enums;
 
 namespace GameScratch.Core.Services;
 
