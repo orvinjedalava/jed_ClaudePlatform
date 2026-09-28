@@ -14,6 +14,7 @@ public static class GameResponseMapper
             Message = response.Message,
             Players = response.Players?.ToDto(),
             Action = response.Action?.ToDto(),
-            StartTurn = response.StartTurn?.ToDto()
+            StartTurn = response.StartTurn?.ToDto(),
+            PlayerOptions = response.PlayerOptions?.ToDto()
         };
 }
