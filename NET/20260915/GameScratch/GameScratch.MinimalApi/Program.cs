@@ -1,10 +1,15 @@
 using Scalar.AspNetCore;
+using GameScratch.Core.Services;
+using GameScratch.MinimalApi.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+// configure Core Services
+builder.ConfigureCoreServices();
 
 var app = builder.Build();
 
@@ -19,6 +24,8 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
 }
+
+// var gameService = app.Services.GetRequiredService<IGameService>();
 
 var summaries = new[]
 {
@@ -41,7 +48,7 @@ app.MapGet("/weatherforecast", () =>
 
 // app.MapGet("/mainmenu", () =>
 // {
-    
+//     return gameService.ShowMainMenu().ToDto();
 // }).WithName("GetMainMenu");
 
 app.Run();

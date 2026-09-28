@@ -5,7 +5,7 @@ namespace GameScratch.Core.LLM.Anthropic;
 
 public static class AnthropicExtensions
 {
-    public static HostApplicationBuilder ConfigureAnthropicServices(this HostApplicationBuilder builder)
+    public static IHostApplicationBuilder ConfigureAnthropicServices(this IHostApplicationBuilder builder)
     {
         builder.Services.Configure<LLMServiceOptions>(builder.Configuration.GetSection("AnthropicLLMService"));
         

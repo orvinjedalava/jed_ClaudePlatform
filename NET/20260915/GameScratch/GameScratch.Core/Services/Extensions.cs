@@ -7,13 +7,13 @@ namespace GameScratch.Core.Services;
 
 public static class ServicesExtensions
 {
-    public static HostApplicationBuilder ConfigureCoreServices(this HostApplicationBuilder builder)
+    public static IHostApplicationBuilder ConfigureCoreServices(this IHostApplicationBuilder builder)
     {
         builder.Services.AddScoped<IPlayerService, PlayerService>();
         builder.Services.AddScoped<IActionService, ActionService>();
         builder.Services.AddTransient<IDiceService, DiceService>();
-        builder.Services.AddSingleton<IGameService, GameService>();
-        builder.Services.AddSingleton<IInputService, InputService>();
+        builder.Services.AddScoped<IGameService, GameService>();
+        builder.Services.AddScoped<IInputService, InputService>();
 
         builder.ConfigureAnthropicServices();
         return builder;
