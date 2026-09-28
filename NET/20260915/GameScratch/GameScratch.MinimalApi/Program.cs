@@ -39,6 +39,11 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast");
 
+// app.MapGet("/mainmenu", () =>
+// {
+    
+// }).WithName("GetMainMenu");
+
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)

@@ -11,17 +11,21 @@
 - dotnet new classlib -n GameScratch.Core -o GameScratch.Core
 - dotnet new xunit -n GameScratch.Tests -o GameScratch.Tests
 - dotnet new webapi -n GameScratch.MinimalApi -o GameScratch.MinimalApi
+- dotnet new classlib -n GameScratch.Contracts -o GameScratch.Contracts
 
 ## All the three projects to the solution
 - dotnet sln GameScratch.slnx add GameScratch.ConsoleApp/GameScratch.App.csproj
 - dotnet sln GameScratch.slnx add GameScratch.Core/GameScratch.Core.csproj
 - dotnet sln GameScratch.slnx add GameScratch.Tests/GameScratch.Tests.csproj
 - dotnet sln GameScratch.slnx add GameScratch.MinimalApi/GameScratch.MinimalApi.csproj
+- dotnet sln GameScratch.slnx add GameScratch.Contracts/GameScratch.Contracts.csproj
 
 ## Wire up project references
-- dotnet add GameScratch.App/GameScratch.ConsoleApp.csproj reference GameScratch.Core/GameScratch.Core.csproj
+- dotnet add GameScratch.ConsoleApp/GameScratch.ConsoleApp.csproj reference GameScratch.Core/GameScratch.Core.csproj
 - dotnet add GameScratch.Tests/GameScratch.Tests.csproj reference GameScratch.Core/GameScratch.Core.csproj
 - dotnet add GameScratch.MinimalApi/GameScratch.MinimalApi.csproj reference GameScratch.Core/GameScratch.Core.csproj
+- dotnet add GameScratch.MinimalApi/GameScratch.MinimalApi.csproj reference GameScratch.Contracts/GameScratch.Contracts.csproj
+- dotnet add GameScratch.ConsoleApp/GameScratch.ConsoleApp.csproj reference GameScratch.Contracts/GameScratch.Contracts.csproj
 
 # Add dotnet package for Generic Host and other configuration packages
 - dotnet add GameScratch.ConsoleApp/GameScratch.ConsoleApp.csproj package Microsoft.Extensions.Hosting

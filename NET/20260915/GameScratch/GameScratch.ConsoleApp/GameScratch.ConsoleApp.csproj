@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GameScratch.Core\GameScratch.Core.csproj" />
+    <ProjectReference Include="..\GameScratch.Contracts\GameScratch.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>
