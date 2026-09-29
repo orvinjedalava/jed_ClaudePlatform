@@ -5,10 +5,10 @@ using Anthropic;
 using Anthropic.Core;
 using Anthropic.Models.Messages;
 using System.Text;
-using System.Text.Json;
 
 using GameScratch.Core.Services;
-using GameScratch.Core.Responses;
+using GameScratch.Contracts.Entities.Responses;
+using GameScratch.Core.Extensions;
 
 namespace GameScratch.Core.LLM.Anthropic;
 

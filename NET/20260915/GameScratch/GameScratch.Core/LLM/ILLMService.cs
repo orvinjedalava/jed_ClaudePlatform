@@ -1,4 +1,4 @@
-using GameScratch.Core.Responses;
+using GameScratch.Contracts.Entities.Responses;
 
 namespace GameScratch.Core.LLM;
 

@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace GameScratch.Core.Responses;
+namespace GameScratch.Contracts.Entities.Responses;
 
 public class CounterResponse
 {

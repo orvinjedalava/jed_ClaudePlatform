@@ -3,11 +3,11 @@ using GameScratch.Core.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using GameScratch.Core.Responses;
+using GameScratch.Contracts.Entities.Responses;
 using GameScratch.Contracts.Enums;
 using GameScratch.Contracts.DTOs;
 using System.Net.Http.Json;
-using System.Text.Json;
+using GameScratch.Core.Extensions;
 
 Console.WriteLine("---------------------------------");
 Console.WriteLine("Gladiator Fight!");

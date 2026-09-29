@@ -1,5 +1,5 @@
 using GameScratch.Contracts.Entities.Players;
-using GameScratch.Core.Responses;
+using GameScratch.Contracts.Entities.Responses;
 
 namespace GameScratch.Core.Services;
 

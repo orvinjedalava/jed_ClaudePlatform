@@ -1,5 +1,5 @@
 using GameScratch.Contracts.DTOs;
-using GameScratch.Core.Responses;
+using GameScratch.Contracts.Entities.Responses;
 
 namespace GameScratch.MinimalApi.Mappers;
 

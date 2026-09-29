@@ -1,8 +1,9 @@
-using GameScratch.Core.Responses;
+using GameScratch.Contracts.Entities.Responses;
 using GameScratch.Contracts.Enums;
 using GameScratch.Contracts.Entities.Weapons;
 using GameScratch.Contracts.Entities.Players;
 using GameScratch.Core.Factories;
+using GameScratch.Core.Extensions;
 using System.Text;
 
 namespace GameScratch.Core.Services;

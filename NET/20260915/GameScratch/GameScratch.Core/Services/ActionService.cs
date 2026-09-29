@@ -1,7 +1,8 @@
 using System.Text;
 using GameScratch.Contracts.Entities.Players;
-using GameScratch.Core.Responses;
+using GameScratch.Contracts.Entities.Responses;
 using GameScratch.Contracts.Enums;
+using GameScratch.Core.Extensions;
 
 namespace GameScratch.Core.Services;
 
