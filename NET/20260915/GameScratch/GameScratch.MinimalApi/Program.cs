@@ -1,6 +1,7 @@
 using Scalar.AspNetCore;
 using GameScratch.Core.Services;
 using GameScratch.MinimalApi.Mappers;
+using GameScratch.Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

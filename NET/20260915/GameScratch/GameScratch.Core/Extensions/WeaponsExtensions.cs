@@ -1,6 +1,6 @@
 using GameScratch.Contracts.Enums;
 
-namespace GameScratch.Core.Common.Weapons;
+namespace GameScratch.Core.Extensions;
 
 public static class WeaponExtensions
 {

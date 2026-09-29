@@ -1,6 +1,6 @@
 using GameScratch.Contracts.Enums;
 
-namespace GameScratch.Core.Common;
+namespace GameScratch.Core.Factories;
 
 public class PromptFactory
 {

@@ -1,9 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
-using GameScratch.Core.LLM;
 using Microsoft.Extensions.Hosting;
 using GameScratch.Core.LLM.Anthropic;
+using GameScratch.Core.Services;
 
-namespace GameScratch.Core.Services;
+namespace GameScratch.Core.Extensions;
 
 public static class ServicesExtensions
 {

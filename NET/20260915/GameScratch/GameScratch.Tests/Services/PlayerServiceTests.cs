@@ -1,4 +1,4 @@
-using GameScratch.Core.Common.Weapons;
+using GameScratch.Core.Extensions;
 using GameScratch.Core.Services;
 using GameScratch.Core.Factories;
 using GameScratch.Contracts.Enums;

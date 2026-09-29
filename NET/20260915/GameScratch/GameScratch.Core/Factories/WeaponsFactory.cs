@@ -1,6 +1,6 @@
 using GameScratch.Contracts.Enums;
 using GameScratch.Contracts.Entities.Weapons;
-using GameScratch.Core.Common.Weapons;
+using GameScratch.Core.Extensions;
 
 namespace GameScratch.Core.Factories;
 

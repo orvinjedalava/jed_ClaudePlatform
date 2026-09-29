@@ -1,10 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
-using GameScratch.Core.LLM;
-using System.Text;
-using GameScratch.Core.Services;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Http;
-using GameScratch.Core.Common.Responses;
+using GameScratch.Core.Extensions;
 
 namespace GameScratch.ConsoleApp;
 
