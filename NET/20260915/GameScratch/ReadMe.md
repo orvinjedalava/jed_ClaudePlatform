@@ -35,6 +35,7 @@
 - dotnet add GameScratch.Core/GameScratch.Core.csproj package Microsoft.Extensions.Options
 - dotnet add GameScratch.Tests/GameScratch.Tests.csproj package Microsoft.Extensions.Options
 - dotnet add GameScratch.ConsoleApp/GameScratch.ConsoleApp.csproj package Microsoft.Extensions.Http
+- dotnet add GameScratch.Contracts/GameScratch.Contracts.csproj package Microsoft.Extensions.Caching.Abstractions
 
 # Add Swagger UI NuGet package
 - dotnet add GameScratch.MinimalApi/GameScratch.MinimalApi.csproj package Scalar.AspNetCore

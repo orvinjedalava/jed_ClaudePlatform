@@ -8,6 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+// Adds a distributed memory cache. Will be swapped for Redis in production.
+builder.Services.AddDistributedMemoryCache();
+
 // configure Core Services
 builder.ConfigureCoreServices();
 
