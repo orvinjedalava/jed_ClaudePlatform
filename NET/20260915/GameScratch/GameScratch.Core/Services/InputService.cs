@@ -1,5 +1,5 @@
 using GameScratch.Core.Responses;
-using GameScratch.Core.Common;
+using GameScratch.Contracts.Constants;
 using GameScratch.Contracts.Enums;
 
 namespace GameScratch.Core.Services;

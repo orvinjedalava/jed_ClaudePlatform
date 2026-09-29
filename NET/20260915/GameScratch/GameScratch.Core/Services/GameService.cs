@@ -1,4 +1,4 @@
-using GameScratch.Core.Common;
+using GameScratch.Contracts.Constants;
 using GameScratch.Contracts.Entities.Players;
 using GameScratch.Core.Responses;
 using GameScratch.Core.LLM;

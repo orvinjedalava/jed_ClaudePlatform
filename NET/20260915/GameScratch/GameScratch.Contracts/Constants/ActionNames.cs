@@ -1,4 +1,4 @@
-namespace GameScratch.Core.Common;
+namespace GameScratch.Contracts.Constants;
 
 public class ActionNames
 {
