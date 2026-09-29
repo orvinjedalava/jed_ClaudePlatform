@@ -2,7 +2,7 @@ using Moq;
 
 using GameScratch.Core.Services;
 using GameScratch.Core.LLM;
-using GameScratch.Core.Common.Players;
+using GameScratch.Core.Factories;
 using GameScratch.Contracts.Enums;
 
 namespace GameScratch.Tests.Services;

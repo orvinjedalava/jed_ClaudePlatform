@@ -1,4 +1,3 @@
-using GameScratch.Core.Common.Players;
 using GameScratch.Core.Common.Responses;
 using GameScratch.Core.Services;
 

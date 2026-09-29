@@ -1,7 +1,8 @@
 using GameScratch.Contracts.Enums;
 using GameScratch.Contracts.Entities.Weapons;
+using GameScratch.Core.Common.Weapons;
 
-namespace GameScratch.Core.Common.Weapons;
+namespace GameScratch.Core.Factories;
 
 public class WeaponsFactory
 {

@@ -3,7 +3,7 @@ using GameScratch.Contracts.Enums;
 using GameScratch.Contracts.Entities.Weapons;
 using GameScratch.Contracts.Entities.Players;
 
-namespace GameScratch.Core.Common.Players;
+namespace GameScratch.Core.Factories;
 
 public class PlayersFactory
 {

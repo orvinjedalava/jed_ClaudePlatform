@@ -1,7 +1,5 @@
 using GameScratch.Core.LLM;
 using GameScratch.Core.Services;
-using GameScratch.Core.Common.Players;
-using GameScratch.Core.Common.Weapons;
 using Moq;
 
 namespace GameScratch.Tests.LLM;

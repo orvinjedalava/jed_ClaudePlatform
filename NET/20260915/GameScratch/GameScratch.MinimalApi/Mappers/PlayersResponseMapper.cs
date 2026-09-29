@@ -1,7 +1,5 @@
 using GameScratch.Contracts.DTOs;
-using GameScratch.Core.Common.Players;
 using GameScratch.Core.Common.Responses;
-using Microsoft.AspNetCore.Mvc;
 
 namespace GameScratch.MinimalApi.Mappers;
 
