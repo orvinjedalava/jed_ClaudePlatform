@@ -2,7 +2,7 @@ using GameScratch.Contracts.Enums;
 
 namespace GameScratch.Core.Extensions;
 
-public static class WeaponExtensions
+public static class WeaponsExtensions
 {
     public static DiceType GetHitPointsDamageDiceType(this WeaponType weaponType) => weaponType switch
     {
