@@ -1,4 +1,4 @@
-namespace GameScratch.Core.Common.Responses;
+namespace GameScratch.Core.Responses;
 
 public class StartTurnResponse
 {

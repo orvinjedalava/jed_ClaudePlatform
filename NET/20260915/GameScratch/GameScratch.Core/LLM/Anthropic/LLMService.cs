@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.Json;
 
 using GameScratch.Core.Services;
-using GameScratch.Core.Common.Responses;
+using GameScratch.Core.Responses;
 
 namespace GameScratch.Core.LLM.Anthropic;
 

@@ -1,4 +1,4 @@
-using GameScratch.Core.Common.Responses;
+using GameScratch.Core.Responses;
 using GameScratch.Contracts.Enums;
 using GameScratch.Contracts.Entities.Weapons;
 using GameScratch.Contracts.Entities.Players;

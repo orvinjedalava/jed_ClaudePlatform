@@ -3,7 +3,7 @@ using GameScratch.Core.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using GameScratch.Core.Common.Responses;
+using GameScratch.Core.Responses;
 using GameScratch.Contracts.Enums;
 using GameScratch.Contracts.DTOs;
 using System.Net.Http.Json;

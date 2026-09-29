@@ -3,7 +3,7 @@ using System.Text;
 using GameScratch.Contracts.Entities.Players;
 using GameScratch.Contracts.Enums;
 
-namespace GameScratch.Core.Common.Responses;
+namespace GameScratch.Core.Responses;
 
 public class PlayersResponse
 {

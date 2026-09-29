@@ -1,4 +1,4 @@
-using GameScratch.Core.Common.Responses;
+using GameScratch.Core.Responses;
 
 namespace GameScratch.Core.LLM;
 
