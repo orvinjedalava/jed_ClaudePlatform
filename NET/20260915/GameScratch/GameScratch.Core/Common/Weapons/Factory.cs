@@ -1,4 +1,5 @@
 using GameScratch.Contracts.Enums;
+using GameScratch.Contracts.Entities.Weapons;
 
 namespace GameScratch.Core.Common.Weapons;
 

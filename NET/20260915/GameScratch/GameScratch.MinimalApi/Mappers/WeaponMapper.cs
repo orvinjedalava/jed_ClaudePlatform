@@ -1,5 +1,5 @@
 using GameScratch.Contracts.DTOs;
-using GameScratch.Core.Common.Weapons;
+using GameScratch.Contracts.Entities.Weapons;
 
 namespace GameScratch.MinimalApi.Mappers;
 
