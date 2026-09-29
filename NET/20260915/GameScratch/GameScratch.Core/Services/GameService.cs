@@ -4,6 +4,7 @@ using GameScratch.Core.Responses;
 using GameScratch.Core.LLM;
 using GameScratch.Contracts.Enums;
 using GameScratch.Core.Factories;
+using GameScratch.Core.Extensions;
 using System.Text;
 
 namespace GameScratch.Core.Services;
