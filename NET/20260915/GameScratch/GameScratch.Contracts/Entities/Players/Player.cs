@@ -10,31 +10,6 @@ public class Player
     public required Equipment Equipment { get; init; }
     public required Conditions Conditions { get; set; }
 
-    public string ToConsoleString()
-    {
-        StringBuilder sb = new();
-
-        sb.AppendLine($"****** The {Profile.RoleType} ******");
-        sb.AppendLine();
-        sb.AppendLine($"Name: {Profile.Name}");
-        sb.AppendLine($"RoleType: {Profile.RoleType}");
-        sb.AppendLine($"Status: {(string.IsNullOrWhiteSpace(GetStatus()) ? StanceType.Neutral.ToString() : GetStatus())}");
-        sb.AppendLine($"StaminaPoints Remaining: {GetStaminaPointsRemaining()}");
-        sb.AppendLine($"HitPoints Remaining: {GetHitPointsRemaining()}");
-        sb.AppendLine($"ArmorClass: {Stats.ArmorClass}");
-        sb.AppendLine($"BalanceClass: {Stats.BalanceClass}");
-        sb.AppendLine($"PoiseClass: {Stats.PoiseClass}");
-        sb.AppendLine($"Stance: {Conditions.StanceType}");
-        sb.AppendLine($"Weapon: {Equipment.Weapon.Name}");
-        sb.AppendLine($"Weapon StaminaPoints Cost: {Equipment.Weapon.StaminaCost}");
-        sb.AppendLine($"Weapon HitPoints DamageDiceType: {Equipment.Weapon.HitPointsDamageDiceType}");
-        sb.AppendLine($"Weapon StaminaPoints Damage: {Equipment.Weapon.StaminaPointsDamage}");
-        sb.AppendLine($"Weapon Poise Damage Modifier: {Equipment.Weapon.PoiseDamageModifier}");
-        sb.AppendLine();
-
-        return sb.ToString();
-    }
-
     public int GetTotalArmorClass()
     {
         return Stats.ArmorClass + GetArmorClassModifiers().Sum();

@@ -2,6 +2,7 @@
 using System.Text;
 using GameScratch.Contracts.Entities.Players;
 using GameScratch.Contracts.Enums;
+using GameScratch.Core.Extensions;
 
 namespace GameScratch.Core.Responses;
 
