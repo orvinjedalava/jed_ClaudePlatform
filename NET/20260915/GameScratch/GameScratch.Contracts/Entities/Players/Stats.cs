@@ -1,4 +1,4 @@
-namespace GameScratch.Core.Common.Players;
+namespace GameScratch.Contracts.Entities.Players;
 
 public class Stats
 {

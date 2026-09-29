@@ -1,6 +1,5 @@
 using GameScratch.Core.Common;
-using GameScratch.Core.Common.Players;
-using GameScratch.Core.Common.Weapons;
+using GameScratch.Contracts.Entities.Players;
 using GameScratch.Core.Common.Responses;
 using GameScratch.Core.LLM;
 using GameScratch.Contracts.Enums;

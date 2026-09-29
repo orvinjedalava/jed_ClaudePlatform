@@ -1,6 +1,5 @@
 using System.Text;
-using GameScratch.Core.Common;
-using GameScratch.Core.Common.Players;
+using GameScratch.Contracts.Entities.Players;
 using GameScratch.Core.Common.Responses;
 using GameScratch.Contracts.Enums;
 

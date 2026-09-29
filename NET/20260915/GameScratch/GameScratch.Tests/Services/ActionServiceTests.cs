@@ -3,6 +3,7 @@ using GameScratch.Core.Common.Weapons;
 using GameScratch.Contracts.Enums;
 using GameScratch.Core.Services;
 using GameScratch.Contracts.Entities.Weapons;
+using GameScratch.Contracts.Entities.Players;
 using Moq;
 
 namespace GameScratch.Tests.Services;
