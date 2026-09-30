@@ -11,4 +11,5 @@ public class LLMSessionService : ILLMSessionService
     public string? UserPrompt { get; set; }
     public List<ToolUnion>? Tools { get; set; }
     public ToolChoice? ToolChoice { get; set; }
+    // public List<MessageParam> Transcript { get; set; }
 }

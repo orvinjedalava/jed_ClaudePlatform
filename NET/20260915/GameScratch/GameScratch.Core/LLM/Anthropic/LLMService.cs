@@ -124,6 +124,8 @@ public class LLMService : LLMServiceBase, ILLMService
             Content = new MessageParamContent([new ContentBlockParam(new TextBlockParam(_llmSessionService.UserPrompt))])
         };
 
+        // _llmSessionService.Transcript = new List<MessageParam>() { messageParam };
+
         // Send the message to the LLM with providing tools and tool choice option to only choose 1
         Message responseMsg = await _client.Messages.Create(
             new MessageCreateParams()
@@ -148,6 +150,8 @@ public class LLMService : LLMServiceBase, ILLMService
             else if (block.TryPickText(out TextBlock? textBlock))
                 sb.AppendLine(textBlock.Text);
         }
+
+        // _llmSessionService.Transcript.Add(new() { Role = Role.Assistant, Content = new MessageParamContent(responseMsg.Content.Select(b => new ContentBlockParam(b.Json)).ToList()) });
 
         return (_llmSessionService.ToolUsePicked!.Name[0], sb.Length > 0 ? sb.ToString().Trim() : "The model responded with a tool choice");
     }
@@ -174,6 +178,18 @@ public class LLMService : LLMServiceBase, ILLMService
             }),
             new(new TextBlockParam(_toolUseResultPostMessage)),
         ];
+
+// SAVE THIS - option to store the whole transcript
+//         _llmSessionService.Transcript.Add(new() { Role = Role.User, Content = new MessageParamContent(toolResults) });
+
+// var followup = await _client.Messages.Create(new MessageCreateParams
+// {
+//     Model = Model.ClaudeHaiku4_5_20251001,
+//     MaxTokens = 1024,
+//     Tools = _llmSessionService.Tools,
+//     ToolChoice = _llmSessionService.ToolChoice,
+//     Messages = _llmSessionService.Transcript,
+// });
 
         var followup = await _client.Messages.Create(new MessageCreateParams
         {

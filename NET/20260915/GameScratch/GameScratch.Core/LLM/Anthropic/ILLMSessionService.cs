@@ -1,4 +1,5 @@
 
+using System.Dynamic;
 using Anthropic;
 using Anthropic.Core;
 using Anthropic.Models.Messages;
@@ -12,4 +13,5 @@ public interface ILLMSessionService
     string? UserPrompt { get; set; }
     List<ToolUnion>? Tools { get; set; }
     ToolChoice? ToolChoice { get; set; }
+    // List<MessageParam> Transcript { get; set; } 
 }
