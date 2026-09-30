@@ -160,6 +160,12 @@ public class LLMService : LLMServiceBase, ILLMService
             return "I've chosen an action!";
         }
 
+        // Update prompt with most recent Player stats
+        StringBuilder sbMessage = new();
+        sbMessage.AppendLine(gameResponse.ToConsoleString());
+        sbMessage.AppendLine(_gameResponsePostMessage);
+        _llmSessionService.UserPrompt = sbMessage.ToString();
+
         List<ContentBlockParam> toolResults = [
             new( new ToolResultBlockParam()
             {

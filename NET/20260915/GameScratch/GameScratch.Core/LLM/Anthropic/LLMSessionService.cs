@@ -10,5 +10,5 @@ public class LLMSessionService : ILLMSessionService
     public ToolUseBlock? ToolUsePicked { get; set; }
     public string? UserPrompt { get; set; }
     public List<ToolUnion>? Tools { get; set; }
-    public ToolChoice? ToolChoice { get;set; }
+    public ToolChoice? ToolChoice { get; set; }
 }
